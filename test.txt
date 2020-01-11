@@ -3,3 +3,7 @@ if you're reading this, hi
 first txt document elliott uploaded from his pc using git
 
 pretty cool NGL
+
+
+
+hi
