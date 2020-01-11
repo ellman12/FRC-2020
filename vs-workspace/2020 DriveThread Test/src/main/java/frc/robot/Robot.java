@@ -1,0 +1,263 @@
+
+/////////////////////////////////////////////////////////////////////
+//  File:  Robot.java
+/////////////////////////////////////////////////////////////////////
+//
+//  Purpose:  Simple timed robot example to evaluate and debug a
+//            child thread for driving and turning.  Intended
+//            application is for the autonomous operations.
+//
+//  Revision: Initial development 12/30/2019
+//
+//
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
+package frc.robot;
+
+//import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+/**
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the TimedRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.gradle file in the
+ * project.
+ */
+public class Robot extends TimedRobot {
+  private static final String kDefaultAuto = "Default";
+  private static final String kCustomAuto = "My Auto";
+  private String m_autoSelected;
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  // Motor and encoder for tilt mechanism
+  // public static double tilt_position;
+  public static CANSparkMax tilt_motor;
+  public static CANEncoder tilt_enc;
+  /*
+   * // InnerLift class public static InnerLiftThread T_innerlift; public static
+   * InnerLift Lift; public static int innerlift_target; // Motor and encoder for
+   * inner lift public static WPI_TalonSRX inner_lift;
+   */
+  public static Encoder MagEncoder; // Encoder for the Redline motor
+
+  // Motor Controllers and encoders for drive system
+  public static CANSparkMax frontLeft, frontRight, backLeft, backRight;
+
+  // Encoders on two of the drive motors.
+  public static CANEncoder left_enc, right_enc;
+
+  public static SpeedControllerGroup leftDrive;
+  public static SpeedControllerGroup rightDrive;
+  public static SpeedControllerGroup allDrive;
+
+  public static DifferentialDrive diff_drive;
+
+  // Gyroscope for drive
+  public static ADXRS450_Gyro gyro;
+
+  // Here is the class that reads all sensors
+  public static Sensors sensor_status;
+
+  // Drive thread parameters
+  public static DriveThread auto_drive;
+  public static boolean drive_thread_active;
+  public static double drive_distance;
+  boolean auto_once = true;
+
+  // Home grown delay class
+  public static Delay delay;
+
+  // Counter to reduce printout of sensor readings.
+  private int sensor_output_count = 0;
+  private final int SENSOR_INTERVAL = 10;
+
+  /**
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
+   */
+  @Override
+  public void robotInit() {
+
+    drive_thread_active = false;
+
+    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    m_chooser.addOption("My Auto", kCustomAuto);
+    SmartDashboard.putData("Auto choices", m_chooser);
+
+    sensor_status = new Sensors();
+
+    MagEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+    MagEncoder.reset();
+
+    tilt_motor = new CANSparkMax(5, MotorType.kBrushless);
+    tilt_enc = new CANEncoder(tilt_motor);
+
+    // drive
+    frontLeft = new CANSparkMax(3, MotorType.kBrushless);
+    backLeft = new CANSparkMax(1, MotorType.kBrushless);
+    frontRight = new CANSparkMax(2, MotorType.kBrushless);
+    backRight = new CANSparkMax(4, MotorType.kBrushless);
+    left_enc = new CANEncoder(frontLeft);
+    right_enc = new CANEncoder(frontRight);
+
+    frontLeft.setIdleMode(IdleMode.kBrake);
+    backLeft.setIdleMode(IdleMode.kBrake);
+    frontRight.setIdleMode(IdleMode.kBrake);
+    backRight.setIdleMode(IdleMode.kBrake);
+
+    frontLeft.setMotorType(MotorType.kBrushless);
+    backLeft.setMotorType(MotorType.kBrushless);
+    frontRight.setMotorType(MotorType.kBrushless);
+    backRight.setMotorType(MotorType.kBrushless);
+
+    // Making the motors all turn the right way
+    frontLeft.setInverted(false);
+    frontRight.setInverted(false);
+    backLeft.setInverted(false);
+    backRight.setInverted(false);
+
+    leftDrive = new SpeedControllerGroup(frontLeft, backLeft);
+    rightDrive = new SpeedControllerGroup(frontRight, backRight);
+    allDrive = new SpeedControllerGroup(frontLeft, frontRight, backLeft, backRight);
+
+    diff_drive = new DifferentialDrive(leftDrive, rightDrive);
+
+    // drive system gyro
+    gyro = new ADXRS450_Gyro();
+
+    // Initialize the gyro, calibrate, and reset to zero degrees.
+    gyro.calibrate();
+    gyro.reset();
+
+    delay = new Delay();
+
+    diff_drive.setSafetyEnabled(false);
+  }
+
+  /**
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
+   *
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
+   */
+  @Override
+  public void robotPeriodic() {
+    // read the sensors
+    // sensor_status.readSensors();
+
+    sensor_output_count++;
+
+    // Read and print out the sensor values per interval. According
+    // to the documentation for the timed robot, this function will
+    // be called every 20msec. We can adjust the frequency of the
+    // sensor readings via the final variable SENSOR_INTERVAL.
+
+    if (sensor_output_count == SENSOR_INTERVAL) {
+      // read the sensors
+      sensor_status.readSensors();
+
+      // System.out.println("drive_angle" + sensor_status.drive_angle);
+      // System.out.println("drive_position" + sensor_status.drive_position);
+      // System.out.println("inner lift position" + sensor_status.inner_lift_position);
+      // System.out.println("tilt_position" + sensor_status.tilt_position);
+
+      // reset counter
+      sensor_output_count = 0;
+    }
+  }
+
+  /**
+   * This autonomous (along with the chooser code above) shows how to select
+   * between different autonomous modes using the dashboard. The sendable chooser
+   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+   * remove all of the chooser code and uncomment the getString line to get the
+   * auto name from the text box below the Gyro
+   *
+   * <p>
+   * You can add additional auto modes by adding additional comparisons to the
+   * switch structure below with additional strings. If using the SendableChooser
+   * make sure to add them to the chooser code above as well.
+   */
+  @Override
+  public void autonomousInit() {
+    m_autoSelected = m_chooser.getSelected();
+    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    System.out.println("Auto selected: " + m_autoSelected);
+  }
+
+  /**
+   * This function is called periodically during autonomous.
+   */
+  @Override
+  public void autonomousPeriodic() {
+    switch (m_autoSelected) {
+    case kCustomAuto:
+      // Put custom auto code here
+      break;
+    case kDefaultAuto:
+    default:
+      // Put default auto code here
+      break;
+    }
+
+    // Need to prevent unintentional duplication of the drive thread
+    // as this block during autonomous is called every 20msec. We
+    // limit the creation of the thread to one time. It is
+    // intended that a single thread handles all of the
+    // autonomous operations. That said, we could create additional
+    // threads for other functions inside this block.
+    if (auto_once == true) {
+
+      auto_drive = new DriveThread("autonomous operations");
+
+      auto_once = false;
+    }
+
+  }
+
+  /**
+   * This function is called periodically during operator control.
+   */
+  @Override
+  public void teleopPeriodic() {
+
+    // Allow joystick actions within this block if the drive thread
+    // is not active.
+    if (drive_thread_active == false) {
+
+      // Put joystick operations here that are associated
+      // with the drive system.
+
+    }
+  }
+
+  /**
+   * This function is called periodically during test mode.
+   */
+  @Override
+  public void testPeriodic() {
+  }
+}
