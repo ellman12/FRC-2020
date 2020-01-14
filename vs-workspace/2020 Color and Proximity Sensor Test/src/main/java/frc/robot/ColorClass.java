@@ -52,10 +52,13 @@ class ColorClass {
   // Constructor.
   ColorClass() {
 
+    // Creating the color sensor.
     m_colorSensor = new ColorSensorV3(i2cPort);
 
+    // Used for detecting colors.
     m_colorMatcher = new ColorMatch();
 
+    // Defining colors.
     kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
     kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
     kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
@@ -113,6 +116,10 @@ class ColorClass {
       colorString = "Yellow";
     } else {
       colorString = "Unknown";
+    }
+
+    if (ColorValidity() == false) {
+      colorString = "Invalid";
     }
 
     return (colorString);

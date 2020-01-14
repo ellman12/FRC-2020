@@ -93,14 +93,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     String detected_color;
-    boolean ColorOkay;
 
     detected_color = colorclass.getColorString();
 
-    ColorOkay = colorclass.ColorValidity();
-
-    System.out.println("Detected Color = " + detected_color + "    IR = " + colorclass.GetIRValue() + "   Proximity = "
-        + colorclass.GetProximity() + "    ColorOkay = " + ColorOkay);
+    SmartDashboard.putString("ColorSensor", detected_color);
 
   }
 
