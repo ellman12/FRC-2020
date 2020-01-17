@@ -132,23 +132,23 @@ class DriveThread implements Runnable  {
 
 			//  The various member functions would be called here.
 			//  For example:
-			driveFwd(5.0);  //  move the robot forward 5.0 feet
+			// driveFwd(5.0);  //  move the robot forward 5.0 feet
          
-			delay.delay_milliseconds(250.0);
+			// delay.delay_milliseconds(250.0);
 			
-			turnAbsolute(-90.0);  //  rotate 45 degrees CW
+			// turnAbsolute(-90.0);  //  rotate 45 degrees CW
 
-			delay.delay_milliseconds(250.0);
+			// delay.delay_milliseconds(250.0);
 
 			// turn2Heading(315.0); //  turn to heading of 315 degrees
 	   
-			turnAbsolute(180);
+			// turnAbsolute(180);
 
-			delay.delay_milliseconds(100);
+			// delay.delay_milliseconds(100);
 
-			turnAbsolute(-90);
+			// turnAbsolute(-90);
 
-			driveFwd(5.0);
+			driveBwd(5.0);
 
 			//  Wait for the thread to complete
 			try  {

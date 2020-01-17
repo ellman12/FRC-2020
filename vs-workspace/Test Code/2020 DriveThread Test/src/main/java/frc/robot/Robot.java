@@ -98,6 +98,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
+    double testVar = 0;
+
     drive_thread_active = false;
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
@@ -149,9 +151,12 @@ public class Robot extends TimedRobot {
     gyro.calibrate();
     gyro.reset();
 
+    // gyro.setName("GyroName", 0);
+
     delay = new Delay();
 
     diff_drive.setSafetyEnabled(false);
+
   }
 
   /**
@@ -181,12 +186,16 @@ public class Robot extends TimedRobot {
 
       // System.out.println("drive_angle" + sensor_status.drive_angle);
       // System.out.println("drive_position" + sensor_status.drive_position);
-      // System.out.println("inner lift position" + sensor_status.inner_lift_position);
+      // System.out.println("inner lift position" +
+      // sensor_status.inner_lift_position);
       // System.out.println("tilt_position" + sensor_status.tilt_position);
 
       // reset counter
       sensor_output_count = 0;
     }
+
+    SmartDashboard.putNumber("left_enc", sensor_status.drive_position);
+    sensor_status.drive_position = SmartDashboard.getNumber("left_enc", sensor_status.drive_position);
   }
 
   /**
@@ -213,16 +222,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-    case kCustomAuto:
-      // Put custom auto code here
-      break;
-    case kDefaultAuto:
-    default:
-      // Put default auto code here
-      break;
-    }
-
     // Need to prevent unintentional duplication of the drive thread
     // as this block during autonomous is called every 20msec. We
     // limit the creation of the thread to one time. It is
