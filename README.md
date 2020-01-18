@@ -3,6 +3,8 @@ Repository for FRC Team #5914 for 2020 Infinite Recharge.
 
 Programmers:
 
+Larry Basegio (Programming Mentor)
+
 Elliott DuCharme
 
-Larry Basegio (Programming Mentor)
+Noah Stigeler
