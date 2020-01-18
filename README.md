@@ -6,3 +6,5 @@ Programmers:
 Elliott DuCharme
 
 Larry Basegio (Programming Mentor)
+
+🅱oah Stigler 
