@@ -66,6 +66,9 @@ public class Robot extends TimedRobot {
     // Drive the robot's Mecanum Drive with the PS4 controller.
     mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
 
+    // IDK about the Z axis.
+    // Our 2nd year robot (Kova) could strafe using the 2 analog triggers. We should do that?
+
     // IDK which one we should use; not much documentation on each.
     // mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation, gyroAngle);
     // mecanumDrive.drivePolar(magnitude, angle, zRotation);
