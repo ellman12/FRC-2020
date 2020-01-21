@@ -49,6 +49,8 @@ class DriveThread implements Runnable {
 
 	// Fixed parameters for conversion of distance to encoder counts
 	// final double WHEEL_DIAMETER = 8.0;
+	final double INCHES_PER_FOOT = 12.0;
+	final double CM_PER_METER = 100.0;
 
 	// Encoders are now on the motors (NEOS). Output from the
 	// encoder in this case is 1.0. A gear reduction of 16:1 implies
