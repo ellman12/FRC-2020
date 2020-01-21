@@ -85,43 +85,12 @@ return
 
 ;**************************APPLICATION SWITCHER STUFF***************************************
 
-#MaxThreadsPerHotkey, 1
-; Vars
-codePath	:=	"C:\Users\Public\wpilib\2020\vscode\Code.exe"
-codeExe		:=	"code.exe"
-return
-
-; Hotkey
-^F2::
-	; Needed on for Atom
-	DetectHiddenWindows, On
-	
-	; Check if atom is running
-	Process, Exist, % codeExe
-	; Errorlevel = PID. 0 means process doesn't exist
-	codePID	:=	ErrorLevel
-	; If atom isn't running
-	if (codePID = 0)
-	{
-		; Run and assign PID to atomPID
-		Run, % codePath . codeExe,,,codePID
-		; Wait for window associated with PID to exist
-		WinWait, ahk_PID %codePID%
-	}
-	
-	; Activate atom by PID
-	WinActivate, ahk_PID %codePID%
-
-	; Don't leave detect hidden windows on
-	DetectHiddenWindows, Off
-return
-
 F1::
 switchToVSAndTabs()
 {
 IfWinNotExist, ahk_class Chrome_WidgetWin_1
 	Run, code.exe
-if WinActive("ahk_exe Visual Studio Code")
+if WinActive("ahk_exe Code.exe")
 	Send ^{PGDN}
 else
 	WinActivate ahk_exe Code.exe
@@ -183,7 +152,7 @@ Process, Exist, chrome.exe
 ;~ }
 
 F9::
-if WinActive("ahk_exe firefox.exe")
+if WinActive("ahk_exe Code.exe")
 	Send ^{PgUp}
 if WinActive("ahk_class Chrome_WidgetWin_1")
 	Send ^+{tab}
