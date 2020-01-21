@@ -152,12 +152,13 @@ Process, Exist, chrome.exe
 ;~ }
 
 F9::
-if WinActive("ahk_exe Code.exe")
-	Send ^{PgUp}
-if WinActive("ahk_class Chrome_WidgetWin_1")
+if WinActive("ahk_exe Code.exe") {
+	Send ^{PGUP}
+} else if WinActive("ahk_class Chrome_WidgetWin_1") {
 	Send ^+{tab}
-if WinActive("ahk_exe explorer.exe")
-	Send !{left} ;alt left is the explorer shortcut to go "back" or "down" one folder level.
+}
+;~ if WinActive("ahk_exe explorer.exe")
+	;~ Send !{left} ;alt left is the explorer shortcut to go "back" or "down" one folder level.
 return
 
 
