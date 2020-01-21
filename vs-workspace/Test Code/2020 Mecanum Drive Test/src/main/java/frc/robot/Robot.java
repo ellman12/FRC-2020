@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public class Robot extends TimedRobot {
 
+  static String gameData;
+
   // Creating the drive motors.
   WPI_TalonFX frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
 
@@ -67,14 +69,28 @@ public class Robot extends TimedRobot {
     mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
 
     // IDK about the Z axis.
-    // Our 2nd year robot (Kova) could strafe using the 2 analog triggers. We should do that?
+    // Our 2nd year robot (Kova) could strafe using the 2 analog triggers. We should
+    // do that?
 
     // IDK which one we should use; not much documentation on each.
     // mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation, gyroAngle);
     // mecanumDrive.drivePolar(magnitude, angle, zRotation);
+
   }
 
   @Override
   public void testPeriodic() {
   }
+
 }
+
+public String getGameData() {
+
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+
+		gameData = gameData.substring(0, 2);
+
+		SmartDashboard.putString("Colors", gameData);
+
+		return (gameData);
+	}
