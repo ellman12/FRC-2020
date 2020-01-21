@@ -73,6 +73,7 @@ public class Robot extends TimedRobot {
 
     gameData = DriverStation.getInstance().getGameSpecificMessage();
 
+    // Possibly trims down String data?
     gameData = gameData.substring(0, 2);
 
     SmartDashboard.putString("Colors", gameData);
