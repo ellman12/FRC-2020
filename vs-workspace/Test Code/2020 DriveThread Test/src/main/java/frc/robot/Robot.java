@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -81,6 +82,7 @@ public class Robot extends TimedRobot {
   // Drive thread parameters
   public static DriveThread auto_drive;
   public static boolean drive_thread_active;
+  public static ProximitySensor proximitySensor;
   public static double drive_distance;
   boolean auto_once = true;
 
@@ -97,6 +99,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+    proximitySensor = new ProximitySensor();
 
     double testVar = 0;
 
@@ -156,8 +160,6 @@ public class Robot extends TimedRobot {
     delay = new Delay();
 
     diff_drive.setSafetyEnabled(false);
-
-    
 
   }
 
@@ -237,6 +239,10 @@ public class Robot extends TimedRobot {
       auto_once = false;
     }
 
+    // if (drive_thread_active == false) {
+    System.out.println("ultrasonic = " + proximitySensor.getDistance());
+    // }
+
   }
 
   /**
@@ -244,6 +250,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+
+    System.out.println("ultrasonic = " + proximitySensor.getDistance());
 
     // Allow joystick actions within this block if the drive thread
     // is not active.

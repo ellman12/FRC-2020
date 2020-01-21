@@ -30,9 +30,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
 
-
-  
-
 /////////////////////////////////////////////////////////////////////
 //  Class:  DriveThread
 /////////////////////////////////////////////////////////////////////
@@ -44,130 +41,127 @@ import edu.wpi.first.wpilibj.Timer;
 //
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-class DriveThread implements Runnable  {
-    String name;
-    Thread t;
-    Runtime r = Runtime.getRuntime();
-    private Delay delay;
+class DriveThread implements Runnable {
+	String name;
+	Thread t;
+	Runtime r = Runtime.getRuntime();
+	private Delay delay;
 
-    // Fixed parameters for conversion of distance to encoder counts
-    //final double WHEEL_DIAMETER = 8.0;
-    final double INCHES_PER_FOOT = 12.0;
-    final double CM_PER_METER = 100.0;
+	// Fixed parameters for conversion of distance to encoder counts
+	// final double WHEEL_DIAMETER = 8.0;
 
-    // Encoders are now on the motors (NEOS). Output from the
-    // encoder in this case is 1.0. A gear reduction of 16:1 implies
-    // 16.0 per revolution of the output shaft. The precision of this
-    // is 42 counts per motor shaft revolution times 16 of the gear
-    // reduction = 1/672. An eight inch wheel diameter implies a distance
-    // traveled of PI*8.0 = 25.17 inches. Distance resolution of the
-    // encoder/gearbox comination is 25.17/672 = 0.037 inches/count. Should be
-    // good enough.
-    // However the output when reading the encoder function
-    // is 1.0 for each revolution of the motor, or 16 for one revolution
-    // of the output shaft. This implies that the inch to output
-    // conversion is 25.17/16.0 or 1.572 inches per unit output
-    final double ENCODER_RESOLUTION = 1.572; // inches per output value
+	// Encoders are now on the motors (NEOS). Output from the
+	// encoder in this case is 1.0. A gear reduction of 16:1 implies
+	// 16.0 per revolution of the output shaft. The precision of this
+	// is 42 counts per motor shaft revolution times 16 of the gear
+	// reduction = 1/672. An eight inch wheel diameter implies a distance
+	// traveled of PI*8.0 = 25.17 inches. Distance resolution of the
+	// encoder/gearbox comination is 25.17/672 = 0.037 inches/count. Should be
+	// good enough.
+	// However the output when reading the encoder function
+	// is 1.0 for each revolution of the motor, or 16 for one revolution
+	// of the output shaft. This implies that the inch to output
+	// conversion is 25.17/16.0 or 1.572 inches per unit output
+	final double ENCODER_RESOLUTION = 1.572; // inches per output value
 
-    // Fixed parameters for driveFwd(...)/driveBwd(...)
-    final double START_SPEED = 0.6;
-    final double BRAKE_SPEED = 0.3;
-    final double BRAKE_FRACTION = 0.25;
+	// Fixed parameters for driveFwd(...)/driveBwd(...)
+	final double START_SPEED = 0.6;
+	final double BRAKE_SPEED = 0.3;
+	final double BRAKE_FRACTION = 0.25;
 
-    // Fixed parameters for console updates and while() loop escapes
-    final int ENC_CONSOLE_UPDATE = 20;
-    final int ENC_LOOP_ESCAPE = 250;
-    final int GYRO_CONSOLE_UPDATE = 20;
-    final int GYRO_LOOP_ESCAPE = 200;
+	// Fixed parameters for console updates and while() loop escapes
+	final int ENC_CONSOLE_UPDATE = 20;
+	final int ENC_LOOP_ESCAPE = 250;
+	final int GYRO_CONSOLE_UPDATE = 20;
+	final int GYRO_LOOP_ESCAPE = 200;
 
-    // Fixed parameters for gyro operation. Specified here to facilitate
-    // changes without confusion in the various functions using these
-    // variables.
-    final double ROT_SPEED = 0.5; // Starting rotation speed for turning
-    // As we approach the target we reduce the speed by this factor
-    final double ROT_ATTEN = 1.5;
-    // proximity (in degrees) to target angle stage 1 rotation attenuation rate
-    final double ANGL_PROX_1 = 25.0;
-    // proximity (in degrees) to target angle stage 2 rotation attenuation rate
-    final double ANGL_PROX_2 = 5.0;
+	// Fixed parameters for gyro operation. Specified here to facilitate
+	// changes without confusion in the various functions using these
+	// variables.
+	final double ROT_SPEED = 0.5; // Starting rotation speed for turning
+	// As we approach the target we reduce the speed by this factor
+	final double ROT_ATTEN = 1.5;
+	// proximity (in degrees) to target angle stage 1 rotation attenuation rate
+	final double ANGL_PROX_1 = 25.0;
+	// proximity (in degrees) to target angle stage 2 rotation attenuation rate
+	final double ANGL_PROX_2 = 5.0;
 
-   
-    public static double position1;
-    public double initPosition1;
+	public static double position1;
+	public double initPosition1;
 
-    public double init_Angle;
+	public double init_Angle;
 
-    //  Constructor
-    DriveThread(String threadname)  {
+	// Constructor
+	DriveThread(String threadname) {
 
-        // We want to establish an initial encoder reading. This will enable reseting
+		// We want to establish an initial encoder reading. This will enable reseting
 		// encoder position to zero when we start moving. We use absolute values to
 		// make the subsequent subtraction more easily interpreted.
 		Robot.left_enc.setPosition(0.0);
-		initPosition1 = Robot.left_enc.getPosition();  // should be zero
+		initPosition1 = Robot.left_enc.getPosition(); // should be zero
 		position1 = initPosition1;
 		init_Angle = Robot.gyro.getAngle();
 
-		//  The initial position should be zero.
-        System.out.println("Left Encoder Initial Position = " + initPosition1);
+		// The initial position should be zero.
+		System.out.println("Left Encoder Initial Position = " + initPosition1);
 		System.out.println("Initial Heading = " + init_Angle);
-		
-        name=threadname;
-        t=new Thread(this,name);
-        System.out.println("New thread: " + t);
-        delay=new Delay();
-        t.start();  //  Start the thread        
-    }
 
+		name = threadname;
+		t = new Thread(this, name);
+		System.out.println("New thread: " + t);
+		delay = new Delay();
+		t.start(); // Start the thread
+	}
 
-    public void run()  {
-        while(Robot.auto_drive.t.isAlive()==true)  {
+	public void run() {
+		while (Robot.auto_drive.t.isAlive() == true) {
 
-			//  Set the flag active so that any joystick
-			//  manipulations are disabled while this 
-			//  thread is active.  Note that delays within
-			//  this thread will not affect the main()
-			//  program.
-			Robot.drive_thread_active=true;
+			// Set the flag active so that any joystick
+			// manipulations are disabled while this
+			// thread is active. Note that delays within
+			// this thread will not affect the main()
+			// program.
+			Robot.drive_thread_active = true;
 
-			//  The various member functions would be called here.
-			//  For example:
-			// driveFwd(5.0);  //  move the robot forward 5.0 feet
-         
-			// delay.delay_milliseconds(250.0);
-			
-			// turnAbsolute(-90.0);  //  rotate 45 degrees CW
+			// The various member functions would be called here.
+			// For example:
+			// driveFwd(5.0); // move the robot forward 5.0 feet
 
 			// delay.delay_milliseconds(250.0);
 
-			// turn2Heading(315.0); //  turn to heading of 315 degrees
-	   
+			// turnAbsolute(-90.0); // rotate 45 degrees CW
+
+			// delay.delay_milliseconds(250.0);
+
+			// turn2Heading(315.0); // turn to heading of 315 degrees
+
 			// turnAbsolute(180);
 
 			// delay.delay_milliseconds(100);
 
 			// turnAbsolute(-90);
 
-			driveBwd(5.0);
+			driveFwd(5.0);
 
-			//  Wait for the thread to complete
-			try  {
+			turnRight_Arcade(90);
+
+			// Wait for the thread to complete
+			try {
 				Robot.auto_drive.t.join();
-			}  catch(InterruptedException e)  {
+			} catch (InterruptedException e) {
 				System.out.println(name + "Interrupted.");
 			}
 
 			System.out.println(name + "Exiting Drive Thread");
-			r.gc();  //  force garbage collection (freeing of memory resources)
+			r.gc(); // force garbage collection (freeing of memory resources)
 
-			//  Reset flag
-			Robot.drive_thread_active=false;
+			// Reset flag
+			Robot.drive_thread_active = false;
 		}
 
-		//  Should get a false indication
+		// Should get a false indication
 		System.out.println("Thread Status = " + Robot.auto_drive.t.isAlive());
-    } 
-	
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	// Function: public int driveFwd(double distance)
@@ -181,33 +175,36 @@ class DriveThread implements Runnable  {
 	// Returns: An double representing overshoot/undershoot of the movement
 	// in inches.
 	//
-	// Remarks: 
+	// Remarks:
 	//
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 	public double driveFwd(double distance) {
 		int loop_count = 0;
-	
+
 		double counts;
 		double initial_position;
 		double current_position;
-        double target;
-      
+		double target;
+
 		double fraction;
-        double heading;
-        
-        double error;
+		double heading;
+
+		double error;
 
 		// Determine where we are pointing - we want to maintain this heading during
 		// this forward movement.
 		heading = Robot.gyro.getAngle();
 		Robot.left_enc.setPosition(0.0);
-		
+
 		// Read encoder #1, get the initial encoder position and assign it to
 		// the current position. Calculate the number of encoder counts
 		// necessary to reach the final destination (target).
-		initial_position = Robot.left_enc.getPosition();  //  should be zero
-        current_position = initial_position;
+		initial_position = Robot.left_enc.getPosition(); // should be zero
+
+		System.out.println("initPos = " + initial_position);
+
+		current_position = initial_position;
 		counts = calcCounts_SAE(distance);
 		target = initial_position + counts;
 
@@ -224,22 +221,23 @@ class DriveThread implements Runnable  {
 		// seemed to work very well for distance of 10 feet.
 		// We want braking enabled.
 		// We also need to put a timer within the while() loop to provide an escape in
-		// the event that the system gets lost during autonomous requiring a restart of the
+		// the event that the system gets lost during autonomous requiring a restart of
+		// the
 		// program.
-        
+
 		while (current_position < target) {
-		
+
 			if (fraction > BRAKE_FRACTION) {
 				moveFwd(START_SPEED, heading);
 			} else {
 				moveFwd(BRAKE_SPEED, heading);
-            }
-            
+			}
+
 			Timer.delay(0.01);
-			System.out.println("current_position = " + current_position + " target = " + target + " fraction = " + fraction);
-        
-        
-        	// We don't want to stay longer than we have to. Assuming
+			System.out.println(
+					"current_position = " + current_position + " target = " + target + " fraction = " + fraction);
+
+			// We don't want to stay longer than we have to. Assuming
 			// that the 10 msec is reasonably accurate we limit the
 			// move to 5 seconds for starters.
 			loop_count++;
@@ -248,10 +246,10 @@ class DriveThread implements Runnable  {
 				System.out.println(
 						"current_position = " + current_position + " target = " + target + " fraction = " + fraction);
 			}
-			if (loop_count == ENC_LOOP_ESCAPE)  {
-                break; // escape clause
-            }
-		
+			if (loop_count == ENC_LOOP_ESCAPE) {
+				break; // escape clause
+			}
+
 			current_position = Robot.left_enc.getPosition();
 			fraction = Math.abs((target - current_position) / (target - initial_position));
 		}
@@ -299,9 +297,9 @@ class DriveThread implements Runnable  {
 		double target;
 
 		double fraction;
-        double heading;
-        
-        double error;
+		double heading;
+
+		double error;
 
 		// Determine where we are pointing - we want to maintain this heading during
 		// this
@@ -354,9 +352,9 @@ class DriveThread implements Runnable  {
 				System.out.println(
 						"current_position = " + current_position + " target = " + target + " fraction = " + fraction);
 			}
-			if (loop_count == ENC_LOOP_ESCAPE)  {
-                break; // escape clause
-            }
+			if (loop_count == ENC_LOOP_ESCAPE) {
+				break; // escape clause
+			}
 			current_position = Robot.left_enc.getPosition();
 			fraction = Math.abs((target - current_position) / (target - initial_position));
 		}
@@ -488,13 +486,13 @@ class DriveThread implements Runnable  {
 
 		return (enc_change);
 
-    }
-    
-    //  Given the counts, returns the distance in inches.
-    public double calcDistance_SAE(double counts) {
+	}
+
+	// Given the counts, returns the distance in inches.
+	public double calcDistance_SAE(double counts) {
 		double distance;
 
-	    distance=counts*ENCODER_RESOLUTION;
+		distance = counts * ENCODER_RESOLUTION;
 
 		return (distance);
 
@@ -532,13 +530,13 @@ class DriveThread implements Runnable  {
 	/////////////////////////////////////////////////////////////////////
 	//
 	// Purpose: Rotates the robot CW through the angle specified
-	// by degrees. 
+	// by degrees.
 	//
 	// Returns: A double representing the error.
 	//
-	// Remarks: Uses Arcade drive to rotate the robot. Note that we 
-	//          want motor braking enabled. Added escape count to exit 
-	//          loop after a certain time when it doesn't reach the target.
+	// Remarks: Uses Arcade drive to rotate the robot. Note that we
+	// want motor braking enabled. Added escape count to exit
+	// loop after a certain time when it doesn't reach the target.
 	//
 	//
 	/////////////////////////////////////////////////////////////////////
@@ -547,11 +545,11 @@ class DriveThread implements Runnable  {
 		int count = 0;
 		double rot_speed = ROT_SPEED;
 		double angle; // current gyro angle
-		double target;  //  target angle
+		double target; // target angle
 		double error;
-	
-		angle = Robot.gyro.getAngle();  //  this is our starting point
-		target=angle+degrees;
+
+		angle = Robot.gyro.getAngle(); // this is our starting point
+		target = angle + degrees;
 		System.out.println("ANGLE = " + angle + " Target = " + target);
 
 		while (angle < target) {
@@ -574,9 +572,9 @@ class DriveThread implements Runnable  {
 		}
 		Robot.diff_drive.arcadeDrive(0, 0);
 		angle = Robot.gyro.getAngle();
-		error=target-angle;  //  the error
+		error = target - angle; // the error
 		System.out.println("Turning Error = " + error + " degrees");
-		return(error);
+		return (error);
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -596,9 +594,9 @@ class DriveThread implements Runnable  {
 	/////////////////////////////////////////////////////////////////////
 	public int rotatePosArcade(double rot_spd) {
 
-		if (rot_spd > 1.0)  {
-            return (-1);
-        }
+		if (rot_spd > 1.0) {
+			return (-1);
+		}
 		Robot.diff_drive.arcadeDrive(0, rot_spd);
 		return (0);
 	}
@@ -608,7 +606,7 @@ class DriveThread implements Runnable  {
 	/////////////////////////////////////////////////////////////////////
 	//
 	// Purpose: Rotates the robot CCW through the specified number
-	//          of degrees.
+	// of degrees.
 	//
 	// Arguments: The degrees of CCW rotation.
 	//
@@ -616,7 +614,7 @@ class DriveThread implements Runnable  {
 	//
 	// Remarks: Uses Arcade drive to
 	// rotate the robot. Note that we want motor braking
-	// enabled. 
+	// enabled.
 	//
 	//
 	// The final variable ROT_ATTEN value is yet to be determined but
@@ -631,9 +629,9 @@ class DriveThread implements Runnable  {
 		double target;
 		double error;
 
-		//  Current angle
+		// Current angle
 		angle = Robot.gyro.getAngle();
-		target=angle-degrees;
+		target = angle - degrees;
 
 		while (angle > target) {
 			rotateNegArcade(rot_speed);
@@ -655,9 +653,9 @@ class DriveThread implements Runnable  {
 		Robot.diff_drive.arcadeDrive(0, 0);
 		angle = Robot.gyro.getAngle();
 		System.out.println("angle = " + angle);
-		error=target-angle;
+		error = target - angle;
 		System.out.println("Turning Error = " + error + " degrees");
-		return(error);
+		return (error);
 
 	}
 
@@ -678,9 +676,9 @@ class DriveThread implements Runnable  {
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 	public int rotateNegArcade(double rot_spd) {
-		if (rot_spd > 1.0)  {
-            return (-1);
-        }
+		if (rot_spd > 1.0) {
+			return (-1);
+		}
 		Robot.diff_drive.arcadeDrive(0, -rot_spd);
 		return (0);
 	}
@@ -694,7 +692,7 @@ class DriveThread implements Runnable  {
 	// rotate CCW, positive arguments CW.
 	//
 	// Arguments: A double representing the number of degrees to rotate
-	// 
+	//
 	//
 	// Returns: A double representing the difference between the
 	// achieved rotation and the requested rotation.
@@ -733,7 +731,7 @@ class DriveThread implements Runnable  {
 		degrees = Math.abs(degrees);
 		if (cw == true) {
 			result = turnRight_Arcade(degrees);
-		} else if (ccw == true) { 
+		} else if (ccw == true) {
 			result = turnLeft_Arcade(degrees);
 		}
 
