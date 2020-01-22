@@ -32,6 +32,12 @@ return
 Send, !{Tab}
 return
 
+:*:sys::
+Send, System.out.println("");
+Sleep 20
+Send, {Left 3}
+return
+
 #IfWinActive SciTE4AutoHotkey
 ^SC029::
 Send, {F5}
@@ -84,12 +90,11 @@ Sleep 75
 return
 
 ;**************************APPLICATION SWITCHER STUFF***************************************
-
 F1::
 switchToVSAndTabs()
 {
 IfWinNotExist, ahk_class Chrome_WidgetWin_1
-	Run, code.exe
+	Run, C:\Users\Public\wpilib\2020\vscode\Code.exe
 if WinActive("ahk_exe Code.exe")
 	Send ^{PGDN}
 else
@@ -101,7 +106,7 @@ switchToOtherVSWindows()
 {
 Process, Exist, Code.exe
 	If errorLevel = 0
-		Run, Code.exe
+		Run, C:\Users\Public\wpilib\2020\vscode\Code.exe
 	else
 	{
 	GroupAdd, taranCodes, ahk_exe Code.exe
