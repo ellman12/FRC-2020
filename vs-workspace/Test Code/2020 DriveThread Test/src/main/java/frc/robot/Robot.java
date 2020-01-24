@@ -247,7 +247,9 @@ public class Robot extends TimedRobot {
     }
 
     // if (drive_thread_active == false) {
-    System.out.println("ultrasonic = " + proximitySensor.getDistance());
+    // System.out.println("ultrasonic = " + proximitySensor.getDistance());
+
+    System.out.println("Drive Gyro: \t" + Sensors.drive_angle);
     // }
 
   }
