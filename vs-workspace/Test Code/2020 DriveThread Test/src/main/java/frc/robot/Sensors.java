@@ -27,7 +27,8 @@ class Sensors {
     int inner_lift_position;
     double tilt_position;
     double drive_position;
-    double drive_angle;
+    static double drive_angle;
+    static double tilt_gyro_angle;
 
     // Constructor
     Sensors() {
@@ -57,7 +58,9 @@ class Sensors {
         drive_position = Robot.left_enc.getPosition();
 
         // Gyro associated with robot direction control
-        drive_angle = Robot.gyro.getAngle();
+        drive_angle = Robot.driveGyro.getAngle();
+
+        // tilt_gyro_angle = Robot.tiltGyro.getAngle();
 
         return (0);
     }

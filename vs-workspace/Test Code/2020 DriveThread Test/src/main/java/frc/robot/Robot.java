@@ -28,6 +28,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -73,8 +74,13 @@ public class Robot extends TimedRobot {
 
   public static DifferentialDrive diff_drive;
 
-  // Gyroscope for drive
-  public static ADXRS450_Gyro gyro;
+  // Gyroscopes for drive and tilt.
+  public static ADXRS450_Gyro driveGyro;
+  // public static ADXRS450_Gyro tiltGyro;
+
+  // Ports for the two gyros.
+  private static final SPI.Port DRIVE_GYRO_PORT = SPI.Port.kOnboardCS2;
+  // private static final SPI.Port TILT_GYRO_PORT = SPI.Port.kOnboardCS1;
 
   // Here is the class that reads all sensors
   public static Sensors sensor_status;
@@ -101,8 +107,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     proximitySensor = new ProximitySensor();
-
-    double testVar = 0;
 
     drive_thread_active = false;
 
@@ -149,11 +153,14 @@ public class Robot extends TimedRobot {
     diff_drive = new DifferentialDrive(leftDrive, rightDrive);
 
     // drive system gyro
-    gyro = new ADXRS450_Gyro();
+    driveGyro = new ADXRS450_Gyro(DRIVE_GYRO_PORT);
+    // tiltGyro = new ADXRS450_Gyro(TILT_GYRO_PORT);
 
-    // Initialize the gyro, calibrate, and reset to zero degrees.
-    gyro.calibrate();
-    gyro.reset();
+    // Initialize the gyros, calibrate, and reset to zero degrees.
+    driveGyro.calibrate();
+    driveGyro.reset();
+    // tiltGyro.calibrate();
+    // tiltGyro.reset();
 
     // gyro.setName("GyroName", 0);
 
@@ -251,7 +258,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    System.out.println("ultrasonic = " + proximitySensor.getDistance());
+    // System.out.println("ultrasonic = " + proximitySensor.getDistance());
+
+    System.out.println("Drive Gyro: \t" + Sensors.drive_angle);
+    //  + "Tilt Gyro: \t" + Sensors.tilt_gyro_angle);
+    
 
     // Allow joystick actions within this block if the drive thread
     // is not active.

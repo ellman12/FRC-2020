@@ -102,7 +102,7 @@ class DriveThread implements Runnable {
 		Robot.left_enc.setPosition(0.0);
 		initPosition1 = Robot.left_enc.getPosition(); // should be zero
 		position1 = initPosition1;
-		init_Angle = Robot.gyro.getAngle();
+		init_Angle = Robot.driveGyro.getAngle();
 
 		// The initial position should be zero.
 		System.out.println("Left Encoder Initial Position = " + initPosition1);
@@ -196,7 +196,7 @@ class DriveThread implements Runnable {
 
 		// Determine where we are pointing - we want to maintain this heading during
 		// this forward movement.
-		heading = Robot.gyro.getAngle();
+		heading = Robot.driveGyro.getAngle();
 		Robot.left_enc.setPosition(0.0);
 
 		// Read encoder #1, get the initial encoder position and assign it to
@@ -306,7 +306,7 @@ class DriveThread implements Runnable {
 		// Determine where we are pointing - we want to maintain this heading during
 		// this
 		// forward movement.
-		heading = Robot.gyro.getAngle();
+		heading = Robot.driveGyro.getAngle();
 		Robot.left_enc.setPosition(0.0);
 
 		// Read encoder #1, get the initial encoder position and assign it to
@@ -395,7 +395,7 @@ class DriveThread implements Runnable {
 		double angle = 0;
 		double delta; // The difference between the target and measured angle
 
-		angle = Robot.gyro.getAngle();
+		angle = Robot.driveGyro.getAngle();
 
 		delta = angle - target;
 
@@ -438,7 +438,7 @@ class DriveThread implements Runnable {
 		double angle = 0;
 		double delta; // The difference between the target and measured angle
 
-		angle = Robot.gyro.getAngle();
+		angle = Robot.driveGyro.getAngle();
 
 		delta = angle - target;
 
@@ -550,13 +550,13 @@ class DriveThread implements Runnable {
 		double target; // target angle
 		double error;
 
-		angle = Robot.gyro.getAngle(); // this is our starting point
+		angle = Robot.driveGyro.getAngle(); // this is our starting point
 		target = angle + degrees;
 		System.out.println("ANGLE = " + angle + " Target = " + target);
 
 		while (angle < target) {
 			rotatePosArcade(rot_speed);
-			angle = Robot.gyro.getAngle();
+			angle = Robot.driveGyro.getAngle();
 
 			if (angle > (target - ANGL_PROX_1)) {
 				rot_speed /= ROT_ATTEN;
@@ -573,7 +573,7 @@ class DriveThread implements Runnable {
 				break;
 		}
 		Robot.diff_drive.arcadeDrive(0, 0);
-		angle = Robot.gyro.getAngle();
+		angle = Robot.driveGyro.getAngle();
 		error = target - angle; // the error
 		System.out.println("Turning Error = " + error + " degrees");
 		return (error);
@@ -632,12 +632,12 @@ class DriveThread implements Runnable {
 		double error;
 
 		// Current angle
-		angle = Robot.gyro.getAngle();
+		angle = Robot.driveGyro.getAngle();
 		target = angle - degrees;
 
 		while (angle > target) {
 			rotateNegArcade(rot_speed);
-			angle = Robot.gyro.getAngle();
+			angle = Robot.driveGyro.getAngle();
 
 			if (angle < (target + ANGL_PROX_1)) {
 				rot_speed /= ROT_ATTEN;
@@ -653,7 +653,7 @@ class DriveThread implements Runnable {
 				break;
 		}
 		Robot.diff_drive.arcadeDrive(0, 0);
-		angle = Robot.gyro.getAngle();
+		angle = Robot.driveGyro.getAngle();
 		System.out.println("angle = " + angle);
 		error = target - angle;
 		System.out.println("Turning Error = " + error + " degrees");
@@ -830,7 +830,7 @@ class DriveThread implements Runnable {
 		// 360 degrees, reduce it to something within the compass range.
 		// The same argument applies if the initial indication is less
 		// than -360.0 degrees.
-		angle = Robot.gyro.getAngle();
+		angle = Robot.driveGyro.getAngle();
 		while (angle > 360.0) {
 			angle -= 360.0;
 			if (debug == 1) {
