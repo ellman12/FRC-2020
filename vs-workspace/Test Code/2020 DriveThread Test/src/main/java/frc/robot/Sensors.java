@@ -58,7 +58,7 @@ class Sensors {
         drive_position = Robot.left_enc.getPosition();
 
         // Gyro associated with robot direction control
-        drive_angle = Robot.driveGyro.getAngle();
+        // drive_angle = Robot.driveGyro.getAngle();
 
         // tilt_gyro_angle = Robot.tiltGyro.getAngle();
 

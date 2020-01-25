@@ -82,10 +82,10 @@ public class Robot extends TimedRobot {
 
   // Gyroscopes for drive and tilt.
   public static ADXRS450_Gyro driveGyro;
-  public static ADXRS450_Gyro tiltGyro;
+  // public static ADXRS450_Gyro tiltGyro;
 
   // Ports for the two gyros.
-  private static final SPI.Port DRIVE_GYRO_PORT = SPI.Port.kOnboardCS0;
+  private static final SPI.Port DRIVE_GYRO_PORT = SPI.Port.kOnboardCS1;
   private static final SPI.Port TILT_GYRO_PORT = SPI.Port.kOnboardCS1;
 
   // Here is the class that reads all sensors
@@ -178,13 +178,13 @@ public class Robot extends TimedRobot {
 
     // drive system gyro
     driveGyro = new ADXRS450_Gyro(DRIVE_GYRO_PORT);
-    tiltGyro = new ADXRS450_Gyro(TILT_GYRO_PORT);
+    // tiltGyro = new ADXRS450_Gyro(TILT_GYRO_PORT);
 
     // Initialize the gyros, calibrate, and reset to zero degrees.
     driveGyro.calibrate();
     driveGyro.reset();
-    tiltGyro.calibrate();
-    tiltGyro.reset();
+    // tiltGyro.calibrate();
+    // tiltGyro.reset();
 
     delay = new Delay();
 
@@ -266,8 +266,8 @@ public class Robot extends TimedRobot {
 
     // System.out.println("ultrasonic = " + proximitySensor.getDistance());
 
-    // System.out.println("Drive Gyro: \t" + Sensors.drive_angle + "Tilt Gyro: \t" +
-    // Sensors.tilt_gyro_angle);
+    System.out.println("Drive Gyro: \t" + driveGyro.getAngle());
+    //  + "Tilt Gyro: \t" + tiltGyro.getAngle());
 
     // Allow joystick actions within this block if the drive thread
     // is not active.
@@ -276,7 +276,6 @@ public class Robot extends TimedRobot {
       // Normal drive.
       // diff_drive.arcadeDrive(-PS4LeftYAxis, PS4LeftXAxis, true);
 
-      
       testFalcon500.set(-PS4RightYAxis);
 
       // System.out.print("vel: \t" + testFalcon500.getSelectedSensorVelocity() +
