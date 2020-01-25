@@ -278,7 +278,7 @@ public class Robot extends TimedRobot {
 
       // diff_drive.curvatureDrive(-PS4LeftYAxis, PS4LeftXAxis, true);
 
-      testFalcon500.set(-PS4RightYAxis);
+      // testFalcon500.set(-PS4RightYAxis);
 
       // System.out.print("vel: \t" + testFalcon500.getSelectedSensorVelocity() +
       // "\t");
