@@ -58,10 +58,13 @@ return
 Suspend
 return
 
-;Just in case lol
+;Just in case lol.
 !p::
 Reload
 return
+
+:*:ps4::PS4
+:*:PS$::PS4
 
 ;Click on name of program folder in vs-workspace, and hit Windows key + o.
 #o::
