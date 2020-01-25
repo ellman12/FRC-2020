@@ -22,6 +22,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 //import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
@@ -65,6 +67,9 @@ public class Robot extends TimedRobot {
 
   // Motor Controllers and encoders for drive system
   public static CANSparkMax frontLeft, frontRight, backLeft, backRight;
+
+  public static WPI_TalonFX testFalcon500;
+
 
   // Encoders on two of the drive motors.
   public static CANEncoder left_enc, right_enc;
@@ -139,6 +144,8 @@ public class Robot extends TimedRobot {
     left_enc = new CANEncoder(frontLeft);
     right_enc = new CANEncoder(frontRight);
 
+    testFalcon500 = new WPI_TalonFX(9);
+
     frontLeft.setIdleMode(IdleMode.kBrake);
     backLeft.setIdleMode(IdleMode.kBrake);
     frontRight.setIdleMode(IdleMode.kBrake);
@@ -179,15 +186,7 @@ public class Robot extends TimedRobot {
 
   }
 
-  /**
-   * This function is called every robot packet, no matter the mode. Use this for
-   * items like diagnostics that you want ran during disabled, autonomous,
-   * teleoperated and test.
-   *
-   * <p>
-   * This runs after the mode specific periodic functions, but before LiveWindow
-   * and SmartDashboard integrated updating.
-   */
+ 
   @Override
   public void robotPeriodic() {
 
@@ -274,6 +273,8 @@ public class Robot extends TimedRobot {
 
       // Testing this drive function.
       diff_drive.curvatureDrive(-PS4LeftYAxis, PS4LEftXAxis, false);
+
+      tilt_motor.set(-PS4RightYAxis);
 
     }
   }
