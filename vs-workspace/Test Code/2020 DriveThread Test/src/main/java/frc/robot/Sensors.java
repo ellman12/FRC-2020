@@ -49,10 +49,10 @@ class Sensors {
     // Read the four sensors
     int readSensors() {
         // Inner Lift redline encoder
-        inner_lift_position = Robot.MagEncoder.get();
+        // inner_lift_position = Robot.MagEncoder.get();
 
         // Intake tilt encoder (NEOS motor)
-        tilt_position = Robot.tilt_enc.getPosition();
+        // tilt_position = Robot.tilt_enc.getPosition();
 
         // Get the position associated with the left drive.
         drive_position = Robot.left_enc.getPosition();

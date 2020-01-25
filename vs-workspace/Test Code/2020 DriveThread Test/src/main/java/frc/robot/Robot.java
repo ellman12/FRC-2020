@@ -22,8 +22,10 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 //import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
@@ -55,21 +57,16 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   // Motor and encoder for tilt mechanism
-  // public static double tilt_position;
+  public static double tilt_position;
   public static CANSparkMax tilt_motor;
   public static CANEncoder tilt_enc;
-  /*
-   * // InnerLift class public static InnerLiftThread T_innerlift; public static
-   * InnerLift Lift; public static int innerlift_target; // Motor and encoder for
-   * inner lift public static WPI_TalonSRX inner_lift;
-   */
+
   public static Encoder MagEncoder; // Encoder for the Redline motor
 
   // Motor Controllers and encoders for drive system
   public static CANSparkMax frontLeft, frontRight, backLeft, backRight;
 
-  public static WPI_TalonFX testFalcon500;
-
+  public static WPI_TalonSRX testFalcon500;
 
   // Encoders on two of the drive motors.
   public static CANEncoder left_enc, right_enc;
@@ -109,7 +106,7 @@ public class Robot extends TimedRobot {
   Joystick PS4;
 
   // Joystick axes.
-  double PS4LEftXAxis, PS4LeftYAxis, PS4RightXAxis, PS4RightYAxis, PS4LeftAnalogTrigger, PS4RightAnalogTrigger;
+  double PS4LeftXAxis, PS4LeftYAxis, PS4RightXAxis, PS4RightYAxis, PS4LeftAnalogTrigger, PS4RightAnalogTrigger;
 
   // Magic numebrs for PS4 controller axes.
   final int LEFT_X_AXIS_PORT = 0;
@@ -130,11 +127,11 @@ public class Robot extends TimedRobot {
 
     sensor_status = new Sensors();
 
-    MagEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
-    MagEncoder.reset();
+    // MagEncoder = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+    // MagEncoder.reset();
 
-    tilt_motor = new CANSparkMax(5, MotorType.kBrushless);
-    tilt_enc = new CANEncoder(tilt_motor);
+    // tilt_motor = new CANSparkMax(5, MotorType.kBrushless);
+    // tilt_enc = new CANEncoder(tilt_motor);
 
     // drive
     frontLeft = new CANSparkMax(3, MotorType.kBrushless);
@@ -144,7 +141,9 @@ public class Robot extends TimedRobot {
     left_enc = new CANEncoder(frontLeft);
     right_enc = new CANEncoder(frontRight);
 
-    testFalcon500 = new WPI_TalonFX(9);
+    testFalcon500 = new WPI_TalonSRX(12);
+
+    testFalcon500.setNeutralMode(NeutralMode.Coast);
 
     frontLeft.setIdleMode(IdleMode.kBrake);
     backLeft.setIdleMode(IdleMode.kBrake);
@@ -186,12 +185,11 @@ public class Robot extends TimedRobot {
 
   }
 
- 
   @Override
   public void robotPeriodic() {
 
     // Reading the values of the 4 analog stick positions.
-    PS4LEftXAxis = PS4.getRawAxis(LEFT_X_AXIS_PORT);
+    PS4LeftXAxis = PS4.getRawAxis(LEFT_X_AXIS_PORT);
     PS4LeftYAxis = PS4.getRawAxis(LEFT_X_AXIS_PORT);
     PS4RightXAxis = PS4.getRawAxis(RIGHT_X_AXIS_PORT);
     PS4RightYAxis = PS4.getRawAxis(RIGHTT_Y_AXIS_PORT);
@@ -265,23 +263,15 @@ public class Robot extends TimedRobot {
     // is not active.
     if (drive_thread_active == false) {
 
-      // Put joystick operations here that are associated
-      // with the drive system.
+    // Normal drive.
+    diff_drive.arcadeDrive(-PS4LeftYAxis, PS4LeftXAxis, true);
 
-      // Normal drive.
-      // diff_drive.arcadeDrive(-PS4YAxis, PS4XAxis, true);
-
-      // Testing this drive function.
-      diff_drive.curvatureDrive(-PS4LeftYAxis, PS4LEftXAxis, false);
-
-      tilt_motor.set(-PS4RightYAxis);
+    // testFalcon500.set(-PS4RightYAxis);
+    // tilt_motor.set(-PS4RightYAxis);
 
     }
   }
 
-  /**
-   * This function is called periodically during test mode.
-   */
   @Override
   public void testPeriodic() {
   }
