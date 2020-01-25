@@ -98,10 +98,10 @@ class Constants {
     final int PS4_PORT_NUMBER = 1;
 
     // Magic numebrs for PS4 controller axes.
-    final int LEFT_X_AXIS_PORT = 0;
-    final int LEFT_Y_AXIS_PORT = 1;
-    final int RIGHT_X_AXIS_PORT = 2;
-    final int RIGHTT_Y_AXIS_PORT = 5;
+    final static int LEFT_X_AXIS_PORT = 0;
+    final static int LEFT_Y_AXIS_PORT = 1;
+    final static int RIGHT_X_AXIS_PORT = 2;
+    final static int RIGHTT_Y_AXIS_PORT = 5;
 
     // Magic numbers for button ID's.
     final int X_BUTTON = 1;

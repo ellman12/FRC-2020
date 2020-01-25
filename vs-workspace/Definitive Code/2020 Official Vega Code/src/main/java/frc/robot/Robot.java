@@ -28,7 +28,8 @@ public class Robot extends TimedRobot {
   public static Sensors sensors;
 
   // Boolean for if the drive thread is active or not.
-  public static boolean drive_thread_active;
+  // Starts out as false.
+  public static boolean drive_thread_active = false;
 
   // Used for running auto code only once.
   boolean auto_once = true;
@@ -43,6 +44,8 @@ public class Robot extends TimedRobot {
     proximitySensor = new ProximitySensor();
     sensors = new Sensors();
 
+    sensors.driveGyro.calibrate();
+    sensors.driveGyro.reset();
   }
 
   @Override
@@ -78,6 +81,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+
+    // Reading the values of the 4 analog stick positions.
+    driveThread.PS4LeftXAxis = driveThread.PS4.getRawAxis(Constants.LEFT_X_AXIS_PORT);
+    driveThread.PS4LeftYAxis = driveThread.PS4.getRawAxis(Constants.LEFT_Y_AXIS_PORT);
+    driveThread.PS4RightXAxis = driveThread.PS4.getRawAxis(Constants.RIGHT_X_AXIS_PORT);
+    driveThread.PS4RightYAxis = driveThread.PS4.getRawAxis(Constants.RIGHTT_Y_AXIS_PORT);
 
     // Drive the robot's Mecanum Drive with the PS4 controller.
     driveThread.mecanumDrive.driveCartesian(driveThread.PS4.getY(), driveThread.PS4.getX(), driveThread.PS4.getZ());

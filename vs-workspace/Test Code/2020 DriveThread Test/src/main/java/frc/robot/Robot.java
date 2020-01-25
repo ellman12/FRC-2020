@@ -199,7 +199,7 @@ public class Robot extends TimedRobot {
 
     // Reading the values of the 4 analog stick positions.
     PS4LeftXAxis = PS4.getRawAxis(LEFT_X_AXIS_PORT);
-    PS4LeftYAxis = PS4.getRawAxis(LEFT_X_AXIS_PORT);
+    PS4LeftYAxis = PS4.getRawAxis(LEFT_Y_AXIS_PORT);
     PS4RightXAxis = PS4.getRawAxis(RIGHT_X_AXIS_PORT);
     PS4RightYAxis = PS4.getRawAxis(RIGHTT_Y_AXIS_PORT);
 
@@ -275,6 +275,8 @@ public class Robot extends TimedRobot {
 
       // Normal drive.
       // diff_drive.arcadeDrive(-PS4LeftYAxis, PS4LeftXAxis, true);
+
+      // diff_drive.curvatureDrive(-PS4LeftYAxis, PS4LeftXAxis, true);
 
       testFalcon500.set(-PS4RightYAxis);
 

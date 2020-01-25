@@ -60,6 +60,9 @@ class DriveThread implements Runnable {
     // Creating the PS4 controller.
     Joystick PS4;
 
+    // Joystick axes.
+    double PS4LeftXAxis, PS4LeftYAxis, PS4RightXAxis, PS4RightYAxis, PS4LeftAnalogTrigger, PS4RightAnalogTrigger;
+
     // Constructor
     DriveThread(String threadname) {
 
