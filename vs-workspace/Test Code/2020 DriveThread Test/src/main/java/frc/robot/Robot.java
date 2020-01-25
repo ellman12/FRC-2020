@@ -22,7 +22,9 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -38,6 +40,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -66,7 +69,7 @@ public class Robot extends TimedRobot {
   // Motor Controllers and encoders for drive system
   public static CANSparkMax frontLeft, frontRight, backLeft, backRight;
 
-  public static WPI_TalonSRX testFalcon500;
+  public static WPI_TalonFX testFalcon500;
 
   // Encoders on two of the drive motors.
   public static CANEncoder left_enc, right_enc;
@@ -141,9 +144,15 @@ public class Robot extends TimedRobot {
     left_enc = new CANEncoder(frontLeft);
     right_enc = new CANEncoder(frontRight);
 
-    testFalcon500 = new WPI_TalonSRX(12);
+    testFalcon500 = new WPI_TalonFX(12);
 
     testFalcon500.setNeutralMode(NeutralMode.Coast);
+
+    testFalcon500.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 30);
+    testFalcon500.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
+
+    // Reset the encoder.
+    testFalcon500.setSelectedSensorPosition(0);
 
     frontLeft.setIdleMode(IdleMode.kBrake);
     backLeft.setIdleMode(IdleMode.kBrake);
@@ -181,7 +190,7 @@ public class Robot extends TimedRobot {
 
     diff_drive.setSafetyEnabled(false);
 
-    PS4 = new Joystick(0);
+    PS4 = new Joystick(1);
 
   }
 
@@ -257,17 +266,25 @@ public class Robot extends TimedRobot {
 
     // System.out.println("ultrasonic = " + proximitySensor.getDistance());
 
-    System.out.println("Drive Gyro: \t" + Sensors.drive_angle + "Tilt Gyro: \t" + Sensors.tilt_gyro_angle);
+    // System.out.println("Drive Gyro: \t" + Sensors.drive_angle + "Tilt Gyro: \t" +
+    // Sensors.tilt_gyro_angle);
 
     // Allow joystick actions within this block if the drive thread
     // is not active.
     if (drive_thread_active == false) {
 
-    // Normal drive.
-    diff_drive.arcadeDrive(-PS4LeftYAxis, PS4LeftXAxis, true);
+      // Normal drive.
+      // diff_drive.arcadeDrive(-PS4LeftYAxis, PS4LeftXAxis, true);
 
-    // testFalcon500.set(-PS4RightYAxis);
-    // tilt_motor.set(-PS4RightYAxis);
+      
+      testFalcon500.set(-PS4RightYAxis);
+
+      // System.out.print("vel: \t" + testFalcon500.getSelectedSensorVelocity() +
+      // "\t");
+
+      // System.out.println("Falcon enc: \t" +
+      // testFalcon500.getSelectedSensorPosition());
+      // tilt_motor.set(-PS4RightYAxis);
 
     }
   }
