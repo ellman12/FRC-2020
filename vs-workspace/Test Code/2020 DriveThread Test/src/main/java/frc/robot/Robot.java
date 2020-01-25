@@ -28,6 +28,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -99,10 +100,18 @@ public class Robot extends TimedRobot {
   private int sensor_output_count = 0;
   private final int SENSOR_INTERVAL = 10;
 
-  /**
-   * This function is run when the robot is first started up and should be used
-   * for any initialization code.
-   */
+  // Creating the PS4 Controller.
+  Joystick PS4;
+
+  // Joystick axes.
+  double PS4LEftXAxis, PS4LeftYAxis, PS4RightXAxis, PS4RightYAxis, PS4LeftAnalogTrigger, PS4RightAnalogTrigger;
+
+  // Magic numebrs for PS4 controller axes.
+  final int LEFT_X_AXIS_PORT = 0;
+  final int LEFT_Y_AXIS_PORT = 1;
+  final int RIGHT_X_AXIS_PORT = 2;
+  final int RIGHTT_Y_AXIS_PORT = 5;
+
   @Override
   public void robotInit() {
 
@@ -166,6 +175,8 @@ public class Robot extends TimedRobot {
 
     diff_drive.setSafetyEnabled(false);
 
+    PS4 = new Joystick(0);
+
   }
 
   /**
@@ -179,6 +190,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
+    // Reading the values of the 4 analog stick positions.
+    PS4LEftXAxis = PS4.getRawAxis(LEFT_X_AXIS_PORT);
+    PS4LeftYAxis = PS4.getRawAxis(LEFT_X_AXIS_PORT);
+    PS4RightXAxis = PS4.getRawAxis(RIGHT_X_AXIS_PORT);
+    PS4RightYAxis = PS4.getRawAxis(RIGHTT_Y_AXIS_PORT);
+
     // read the sensors
     // sensor_status.readSensors();
 
@@ -207,28 +225,11 @@ public class Robot extends TimedRobot {
     sensor_status.drive_position = SmartDashboard.getNumber("left_enc", sensor_status.drive_position);
   }
 
-  /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable chooser
-   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
-   * remove all of the chooser code and uncomment the getString line to get the
-   * auto name from the text box below the Gyro
-   *
-   * <p>
-   * You can add additional auto modes by adding additional comparisons to the
-   * switch structure below with additional strings. If using the SendableChooser
-   * make sure to add them to the chooser code above as well.
-   */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+
   }
 
-  /**
-   * This function is called periodically during autonomous.
-   */
   @Override
   public void autonomousPeriodic() {
     // Need to prevent unintentional duplication of the drive thread
@@ -267,6 +268,12 @@ public class Robot extends TimedRobot {
 
       // Put joystick operations here that are associated
       // with the drive system.
+
+      // Normal drive.
+      // diff_drive.arcadeDrive(-PS4YAxis, PS4XAxis, true);
+
+      // Testing this drive function.
+      diff_drive.curvatureDrive(-PS4LeftYAxis, PS4LEftXAxis, false);
 
     }
   }
