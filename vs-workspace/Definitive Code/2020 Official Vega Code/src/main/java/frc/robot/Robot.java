@@ -34,6 +34,9 @@ public class Robot extends TimedRobot {
   // Used for running auto code only once.
   boolean auto_once = true;
 
+  // Variable used for knowing which button is pressed.
+  int button;
+
   @Override
   public void robotInit() {
 
@@ -81,6 +84,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+
+    button = driveThread.PS4.getButtonCount();
+
+    // Switch statement used for doing different functions.
+    // Doing it like this helps us know which buttons are
+    // used and which are available.
+    switch (button) {
+
+    case constants.X_BUTTON:
+      System.out.println("X");
+      break;
+
+    }
 
     // Reading the values of the 4 analog stick positions.
     driveThread.PS4LeftXAxis = driveThread.PS4.getRawAxis(Constants.LEFT_X_AXIS_PORT);
