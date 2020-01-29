@@ -58,6 +58,9 @@ class MultiThreadTest  {
     static BufferedReader br;
     static char c;
    
+    '
+    
+    dfnjdfk'
     public static void main(String args[])  {
 
   
