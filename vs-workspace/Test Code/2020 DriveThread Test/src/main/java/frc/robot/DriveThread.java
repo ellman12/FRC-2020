@@ -67,7 +67,8 @@ class DriveThread implements Runnable {
 	final double ENCODER_RESOLUTION = 1.572; // inches per output value
 
 	// Fixed parameters for driveFwd(...)/driveBwd(...)
-	final double START_SPEED = 0.6;
+	final double START_SPEED = 0.1; // Also used in acceleration functions.
+	final double MAX_SPEED = 0.6;
 	final double BRAKE_SPEED = 0.3;
 	final double BRAKE_FRACTION = 0.25;
 
@@ -230,18 +231,20 @@ class DriveThread implements Runnable {
 		while (current_position < target) {
 
 			if (fraction > BRAKE_FRACTION) {
-				moveFwd(START_SPEED, heading);
+				// moveFwd(START_SPEED, heading);
+				accelerateFwd(heading);
 			} else {
-				moveFwd(BRAKE_SPEED, heading);
+				// moveFwd(BRAKE_SPEED, heading);
+				decelerateFwd(heading);
 			}
 
 			Timer.delay(0.01);
 			System.out.println(
 					"current_position = " + current_position + " target = " + target + " fraction = " + fraction);
 
-			// We don't want to stay longer than we have to. Assuming
-			// that the 10 msec is reasonably accurate we limit the
-			// move to 5 seconds for starters.
+			// We don't want to stay longer than we have to. Assumine
+			// move to 5 seconds for starters.g
+			// that the 10 msec is reasonably accurate we limit th
 			loop_count++;
 			if ((loop_count % ENC_CONSOLE_UPDATE) == 0) {
 				// Provide periodic status
@@ -410,6 +413,76 @@ class DriveThread implements Runnable {
 
 		// System.out.println(" target = " + target + " angle = " + angle + " delta = "
 		// + delta);
+
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	// Function: accelerateFwd()
+	/////////////////////////////////////////////////////////////////////
+	//
+	// Purpose: Used for accelerating the robot with driveFwd().
+	//
+	// Arguments: double target
+	//
+	// Returns: void
+	//
+	// Remarks:
+	//
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	void accelerateFwd(double target) {
+		double speed;
+		double corr = 0.2;
+		double angle = 0;
+		double delta; // The difference between the target and measured angle
+
+		angle = Robot.driveGyro.getAngle();
+
+		delta = angle - target;
+
+		speed = 0.1;
+
+		while (speed < MAX_SPEED) {
+
+			speed += 0.01;
+			Robot.diff_drive.arcadeDrive(speed, -corr * delta);
+			delay.delay_milliseconds(40.0);
+		}
+
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	// Function: decelerateFwd()
+	/////////////////////////////////////////////////////////////////////
+	//
+	// Purpose: Used for declerating the robot with driveFwd().
+	//
+	// Arguments: double target
+	//
+	// Returns: void
+	//
+	// Remarks:
+	//
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	void decelerateFwd(double target) {
+		double speed;
+		double corr = 0.2;
+		double angle = 0;
+		double delta; // The difference between the target and measured angle
+
+		angle = Robot.driveGyro.getAngle();
+
+		delta = angle - target;
+
+		speed = 0.6;
+
+		while (speed > 0) {
+
+			speed -= 0.01;
+			Robot.diff_drive.arcadeDrive(speed, -corr * delta);
+			delay.delay_milliseconds(40.0);
+		}
 
 	}
 
