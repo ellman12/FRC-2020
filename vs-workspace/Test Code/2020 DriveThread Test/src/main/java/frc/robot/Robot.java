@@ -267,7 +267,7 @@ public class Robot extends TimedRobot {
     // System.out.println("ultrasonic = " + proximitySensor.getDistance());
 
     System.out.println("Drive Gyro: \t" + driveGyro.getAngle());
-    //  + "Tilt Gyro: \t" + tiltGyro.getAngle());
+    // + "Tilt Gyro: \t" + tiltGyro.getAngle());
 
     // Allow joystick actions within this block if the drive thread
     // is not active.
