@@ -23,19 +23,19 @@
 package frc.robot;
 
 class Sensors {
- 
+
     int inner_lift_position;
     double tilt_position;
-    double drive_position;
+    static double drive_position;
     static double drive_angle;
     static double tilt_gyro_angle;
 
     // Constructor
     Sensors() {
-        inner_lift_position=0;
-        tilt_position=0;
-        drive_position=0;
-        drive_angle=0;
+        inner_lift_position = 0;
+        tilt_position = 0;
+        drive_position = 0;
+        drive_angle = 0;
     }
 
     // Entry point for the thread. This is where any desired

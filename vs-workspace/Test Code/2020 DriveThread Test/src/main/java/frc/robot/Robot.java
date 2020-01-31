@@ -192,10 +192,15 @@ public class Robot extends TimedRobot {
 
     PS4 = new Joystick(1);
 
+    // This somehow resets the Talon drive encoder...?
+    left_enc.setPosition(0);
+
   }
 
   @Override
   public void robotPeriodic() {
+
+    // System.out.println("enc: " + Sensors.drive_position);
 
     // Reading the values of the 4 analog stick positions.
     PS4LeftXAxis = PS4.getRawAxis(LEFT_X_AXIS_PORT);
@@ -290,7 +295,12 @@ public class Robot extends TimedRobot {
     }
   }
 
+  // Use testPeriodic() for resetting encoders and stuff.
   @Override
   public void testPeriodic() {
+
+    // This somehow resets the Talon drive encoder...?
+    left_enc.setPosition(0);
+
   }
 }

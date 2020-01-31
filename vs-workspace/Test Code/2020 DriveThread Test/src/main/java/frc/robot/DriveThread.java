@@ -146,7 +146,7 @@ class DriveThread implements Runnable {
 
 			driveFwd(5.0);
 
-			turnRight_Arcade(90);
+			// turnRight_Arcade(90);
 
 			// Wait for the thread to complete
 			try {
@@ -411,8 +411,7 @@ class DriveThread implements Runnable {
 		// negatives counterclockwise.
 		Robot.diff_drive.arcadeDrive(speed, -corr * delta);
 
-		// System.out.println(" target = " + target + " angle = " + angle + " delta = "
-		// + delta);
+		System.out.println(" target = " + target + " angle = " + angle + " delta = " + delta);
 
 	}
 
@@ -431,6 +430,8 @@ class DriveThread implements Runnable {
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 	void accelerateFwd(double target) {
+		int loop_count = 0;
+
 		double speed;
 		double corr = 0.2;
 		double angle = 0;
@@ -446,9 +447,20 @@ class DriveThread implements Runnable {
 
 			speed += 0.01;
 			Robot.diff_drive.arcadeDrive(speed, -corr * delta);
+			// System.out.println("accelSpeed: \t" + speed + "\t" + "delta: \t" + delta);
 			delay.delay_milliseconds(40.0);
+
+			// We don't want to stay longer than we have to. Assumine
+			// move to 5 seconds for starters.
+			// that the 10 msec is reasonably accurate we limit th
+			loop_count++;
+
+			if (loop_count == ENC_LOOP_ESCAPE) {
+				break; // escape clause
+			}
 		}
 
+		Robot.diff_drive.arcadeDrive(0, 0);
 	}
 
 	/////////////////////////////////////////////////////////////////////
