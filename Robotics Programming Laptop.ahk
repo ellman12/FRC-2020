@@ -92,6 +92,17 @@ Send, {Enter}
 Sleep 75
 return
 
+;Minimize active window.
+!-::
+WinMinimize, A
+return
+
+;Maximize active window.
+!=::
+WinMaximize, A
+return
+
+
 ;**************************APPLICATION SWITCHER STUFF***************************************
 F1::
 switchToVSAndTabs()
