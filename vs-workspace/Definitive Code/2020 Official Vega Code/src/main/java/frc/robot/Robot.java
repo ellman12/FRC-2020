@@ -30,6 +30,8 @@ public class Robot extends TimedRobot {
     frontRight = new CANSparkMax(3, MotorType.kBrushless);
     backRight = new CANSparkMax(4, MotorType.kBrushless);
 
+    // Nice.👌
+
   }
 
   @Override
