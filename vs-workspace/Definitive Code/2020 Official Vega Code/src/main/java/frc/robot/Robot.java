@@ -20,15 +20,22 @@ public class Robot extends TimedRobot {
   double PS4LeftXAxis;
   double PS4LeftYAxis;
 
-  Joystick PS4 = new Joystick(1);
+  final int FRONT_LEFT_SPARK_ID = 1;
+  final int BACK_LEFT_SPARK_ID = 2;
+  final int FRONT_RIGHT_SPARK_ID = 3;
+  final int BACK_RIGHT_SPARK_ID = 4;
+
+  final int PS4_ID = 1;
+
+  Joystick PS4 = new Joystick(PS4_ID);
 
   @Override
   public void robotInit() {
 
-    frontLeft = new CANSparkMax(1, MotorType.kBrushless);
-    backLeft = new CANSparkMax(2, MotorType.kBrushless);
-    frontRight = new CANSparkMax(3, MotorType.kBrushless);
-    backRight = new CANSparkMax(4, MotorType.kBrushless);
+    frontLeft = new CANSparkMax(FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
+    backLeft = new CANSparkMax(BACK_LEFT_SPARK_ID, MotorType.kBrushless);
+    frontRight = new CANSparkMax(FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
+    backRight = new CANSparkMax(BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
 
   }
 
