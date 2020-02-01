@@ -11,6 +11,8 @@
 // Remarks: Made for 2020 competition; probably won't be useful for
 // future seasons.
 //
+// SD stands for SmartDashboard.
+//
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
@@ -25,19 +27,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
+  // Magic numbers for motor ports.
   final int TEST_SPARK_MAX1_PORT = 1;
   final int TEST_SPARK_MAX2_PORT = 2;
   final int TEST_FALCON_PORT = 3;
 
+  // Creating the 2 Spark Maxes.
   CANSparkMax testSparkMax1 = new CANSparkMax(TEST_SPARK_MAX1_PORT, MotorType.kBrushless);
   CANSparkMax testSparkMax2 = new CANSparkMax(TEST_SPARK_MAX2_PORT, MotorType.kBrushless);
 
+  // Creating the Falcon 500.
   WPI_TalonFX testFalcon = new WPI_TalonFX(TEST_FALCON_PORT);
 
+  // Doubles used for controlling the motor speeds through SD.
   double SparkMax1Speed;
   double SparkMax2Speed;
   double Falcon500Speed;
 
+  // SD stuff.
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -81,6 +88,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+    // Getting and setting motor speeds.
     SmartDashboard.getNumber("Falcon 500 SPeed", Falcon500Speed);
     SmartDashboard.putNumber("Falcon 500 Speed", Falcon500Speed);
 
