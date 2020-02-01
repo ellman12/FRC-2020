@@ -43,6 +43,13 @@ return
 Send, {F5}
 return
 
+#IfWinNotActive GitHub Desktop
+
+;Open the repo folder.
+^+g::
+Run, %A_MyDocuments%\GitHub\FRC-2020
+return
+
 #If
 
 SC029::
