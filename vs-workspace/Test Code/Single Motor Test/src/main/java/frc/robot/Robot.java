@@ -17,6 +17,8 @@ public class Robot extends TimedRobot {
 
   CANSparkMax testSparkMax = new CANSparkMax(TEST_SPARK_MAX_PORT, MotorType.kBrushless);
 
+  double Falcon500Speed;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -59,6 +61,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+
+    SmartDashboard.getNumber("Falcon 500 SPeed", Falcon500Speed);
+    SmartDashboard.putNumber("Falcon 500 Speed", Falcon500Speed);
 
   }
 
