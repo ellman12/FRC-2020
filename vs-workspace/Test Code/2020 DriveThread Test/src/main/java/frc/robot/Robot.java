@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
   // Motor Controllers and encoders for drive system
   public static CANSparkMax frontLeft, frontRight, backLeft, backRight;
 
-  public static WPI_TalonFX testFalcon500;
+  // public static WPI_TalonFX testFalcon500;
 
   // Encoders on two of the drive motors.
   public static CANEncoder left_enc, right_enc;
@@ -82,10 +82,10 @@ public class Robot extends TimedRobot {
 
   // Gyroscopes for drive and tilt.
   public static ADXRS450_Gyro driveGyro;
-  // public static ADXRS450_Gyro tiltGyro;
+  public static ADXRS450_Gyro tiltGyro;
 
   // Ports for the two gyros.
-  private static final SPI.Port DRIVE_GYRO_PORT = SPI.Port.kOnboardCS1;
+  private static final SPI.Port DRIVE_GYRO_PORT = SPI.Port.kOnboardCS0;
   private static final SPI.Port TILT_GYRO_PORT = SPI.Port.kOnboardCS1;
 
   // Here is the class that reads all sensors
@@ -144,16 +144,6 @@ public class Robot extends TimedRobot {
     left_enc = new CANEncoder(frontLeft);
     right_enc = new CANEncoder(frontRight);
 
-    testFalcon500 = new WPI_TalonFX(12);
-
-    testFalcon500.setNeutralMode(NeutralMode.Coast);
-
-    testFalcon500.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 30);
-    testFalcon500.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
-
-    // Reset the encoder.
-    testFalcon500.setSelectedSensorPosition(0);
-
     frontLeft.setIdleMode(IdleMode.kBrake);
     backLeft.setIdleMode(IdleMode.kBrake);
     frontRight.setIdleMode(IdleMode.kBrake);
@@ -178,13 +168,13 @@ public class Robot extends TimedRobot {
 
     // drive system gyro
     driveGyro = new ADXRS450_Gyro(DRIVE_GYRO_PORT);
-    // tiltGyro = new ADXRS450_Gyro(TILT_GYRO_PORT);
+    tiltGyro = new ADXRS450_Gyro(TILT_GYRO_PORT);
 
     // Initialize the gyros, calibrate, and reset to zero degrees.
     driveGyro.calibrate();
     driveGyro.reset();
-    // tiltGyro.calibrate();
-    // tiltGyro.reset();
+    tiltGyro.calibrate();
+    tiltGyro.reset();
 
     delay = new Delay();
 
@@ -220,7 +210,7 @@ public class Robot extends TimedRobot {
 
     if (sensor_output_count == SENSOR_INTERVAL) {
       // read the sensors
-      sensor_status.readSensors();
+      // sensor_status.readSensors();
 
       // System.out.println("drive_angle" + sensor_status.drive_angle);
       // System.out.println("drive_position" + sensor_status.drive_position);
@@ -271,8 +261,7 @@ public class Robot extends TimedRobot {
 
     // System.out.println("ultrasonic = " + proximitySensor.getDistance());
 
-    System.out.println("Drive Gyro: \t" + driveGyro.getAngle());
-    // + "Tilt Gyro: \t" + tiltGyro.getAngle());
+    System.out.println("Drive Gyro: \t" + driveGyro.getAngle() + "\t" + "Tilt Gyro: \t" + tiltGyro.getAngle());
 
     // Allow joystick actions within this block if the drive thread
     // is not active.
