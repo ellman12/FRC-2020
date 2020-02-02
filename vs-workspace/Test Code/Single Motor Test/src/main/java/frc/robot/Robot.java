@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   final int TEST_SPARK_MAX2_PORT = 3;
   final int TEST_FALCON_PORT = 2;
 
-  // String nullVarTest = null;
+  String nullVarTest = null;
 
   // Creating the 2 Spark Maxes.
   CANSparkMax testSparkMax1 = new CANSparkMax(TEST_SPARK_MAX1_PORT, MotorType.kBrushless);
@@ -65,30 +65,30 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
 
     // Temporary test.
-    // try {
+    try {
 
-    // System.out.println("nullVarTest: " + nullVarTest);
+      System.out.println("nullVarTest: " + nullVarTest);
 
-    // } catch (NullPointerException e) {
+    } catch (NullPointerException e) {
 
-    // System.out.print("NullPointerException Caught");
-    // }
+      System.out.print("NullPointerException Caught");
+    }
 
   }
 
   @Override
   public void autonomousInit() {
-
   }
 
   @Override
   public void autonomousPeriodic() {
-
   }
 
   @Override
   public void teleopPeriodic() {
 
+    // Allows controlling individual motors through SD.
+    // The values are a percantage from -100% to 100%.
     SparkMax1Speed = SmartDashboard.getNumber(sparkMax1SpeedChoice, 100) / 100;
     SmartDashboard.putNumber(sparkMax1SpeedChoice, SparkMax1Speed * 100);
 
@@ -98,21 +98,11 @@ public class Robot extends TimedRobot {
     Falcon500Speed = SmartDashboard.getNumber(falconSpeedChoice, 100) / 100;
     SmartDashboard.putNumber(falconSpeedChoice, Falcon500Speed * 100);
 
-    // Getting and setting motor speeds.
-    // SmartDashboard.putData("Falcon 500 SPeed", Falcon500Speed);
-    // SmartDashboard.putNumber("Falcon 500 Speed", Falcon500Speed);
+    // testFalcon.set(Falcon500Speed);
 
-    // SmartDashboard.getNumber("Spark Max 1 SPeed", SparkMax1Speed);
-    // SmartDashboard.putNumber("Spark Max 1 Speed", SparkMax1Speed);
+    // testSparkMax1.set(SparkMax1Speed);
 
-    // SmartDashboard.getNumber("Spark Max 2 SPeed", SparkMax2Speed);
-    // SmartDashboard.putNumber("Spark Max 2 Speed", SparkMax2Speed);
-
-    testFalcon.set(Falcon500Speed);
-
-    testSparkMax1.set(SparkMax1Speed);
-
-    testSparkMax2.set(SparkMax2Speed);
+    // testSparkMax2.set(SparkMax2Speed);
 
   }
 
