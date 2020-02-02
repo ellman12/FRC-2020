@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
   // final int MOTOR_775_PRO_PORT = 1;
 
   final int TEST_FALCON_PORT_1 = 3;
-  final int TEST_FALCON_PORT_2 = 4;
+  final int TEST_FALCON_PORT_2 = 2;
 
   // Creating the 775 Pro Motor, and its controller.
   // WPI_TalonSRX motor775Pro = new WPI_TalonSRX(MOTOR_775_PRO_PORT);
