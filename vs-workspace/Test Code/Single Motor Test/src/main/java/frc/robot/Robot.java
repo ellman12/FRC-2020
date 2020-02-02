@@ -32,8 +32,6 @@ public class Robot extends TimedRobot {
   final int TEST_SPARK_MAX2_PORT = 1;
   final int TEST_FALCON_PORT = 3;
 
-  String nullVarTest;
-
   // Creating the 2 Spark Maxes.
   CANSparkMax testSparkMax1 = new CANSparkMax(TEST_SPARK_MAX1_PORT, MotorType.kBrushless);
   CANSparkMax testSparkMax2 = new CANSparkMax(TEST_SPARK_MAX2_PORT, MotorType.kBrushless);
