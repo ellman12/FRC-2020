@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   final int TEST_SPARK_MAX2_PORT = 3;
   final int TEST_FALCON_PORT = 2;
 
-  String nullVarTest = null;
+  String nullVarTest;
 
   // Creating the 2 Spark Maxes.
   CANSparkMax testSparkMax1 = new CANSparkMax(TEST_SPARK_MAX1_PORT, MotorType.kBrushless);
@@ -58,22 +58,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-
   }
 
   @Override
   public void robotPeriodic() {
-
-    // Temporary test.
-    try {
-
-      System.out.println("nullVarTest: " + nullVarTest);
-
-    } catch (NullPointerException e) {
-
-      System.out.print("NullPointerException Caught");
-    }
-
   }
 
   @Override
@@ -98,11 +86,11 @@ public class Robot extends TimedRobot {
     Falcon500Speed = SmartDashboard.getNumber(falconSpeedChoice, 100) / 100;
     SmartDashboard.putNumber(falconSpeedChoice, Falcon500Speed * 100);
 
-    // testFalcon.set(Falcon500Speed);
+    testFalcon.set(Falcon500Speed);
 
-    // testSparkMax1.set(SparkMax1Speed);
+    testSparkMax1.set(SparkMax1Speed);
 
-    // testSparkMax2.set(SparkMax2Speed);
+    testSparkMax2.set(SparkMax2Speed);
 
   }
 
