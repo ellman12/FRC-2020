@@ -28,9 +28,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 
   // Magic numbers for motor ports.
-  final int TEST_SPARK_MAX1_PORT = 1;
-  final int TEST_SPARK_MAX2_PORT = 3;
-  final int TEST_FALCON_PORT = 2;
+  final int TEST_SPARK_MAX1_PORT = 2;
+  final int TEST_SPARK_MAX2_PORT = 1;
+  final int TEST_FALCON_PORT = 3;
 
   String nullVarTest;
 
