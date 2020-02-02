@@ -18,9 +18,11 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,34 +30,37 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 
   // Magic numbers for motor ports.
-  final int TEST_SPARK_MAX1_PORT = 2;
-  final int TEST_SPARK_MAX2_PORT = 1;
-  final int TEST_FALCON_PORT = 3;
+  // final int MOTOR_775_PRO_PORT = 1;
 
-  // Creating the 2 Spark Maxes.
-  CANSparkMax testSparkMax1 = new CANSparkMax(TEST_SPARK_MAX1_PORT, MotorType.kBrushless);
-  CANSparkMax testSparkMax2 = new CANSparkMax(TEST_SPARK_MAX2_PORT, MotorType.kBrushless);
+  final int TEST_FALCON_PORT_1 = 3;
+  final int TEST_FALCON_PORT_2 = 4;
+
+  // Creating the 775 Pro Motor, and its controller.
+  // WPI_TalonSRX motor775Pro = new WPI_TalonSRX(MOTOR_775_PRO_PORT);
 
   // Creating the Falcon 500.
-  WPI_TalonFX testFalcon = new WPI_TalonFX(TEST_FALCON_PORT);
+  WPI_TalonFX testFalcon1 = new WPI_TalonFX(TEST_FALCON_PORT_1);
+  WPI_TalonFX testFalcon2 = new WPI_TalonFX(TEST_FALCON_PORT_2);
 
   // Doubles used for controlling the motor speeds through SD.
-  double SparkMax1Speed = 0;
-  double SparkMax2Speed = 0;
+  // Start as 0 so that they're not full blast right away.
+  // double motor775ProSpeed = 0;
   double Falcon500Speed = 0;
 
-  // SD stuff.
-  public static final String sparkMax1SpeedChoice = "sparkMax1SpeedChoice";
-  public SendableChooser<String> sendChooserSpeedSparkMax1 = new SendableChooser<>();
+  SpeedControllerGroup Falcon500Group = new SpeedControllerGroup(testFalcon1, testFalcon2);
 
-  public static final String sparkMax2SpeedChoice = "sparkMax2SpeedChoice";
-  public SendableChooser<String> sendChooserSpeedSparkMax2 = new SendableChooser<>();
+  // SD stuff.
+  // public static final String motor775ProSpeedChoice = "motor775ProSpeedChoice";
+  // public SendableChooser<String> sendChooser775Pro = new SendableChooser<>();
 
   public static final String falconSpeedChoice = "falconSpeedChoice";
   public SendableChooser<String> sendChooserSpeedFalcon = new SendableChooser<>();
 
   @Override
   public void robotInit() {
+
+    testFalcon2.setInverted(true);
+
   }
 
   @Override
@@ -75,20 +80,17 @@ public class Robot extends TimedRobot {
 
     // Allows controlling individual motors through SD.
     // The values are a percantage from -100% to 100%.
-    SparkMax1Speed = SmartDashboard.getNumber(sparkMax1SpeedChoice, 100) / 100;
-    SmartDashboard.putNumber(sparkMax1SpeedChoice, SparkMax1Speed * 100);
-
-    SparkMax2Speed = SmartDashboard.getNumber(sparkMax2SpeedChoice, 100) / 100;
-    SmartDashboard.putNumber(sparkMax2SpeedChoice, SparkMax2Speed * 100);
+    // motor775ProSpeed = SmartDashboard.getNumber(motor775ProSpeedChoice, 100) /
+    // 100;
+    // SmartDashboard.putNumber(motor775ProSpeedChoice, motor775ProSpeed * 100);
 
     Falcon500Speed = SmartDashboard.getNumber(falconSpeedChoice, 100) / 100;
     SmartDashboard.putNumber(falconSpeedChoice, Falcon500Speed * 100);
 
-    testFalcon.set(Falcon500Speed);
+    // Sets the motor speeds to what the user inputs.
+    // motor775Pro.set(motor775ProSpeed);
 
-    testSparkMax1.set(SparkMax1Speed);
-
-    testSparkMax2.set(SparkMax2Speed);
+    Falcon500Group.set(Falcon500Speed);
 
   }
 
