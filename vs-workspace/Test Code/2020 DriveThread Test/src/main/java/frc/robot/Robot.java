@@ -85,8 +85,8 @@ public class Robot extends TimedRobot {
   public static ADXRS450_Gyro tiltGyro;
 
   // Ports for the two gyros.
-  private static final SPI.Port DRIVE_GYRO_PORT = SPI.Port.kOnboardCS0;
-  private static final SPI.Port TILT_GYRO_PORT = SPI.Port.kOnboardCS1;
+  // private static final SPI.Port DRIVE_GYRO_PORT = SPI.Port.kOnboardCS0;
+  // private static final SPI.Port TILT_GYRO_PORT = SPI.Port.kOnboardCS1;
 
   // Here is the class that reads all sensors
   public static Sensors sensor_status;
@@ -167,8 +167,8 @@ public class Robot extends TimedRobot {
     diff_drive = new DifferentialDrive(leftDrive, rightDrive);
 
     // drive system gyro
-    driveGyro = new ADXRS450_Gyro(DRIVE_GYRO_PORT);
-    tiltGyro = new ADXRS450_Gyro(TILT_GYRO_PORT);
+    driveGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
+    tiltGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS1);
 
     // Initialize the gyros, calibrate, and reset to zero degrees.
     driveGyro.calibrate();
