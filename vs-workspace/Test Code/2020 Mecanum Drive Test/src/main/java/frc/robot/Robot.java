@@ -16,9 +16,11 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
@@ -82,15 +84,15 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
+  public String getGameData() {
+
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+
+    gameData = gameData.substring(0, 2);
+
+    SmartDashboard.putString("Colors", gameData);
+
+    return (gameData);
+  }
+
 }
-
-public String getGameData() {
-
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-
-		gameData = gameData.substring(0, 2);
-
-		SmartDashboard.putString("Colors", gameData);
-
-		return (gameData);
-	}
