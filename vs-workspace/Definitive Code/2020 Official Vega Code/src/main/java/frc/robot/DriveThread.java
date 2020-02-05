@@ -1,0 +1,37 @@
+/////////////////////////////////////////////////////////////////////
+// File: 
+/////////////////////////////////////////////////////////////////////
+//
+// Purpose: 
+//
+// Authors: 
+//
+// Environment: Microsoft VSCode Java
+//
+// Remarks: 
+//
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+package frc.robot;
+
+class DriveThread implements Runnable {
+    String name;
+    Thread t;
+    Runtime r = Runtime.getRuntime();
+
+    // DriveThread constructor.
+    DriveThread(String threadname) {
+
+        name = threadname;
+		t = new Thread(this, name);
+		t.start(); // Start the thread
+
+    }
+
+    public void run() {
+
+        
+
+    }
+
+}
