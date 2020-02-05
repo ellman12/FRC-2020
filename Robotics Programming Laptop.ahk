@@ -45,15 +45,16 @@ return
 
 #IfWinNotActive GitHub Desktop
 
-;Open the repo folder.
-^+g::
+#If
+
+;Open FRC-2020 GitHub folder.
+^+f::
 Run, %A_MyDocuments%\GitHub\FRC-2020
 return
 
-#If
-
-SC029::
-Send, !{Tab}
+;Opens the FRC-2020 GitHub repo in Chrome.
+^+g::
+Run, "https://github.com/ellman12/FRC-2020"
 return
 
 ^Space::
