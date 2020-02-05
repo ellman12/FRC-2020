@@ -43,9 +43,38 @@ return
 Send, {F5}
 return
 
-#IfWinNotActive GitHub Desktop
+;When Cortana/Search is open, RWin does LWin twice.
+#IfWinActive Cortana
+RWin::
+Send, {LWin}
+Sleep 300
+Send, {LWin}
+return
 
+;Sends a Space and "meaning" when the Windows 10 Search Bar window is active (Cortana).
+;Equivalent to G15 in Browser.
+!s::
+Send, {Space}meaning
+return
 #If
+
+;Sends the current date and time in this format: 10/31/2019 07:43 PM.
+:*:datetime::
+FormatTime, CurrentDateTime,, M/dd/yyyy h:mm tt
+SendInput, %CurrentDateTime%
+return
+
+;Same thing, but just the date.
+:*:currdate::
+FormatTime, CurrentDateTime,, M/dd/yyyy
+SendInput, %CurrentDateTime%
+return
+
+;Same thing, but just the time.
+:*:currtime::
+FormatTime, CurrentDateTime,, h:mm tt
+SendInput, %CurrentDateTime%
+return
 
 ;Open FRC-2020 GitHub folder.
 ^+f::
