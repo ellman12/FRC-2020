@@ -18,6 +18,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 

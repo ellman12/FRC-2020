@@ -19,6 +19,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -31,6 +32,9 @@ import edu.wpi.first.wpilibj.util.Color;
 
 class Sensors {
 
+    // Creating an instance of DriveThread in Sensors.java.
+    DriveThread driveThread = new DriveThread("DriveThread");
+
     // Variables for storing sensor values.
     // Gyro angles.
     double driveGyroAngle;
@@ -38,6 +42,10 @@ class Sensors {
 
     // Proximity sensor distance value (in inches).
     double proximitySensorDistance;
+
+    // Doubles for storing encoder readings.
+    double frontLeftDriveEncValue;
+    double frontRightDriveEncValue;
 
     // Creating the 2 gyros.
     ADXRS450_Gyro driveGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
@@ -77,6 +85,9 @@ class Sensors {
     private final Color colorRed = ColorMatch.makeColor(0.561, 0.232, 0.114);
     private final Color colorYellow = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
+    // Creating the 2 drive encoders.
+    CANEncoder frontLeftEncoder, frontRightEncoder;
+
     // Sensors class constructor.
     Sensors() {
 
@@ -85,14 +96,21 @@ class Sensors {
         colorMatcher.addColorMatch(colorGreen);
         colorMatcher.addColorMatch(colorRed);
         colorMatcher.addColorMatch(colorYellow);
+
+        frontLeftEncoder = new CANEncoder(driveThread.frontLeftMotor);
+        frontRightEncoder = new CANEncoder(driveThread.frontRightMotor);
     }
 
     public void readSensors() {
 
+        // Assigns these variables with their measurements.
         driveGyroAngle = driveGyro.getAngle();
         wormDriveGyroAngle = wormDriveGyro.getAngle();
 
         proximitySensorDistance = getDistance();
+
+        frontLeftDriveEncValue = frontLeftEncoder.getPosition();
+        frontRightDriveEncValue = frontRightEncoder.getPosition();
     }
 
     /////////////////////////////////////////////////////////////////////

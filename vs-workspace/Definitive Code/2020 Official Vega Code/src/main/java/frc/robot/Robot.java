@@ -7,6 +7,9 @@ public class Robot extends TimedRobot {
   // Creating instance of DriveThread.
   DriveThread driveThread;
 
+  // Create instance of the Sensors class.
+  Sensors sensors = new Sensors();
+
   @Override
   public void robotInit() {
 
@@ -19,6 +22,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    sensors.readSensors();
+
   }
 
   @Override
