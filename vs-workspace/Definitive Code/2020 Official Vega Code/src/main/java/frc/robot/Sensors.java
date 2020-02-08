@@ -20,6 +20,7 @@
 package frc.robot;
 
 import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -61,20 +62,21 @@ class Sensors {
     // This is used for matching colors.
     ColorMatch colorMatcher = new ColorMatch();
 
-    // Assigning these RGB values to variables.
-    private final Color blueColor = ColorMatch.makeColor(0.143, 0.427, 0.429);
-    private final Color greenColor = ColorMatch.makeColor(0.197, 0.561, 0.240);
-    private final Color redColor = ColorMatch.makeColor(0.561, 0.232, 0.114);
-    private final Color yellowColor = ColorMatch.makeColor(0.361, 0.524, 0.113);
+    // Assigning these RGB values to variables, so the color sensor can look for
+    // these RGB values.
+    private final Color colorBlue = ColorMatch.makeColor(0.143, 0.427, 0.429);
+    private final Color colorGreen = ColorMatch.makeColor(0.197, 0.561, 0.240);
+    private final Color colorRed = ColorMatch.makeColor(0.561, 0.232, 0.114);
+    private final Color colorYellow = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
     // Sensors class constructor.
     Sensors() {
 
-        // Adding the colors to look for.
-        colorMatcher.addColorMatch(blueColor);
-        colorMatcher.addColorMatch(greenColor);
-        colorMatcher.addColorMatch(redColor);
-        colorMatcher.addColorMatch(yellowColor);
+        // Adding the colors to look for to the color matcher.
+        colorMatcher.addColorMatch(colorBlue);
+        colorMatcher.addColorMatch(colorGreen);
+        colorMatcher.addColorMatch(colorRed);
+        colorMatcher.addColorMatch(colorYellow);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -100,6 +102,152 @@ class Sensors {
         distance = (measuredVoltage * PROX_SENSOR_RES) / MM_PER_INCH;
 
         return distance;
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: getColorString()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Gets the current color that the color sensor sees.
+    //
+    // Arguments: void.
+    //
+    // Returns: A string containing the color it sees (colorString).
+    //
+    // Remarks:
+    //
+    /////////////////////////////////////////////////////////////////////
+    String getColorString() {
+        // Get instances of each of these classes.
+        Color detectedColor;
+        ColorMatchResult colorMatchResult;
+
+        // String for storing the detected color.
+        // E.g, if the color sensor sees Blue, it will store this String
+        // as "Blue".
+        String colorOutput;
+
+        // The color that the color sensor sees.
+        detectedColor = colorSensor.getColor();
+
+        // The result after running the color matching algorithm.
+        colorMatchResult = colorMatcher.matchClosestColor(detectedColor);
+
+        // If the color match result is a color, assign the String that value.
+        // Else, return unknown.
+        if (colorMatchResult.color == colorBlue) {
+            colorOutput = "Blue";
+        } else if (colorMatchResult.color == colorRed) {
+            colorOutput = "Red";
+        } else if (colorMatchResult.color == colorGreen) {
+            colorOutput = "Green";
+        } else if (colorMatchResult.color == colorYellow) {
+            colorOutput = "Yellow";
+        } else {
+            colorOutput = "Unknown";
+        }
+
+        // If the color sensor is too far away to be able to read colors properly,
+        // return "Invalid".
+        if (ColorValidity() == false) {
+            colorOutput = "Invalid";
+        }
+
+        // Returns the detected color
+        return (colorOutput);
+
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: getColorSensorIR()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Gets the IR value.
+    //
+    // Arguments: void.
+    //
+    // Returns: double representing the IR reading.
+    //
+    // Remarks: Created on 1/11/2020.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    double getColorSensorIR() {
+
+        // Value used for storing the IR reading.
+        double IR_Reading;
+
+        // Get the IR value from the color sensor.
+        IR_Reading = colorSensor.getIR();
+
+        // Return the value.
+        return (IR_Reading);
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: getProximity()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Gets the proximity to the object.
+    //
+    // Arguments: void.
+    //
+    // Returns: A value proportional to the proximity
+    // (the closer you are, the higher the value).
+    //
+    // Remarks: Saturates at 255 (max value it can return).
+    // Experimentally, the minimum value is 40 or 50.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    int getColorSensorProximity() {
+
+        // Stores the proximity value for the color sensor.
+        int proximity;
+
+        // Gets the proximity value from the color sensor.
+        proximity = colorSensor.getProximity();
+
+        // Returns the proximity value from the color sensor.
+        return (proximity);
+
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: ColorValidity()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Determines if we are close enough to get an accurate
+    // color reading. Makes use of both IR and proximity features of
+    // the sensor.
+    //
+    // Arguments: void.
+    //
+    // Returns: True or false, depending on if it's close enough to get
+    // an accurate reading. True means that we can have a valid reading
+    // (we're close enough). False means we're not close enough.
+    //
+    // Remarks: Initial testing indicated that the values MIN_IR_VALUE and
+    // MIN_PROX_VALUE are sufficient.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    boolean ColorValidity() {
+
+        int proximity;
+        double IR_Reading;
+
+        IR_Reading = getColorSensorIR();
+
+        proximity = getColorSensorProximity();
+
+        // If we're too far away, return false, thus saying the validity is false.
+        if ((proximity > MIN_COLOR_SENSOR_PROX_VALUE) && (IR_Reading > MIN_COLOR_SENSOR_IR_VALUE)) {
+            return (true);
+        } else {
+            return (false);
+        }
+
     }
 
 }
