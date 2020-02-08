@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////
-// File: Autonomous.java
+// File: BallShootThread.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: Houses functions used in Autonomous.
-// This helps keep DriveThread less cluttered.
+// Purpose: Thread used for controlling the mechanisms for shooting
+// lemons (power cells).
 //
-// Authors: Elliott DuCharme and Noah Stigeler.
+// Authors: Elliot DuCharme and Noah Stigeler.
 //
 // Environment: Microsoft VSCode Java
 //
@@ -15,9 +15,9 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-class Autonomous {
+class BallShootThread {
 
-    Autonomous() {
+    BallShootThread(String threadName) {
 
     }
 }

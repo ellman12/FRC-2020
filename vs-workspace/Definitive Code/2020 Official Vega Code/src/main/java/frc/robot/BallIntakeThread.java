@@ -1,11 +1,10 @@
 /////////////////////////////////////////////////////////////////////
-// File: Autonomous.java
+// File: BallIntakeThread.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: Houses functions used in Autonomous.
-// This helps keep DriveThread less cluttered.
+// Purpose: 
 //
-// Authors: Elliott DuCharme and Noah Stigeler.
+// Authors: Elliot DuCharme and Noah Stigeler.
 //
 // Environment: Microsoft VSCode Java
 //
@@ -15,9 +14,9 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-class Autonomous {
+class BallIntakeThread {
 
-    Autonomous() {
+    BallIntakeThread(String threadName) {
 
     }
 }

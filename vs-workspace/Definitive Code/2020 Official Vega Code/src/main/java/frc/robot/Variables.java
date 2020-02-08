@@ -19,6 +19,7 @@ package frc.robot;
 
 class Variables {
 
+    ///////////////////// Variables ////////////////////
     // Magic numbers for PS4 Controller IDs.
     final int PS4_L_X_AXIS_ID = 0;
     final int PS4_L_Y_AXIS_ID = 1;
@@ -26,6 +27,11 @@ class Variables {
     final int PS4_R_Y_AXIS_ID = 3;
     final int PS4_L_ANALOG_TRIG_ID = 4;
     final int PS4_R_ANALOG_TRIG_ID = 5;
+
+    ///////////////////// CONSTANTS ////////////////////
+    final int MIN_THREAD_PRIORITY = 1;
+    final int NORM_THREAD_PRIORITY = 5;
+    final int MAX_THREAD_PRIORITY = 10;
 
     // Constructor.
     Variables() {

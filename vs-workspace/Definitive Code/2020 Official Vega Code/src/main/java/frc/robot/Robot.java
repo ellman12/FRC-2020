@@ -10,6 +10,9 @@ public class Robot extends TimedRobot {
   // Create instance of the Sensors class.
   Sensors sensors = new Sensors();
 
+  // Creating an instance of the Variables class.
+  Variables variables = new Variables();
+
   @Override
   public void robotInit() {
 
@@ -17,6 +20,9 @@ public class Robot extends TimedRobot {
     // Calling it once in robotInit() should help prevent it from
     // being called a gazillion times in autoPeriodic/teleopPeriodic().
     driveThread = new DriveThread("driveThread");
+
+    // Setting initial Thread priorities.
+    driveThread.driveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
   }
 
   @Override
