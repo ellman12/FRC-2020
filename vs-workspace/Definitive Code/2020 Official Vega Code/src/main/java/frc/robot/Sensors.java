@@ -31,6 +31,14 @@ import edu.wpi.first.wpilibj.util.Color;
 
 class Sensors {
 
+    // Variables for storing sensor values.
+    // Gyro angles.
+    double driveGyroAngle;
+    double wormDriveGyroAngle;
+
+    // Proximity sensor distance value (in inches).
+    double proximitySensorDistance;
+
     // Creating the 2 gyros.
     ADXRS450_Gyro driveGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
     ADXRS450_Gyro wormDriveGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS1);
@@ -77,6 +85,14 @@ class Sensors {
         colorMatcher.addColorMatch(colorGreen);
         colorMatcher.addColorMatch(colorRed);
         colorMatcher.addColorMatch(colorYellow);
+    }
+
+    public void readSensors() {
+
+        driveGyroAngle = driveGyro.getAngle();
+        wormDriveGyroAngle = wormDriveGyro.getAngle();
+
+        proximitySensorDistance = getDistance();
     }
 
     /////////////////////////////////////////////////////////////////////
