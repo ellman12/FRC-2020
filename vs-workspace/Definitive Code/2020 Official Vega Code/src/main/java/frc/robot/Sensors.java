@@ -234,14 +234,16 @@ class Sensors {
     /////////////////////////////////////////////////////////////////////
     boolean ColorValidity() {
 
+        // Stores the color sensor's IR and proximity values.
         int proximity;
         double IR_Reading;
 
+        // Gets those values.
         IR_Reading = getColorSensorIR();
 
         proximity = getColorSensorProximity();
 
-        // If we're too far away, return false, thus saying the validity is false.
+        // If we're close enough, return true. Else, return false.
         if ((proximity > MIN_COLOR_SENSOR_PROX_VALUE) && (IR_Reading > MIN_COLOR_SENSOR_IR_VALUE)) {
             return (true);
         } else {
