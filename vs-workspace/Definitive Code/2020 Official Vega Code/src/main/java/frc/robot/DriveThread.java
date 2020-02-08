@@ -74,7 +74,7 @@ class DriveThread implements Runnable {
     // ID for PS4 Controller.
     final int PS4_ID = 1;
 
-    // Creaing the Controller.
+    // Creating the Controller.
     Joystick PS4 = new Joystick(PS4_ID);
 
     // DriveThread constructor.
