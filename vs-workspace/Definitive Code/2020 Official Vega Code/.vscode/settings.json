@@ -11,5 +11,17 @@
     "**/.project": true,
     "**/.settings": true,
     "**/.factorypath": true
-  }
+  },
+  "cSpell.words": [
+    "axes",
+    "inputted",
+    "might",
+    "not",
+    "probably",
+    "the",
+    "they",
+    "todo",
+    "won't",
+    "work"
+  ]
 }

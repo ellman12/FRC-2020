@@ -114,7 +114,18 @@ class DriveThread implements Runnable {
                 PS4LeftAnalogTrigger = PS4.getRawAxis(variables.PS4_L_ANALOG_TRIG_ID);
                 PS4RightAnalogTrigger = PS4.getRawAxis(variables.PS4_R_ANALOG_TRIG_ID);
 
-                mecanumDrive.
+                // Controlling the Mecanum Drive with the Joystick axes.
+                mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
+
+                // If the analog triggers are pressed down sufficiently, strafe in the
+                // corresponding direction.
+                if (PS4LeftAnalogTrigger >= PS4_ANALOG_TRIGGER_DEADBAND) {
+                    strafeLeft();
+                }
+
+                if (PS4_ANALOG_TRIGGER_DEADBAND >= PS4_ANALOG_TRIGGER_DEADBAND) {
+                    strafeRight();
+                }
 
             }
 
@@ -129,6 +140,60 @@ class DriveThread implements Runnable {
 
         }
 
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: strafeLeft()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Function called when the left analog trigger is pressed
+    // down. Causes the robot to strafe left.
+    //
+    // Arguments: None
+    //
+    // Returns: void
+    //
+    // Remarks:
+    // In order to strafe left...
+    // the frontLeftMotor has to spin backwards...
+    // the backLeftMotor has to spin forwards...
+    // the frontRightMotor has to spin forwards...
+    // and the backRightMotor has to spin backwards.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void strafeLeft() {
+        frontLeftMotor.set(-PS4LeftAnalogTrigger);
+        backLeftMotor.set(PS4LeftAnalogTrigger);
+        frontRightMotor.set(PS4LeftAnalogTrigger);
+        backRightMotor.set(-PS4LeftAnalogTrigger);
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: strafeRight()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Function called when the right analog trigger is pressed
+    // down. Causes the robot to strafe right.
+    //
+    // Arguments: None
+    //
+    // Returns: void
+    //
+    // Remarks:
+    // In order to strafe right...
+    // the frontLeftMotor has to spin forwards...
+    // the backLeftMotor has to spin backwards...
+    // the frontRightMotor has to spin backwards...
+    // and the backRightMotor has to spin forwards.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void strafeRight() {
+        frontLeftMotor.set(PS4LeftAnalogTrigger);
+        backLeftMotor.set(-PS4LeftAnalogTrigger);
+        frontRightMotor.set(-PS4LeftAnalogTrigger);
+        backRightMotor.set(PS4LeftAnalogTrigger);
     }
 
 }
