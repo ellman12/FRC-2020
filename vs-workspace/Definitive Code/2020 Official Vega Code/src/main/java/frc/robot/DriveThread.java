@@ -18,7 +18,6 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -138,8 +137,10 @@ class DriveThread implements Runnable {
                 System.out.println(threadName + "Interrupted.");
             }
 
+            // Print out when the Thread is exiting, and force garbage collection (freeing
+            // of memory resources) (.gc()).
             System.out.println(threadName + "Exiting Drive Thread");
-            runtime.gc(); // force garbage collection (freeing of memory resources)
+            runtime.gc();
 
         }
 

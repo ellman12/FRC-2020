@@ -10,7 +10,7 @@
 // Environment: Microsoft VSCode Java
 //
 // Remarks: Created on 2/08/2020.
-// This for the first argument wasn't working, even though in
+// "This" for the first argument wasn't working, even though in
 // DriveThread that is how we do it...?
 //
 /////////////////////////////////////////////////////////////////////
@@ -29,6 +29,13 @@ class BallShootThread {
     // Creating instance of the Thread class by
     // creating a thread (reserving memory for this object).
     Thread ballShooThread;
+
+    // Create an instance of the DriveThread
+    // Just used for getting the PS4 button press.
+    DriveThread driveThread = new DriveThread("DriveThread");
+
+    // Create an instance of the Variables class.
+    Variables variables = new Variables();
 
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
@@ -49,6 +56,10 @@ class BallShootThread {
     final int BACK_LEFT_SHOOTER_MOTOR_ID = 7;
     final int BACK_RIGHT_SHOOTER_MOTOR_ID = 8;
 
+    // Magic numbers for controlling the speeds of the shooter motors.
+    final double FRONT_SHOOTER_MOTORS_SPEED = 1; // 100%
+    final double BACK_SHOOTER_MOTORS_SPEED = 0.75; // 75%
+
     // Grouping motors together, so it's easier to control them.
     SpeedControllerGroup frontShooterMotors, backShooterMotors;
 
@@ -66,6 +77,14 @@ class BallShootThread {
         backLeftShooterMotor = new WPI_TalonFX(BACK_LEFT_SHOOTER_MOTOR_ID);
         backRightShooterMotor = new WPI_TalonFX(BACK_RIGHT_SHOOTER_MOTOR_ID);
 
+        // Creating the SpeedControllerGroups.
+        frontShooterMotors = new SpeedControllerGroup(frontLeftShooterMotor, frontLeftShooterMotor);
+        backShooterMotors = new SpeedControllerGroup(backRightShooterMotor, backLeftShooterMotor);
+
+        // Invert shooter motors, so they spin the right way.
+        frontRightShooterMotor.setInverted(true);
+        backRightShooterMotor.setInverted(true);
+
         // Actually creating the Thread.
         ballShooThread = new Thread(ballShooThread, threadName);
         ballShooThread.start(); // Start the Thread.
@@ -78,11 +97,53 @@ class BallShootThread {
         // While the Thread is alive, do stuff.
         while (ballShooThread.isAlive() == true) {
 
-
+            // While this Thread is running, have this function ready to go.
+            ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
 
         }
 
+        // Thread class provides the join() method which allows one thread to wait until
+        // another thread completes its execution.
+        // Basically, if t is a Thread object whose thread is currently executing, then
+        // t.join() will make sure that t is terminated before the next instruction is
+        // executed by the program.
+        try {
+            ballShooThread.join();
+        } catch (InterruptedException e) {
+            System.out.println(threadName + "Interrupted.");
+        }
+
+        // Print out when the Thread is exiting, and force garbage collection (freeing
+        // of memory resources) (.gc()).
+        System.out.println(threadName + "Exiting Drive Thread");
+        runtime.gc();
+
     }
 
-    public 
+    /////////////////////////////////////////////////////////////////////
+    // Function: ballShoot()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Function used for shooting balls.
+    // You can input what speeds you want the motors to run at when the
+    // button is pressed.
+    //
+    // Arguments: double frontFalconSpeed, double backFalconSpeed
+    // Speeds for the front and back motors.
+    //
+    // Returns: void
+    //
+    // Remarks:
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void ballShoot(double frontFalconSpeed, double backFalconSpeed) {
+        if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
+            frontShooterMotors.set(frontFalconSpeed);
+            backShooterMotors.set(backFalconSpeed);
+        } else {
+            frontShooterMotors.set(0);
+            backShooterMotors.set(0);
+        }
+    }
 }
