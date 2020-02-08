@@ -3,28 +3,24 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.hal.sim.DriverStationSim;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public class Robot extends TimedRobot {
 
-  // Double variables for the PS4 Controller axes.
-  double PS4LeftXAxis;
-  double PS4LeftYAxis;
-  double PS4LeftAnalogTrigger;
-  double PS4RightAnalogTrigger;
-
-  // Magic numbers for PS4 Controller IDs.
-  final int PS4_L_X_AXIS_ID = 0;
-  final int PS4_L_Y_AXIS_ID = 1;
-  final int PS4_R_X_AXIS_ID = 2;
-  final int PS4_R_Y_AXIS_ID = 3;
-  final int PS4_L_ANALOG_TRIG_ID = 4;
-  final int PS4_R_ANALOG_TRIG_ID = 5;
+  // Creating instance of DriveThread.
+  DriveThread driveThread;
 
   @Override
   public void robotInit() {
+
+    // Calling the DriveThread, and telling it to do its thing.
+    // Calling it once in robotInit() should help prevent it from
+    // being called a gazillion times in autoPeriodic/teleopPeriodic().
+    driveThread = new DriveThread("driveThread");
 
   }
 
@@ -34,36 +30,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-
   }
 
   @Override
   public void autonomousPeriodic() {
-
   }
 
   @Override
   public void teleopPeriodic() {
-
-    // Getting the values of the PS4 Controller's axes.
-    PS4LeftXAxis = PS4.getRawAxis(PS4_L_X_AXIS_ID);
-    PS4LeftYAxis = PS4.getRawAxis(PS4_L_Y_AXIS_ID);
-    PS4LeftAnalogTrigger = PS4.getRawAxis(PS4_L_ANALOG_TRIG_ID);
-    PS4RightAnalogTrigger = PS4.getRawAxis(PS4_R_ANALOG_TRIG_ID);
-
-    // Controlling the Mecanum Drive with the Joystick axes.
-    mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
-
-    // If the analog triggers are pressed down sufficiently, strafe in the
-    // corresponding direction.
-    if (PS4LeftAnalogTrigger >= PS4_ANALOG_TRIGGER_DEADBAND) {
-      strafeLeft();
-    }
-
-    if (PS4_ANALOG_TRIGGER_DEADBAND >= PS4_ANALOG_TRIGGER_DEADBAND) {
-      strafeRight();
-    }
-
   }
 
   @Override

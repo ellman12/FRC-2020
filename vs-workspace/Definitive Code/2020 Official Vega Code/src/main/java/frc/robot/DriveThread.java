@@ -21,15 +21,23 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.hal.sim.DriverStationSim;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 // Creating the class that implements the Runnable interface.
 class DriveThread implements Runnable {
 
+    // Name of the Thread.
+    String name;
+
     // Creating instance of the Thread class by
     // creating a thread (reserving memory for this object).
     Thread driveThread;
+
+    // Creating an instance of the Variables class.
+    Variables variables;
 
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
@@ -52,6 +60,12 @@ class DriveThread implements Runnable {
     // not cause the robot to strafe. This prevents accidental strafing.
     final double PS4_ANALOG_TRIGGER_DEADBAND = 0.15;
 
+    // Double variables for the values of the PS4 Controller axes.
+    double PS4LeftXAxis;
+    double PS4LeftYAxis;
+    double PS4LeftAnalogTrigger;
+    double PS4RightAnalogTrigger;
+
     // Magic numbers for Motor IDs.
     final int FRONT_LEFT_SPARK_ID = 1;
     final int BACK_LEFT_SPARK_ID = 2;
@@ -69,46 +83,51 @@ class DriveThread implements Runnable {
     // Normally, you would have like "DriveThread" or something.
     DriveThread(String threadName) {
 
+        // Assigning the name of the Thread to the argument.
+        name = threadName;
+
         // Constructing the motors, giving them their IDs, and making them brushless.
         frontLeftMotor = new CANSparkMax(FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
         backLeftMotor = new CANSparkMax(BACK_LEFT_SPARK_ID, MotorType.kBrushless);
         frontRightMotor = new CANSparkMax(FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
         backRightMotor = new CANSparkMax(BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
 
+        variables = new Variables();
+
         driveThread = new Thread(this, threadName); // Actually creating the Thread.
         driveThread.start(); // Start the thread.
     }
 
+    // Function that actually runs stuff.
     public void run() {
 
+        // While the Thread is alive.
         while (driveThread.isAlive() == true) {
 
-            // Set the flag active so that any joystick
-            // manipulations are disabled while this
-            // thread is active. Note that delays within
-            // this thread will not affect the main()
-            // program.
-            Robot.driveThreadActive = true;
+            if (DriverStation.getInstance().isAutonomous()) {
+                // Auto functions called here.
+            } else {
+                // Have teleop stuff here.
+                // Getting the values of the PS4 Controller's axes.
+                PS4LeftXAxis = PS4.getRawAxis(variables.PS4_L_X_AXIS_ID);
+                PS4LeftYAxis = PS4.getRawAxis(variables.PS4_L_Y_AXIS_ID);
+                PS4LeftAnalogTrigger = PS4.getRawAxis(variables.PS4_L_ANALOG_TRIG_ID);
+                PS4RightAnalogTrigger = PS4.getRawAxis(variables.PS4_R_ANALOG_TRIG_ID);
 
-            // The various member functions would be called here.
-            // For example:
-            // driveFwd(5.0); // move the robot forward 5.0 feet
+                mecanumDrive.
+
+            }
 
             try {
-                Robot.auto_drive.t.join();
+                driveThread.join();
             } catch (InterruptedException e) {
                 System.out.println(name + "Interrupted.");
             }
 
             System.out.println(name + "Exiting Drive Thread");
-            r.gc(); // force garbage collection (freeing of memory resources)
+            runtime.gc(); // force garbage collection (freeing of memory resources)
 
-            // Reset flag
-            Robot.driveThreadActive = false;
         }
-
-        // Should get a false indication
-        System.out.println("Thread Status = " + Robot.auto_drive.t.isAlive());
 
     }
 
