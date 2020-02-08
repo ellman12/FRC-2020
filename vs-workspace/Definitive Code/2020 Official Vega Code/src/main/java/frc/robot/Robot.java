@@ -7,6 +7,9 @@ public class Robot extends TimedRobot {
   // Creating instance of DriveThread.
   DriveThread driveThread;
 
+  // Creating instance of BallShootThread.
+  BallShootThread ballShootThread;
+
   // Create instance of the Sensors class.
   Sensors sensors = new Sensors();
 
@@ -19,7 +22,10 @@ public class Robot extends TimedRobot {
     // Calling the DriveThread, and telling it to get ready to/start running.
     // Calling it once in robotInit() should help prevent it from
     // being called a gazillion times in autoPeriodic/teleopPeriodic().
-    driveThread = new DriveThread("driveThread");
+    driveThread = new DriveThread("DriveThread");
+
+    // Calling the BallShootThread, and telling it to get ready to/start running.
+    ballShootThread = new BallShootThread("BallShootThread");
 
     // Setting initial Thread priorities.
     driveThread.driveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
