@@ -69,6 +69,7 @@ class DriveThread implements Runnable {
 	// Fixed parameters for driveFwd(...)/driveBwd(...)
 	final double START_SPEED = 0.1; // Also used in acceleration functions.
 	final double MAX_SPEED = 0.6;
+	final double MIN_SPEED = 1.0;
 	final double BRAKE_SPEED = 0.3;
 	final double BRAKE_FRACTION = 0.25;
 
@@ -144,7 +145,7 @@ class DriveThread implements Runnable {
 
 			// turnAbsolute(-90);
 
-			driveBwd(5.0);
+			driveFwd(5.0);
 
 			// turnRight_Arcade(90);
 
@@ -460,7 +461,8 @@ class DriveThread implements Runnable {
 			}
 		}
 
-		Robot.diff_drive.arcadeDrive(0, 0);
+        //  continue at max speed until instructed otherwise
+		Robot.diff_drive.arcadeDrive(MAX_SPEED, -corr * delta);
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -489,13 +491,15 @@ class DriveThread implements Runnable {
 
 		speed = 0.6;
 
-		while (speed > 0) {
+		while (speed > MIN_SPEED) {
 
 			speed -= 0.01;
 			Robot.diff_drive.arcadeDrive(speed, -corr * delta);
 			delay.delay_milliseconds(40.0);
 		}
 
+		//  Continue at slow speed until target is reached.
+		Robot.diff_drive.arcadeDrive(BRAKE_SPEED, -corr*delta);
 	}
 
 	///////////////////////////////////////////////////////////////////////////
