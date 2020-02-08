@@ -17,6 +17,10 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+
 class BallShootThread {
 
     // Name of the Thread.
@@ -36,15 +40,35 @@ class BallShootThread {
     // Worth a look.
     Runtime runtime = Runtime.getRuntime();
 
+    // Creating the motors for the ball shooter.
+    WPI_TalonFX frontLeftShooterMotor, frontRightShooterMotor, backLeftShooterMotor, backRightShooterMotor;
+
+    // Magic numbers for Motor IDs.
+    final int FRONT_LEFT_SHOOTER_MOTOR_ID = 5;
+    final int FRONT_RIGHT_SHOOTER_MOTOR_ID = 6;
+    final int BACK_LEFT_SHOOTER_MOTOR_ID = 7;
+    final int BACK_RIGHT_SHOOTER_MOTOR_ID = 8;
+
+    // Grouping motors together, so it's easier to control them.
+    SpeedControllerGroup frontShooterMotors, backShooterMotors;
+
     // DriveThread constructor.
     // String threadName is what is inputted when the Thread is created in the code.
     // Normally, you would have like "DriveThread" or something.
     BallShootThread(String name) {
 
+        // Assigning the name of the Thread to the argument.
         threadName = name;
 
+        // Creating the 4 shooter motors, and assigning them their ID's.
+        frontLeftShooterMotor = new WPI_TalonFX(FRONT_LEFT_SHOOTER_MOTOR_ID);
+        frontRightShooterMotor = new WPI_TalonFX(FRONT_RIGHT_SHOOTER_MOTOR_ID);
+        backLeftShooterMotor = new WPI_TalonFX(BACK_LEFT_SHOOTER_MOTOR_ID);
+        backRightShooterMotor = new WPI_TalonFX(BACK_RIGHT_SHOOTER_MOTOR_ID);
+
+        // Actually creating the Thread.
         ballShooThread = new Thread(ballShooThread, threadName);
-        ballShooThread.start();
+        ballShooThread.start(); // Start the Thread.
 
     }
 
@@ -54,7 +78,11 @@ class BallShootThread {
         // While the Thread is alive, do stuff.
         while (ballShooThread.isAlive() == true) {
 
+
+
         }
 
     }
+
+    public 
 }

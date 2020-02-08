@@ -36,9 +36,9 @@ class Variables {
     final int MAX_THREAD_PRIORITY = 10;
 
     // Magic numbers used for the PS4 Controller button ID's.
-    final int PS4_SQUARE_BUTTON = 1;
-    final int PS4_X_BUTTON = 2;
-    final int PS4_CIRCLE_BUTTON = 3;
+    final int PS4_SQUARE_BUTTON = 1; // Used in filename.java (example).
+    final int PS4_X_BUTTON = 2; // Used in BallShootThread.java for shooting balls.
+    final int PS4_CIRCLE_BUTTON = 3; // TODO Used in BallIntakeThread.java for intaking balls.
     final int PS4_TRIANGLE_BUTTON = 4;
     final int PS4_LEFT_BUMPER = 5;
     final int PS4_RIGHT_BUMPER = 6;

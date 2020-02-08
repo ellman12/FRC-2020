@@ -97,8 +97,8 @@ class Sensors {
         colorMatcher.addColorMatch(colorRed);
         colorMatcher.addColorMatch(colorYellow);
 
-        frontLeftEncoder = new CANEncoder(driveThread.frontLeftMotor);
-        frontRightEncoder = new CANEncoder(driveThread.frontRightMotor);
+        frontLeftEncoder = new CANEncoder(driveThread.frontLeftDriveMotor);
+        frontRightEncoder = new CANEncoder(driveThread.frontRightDriveMotor);
     }
 
     public void readSensors() {

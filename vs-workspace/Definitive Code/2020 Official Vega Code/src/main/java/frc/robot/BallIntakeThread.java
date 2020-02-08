@@ -32,4 +32,12 @@ class BallIntakeThread {
         ballIntakeThread.start();
 
     }
+
+    public void run() {
+
+        while (ballIntakeThread.isAlive() == true) {
+
+        }
+
+    }
 }

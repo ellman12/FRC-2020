@@ -50,10 +50,11 @@ class DriveThread implements Runnable {
     Runtime runtime = Runtime.getRuntime();
 
     // Creating the drive motors.
-    CANSparkMax frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
+    CANSparkMax frontLeftDriveMotor, backLeftDriveMotor, frontRightDriveMotor, backRightDriveMotor;
 
     // Creating the MecanumDrive constructor, which links all 4 motors together.
-    MecanumDrive mecanumDrive = new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
+    MecanumDrive mecanumDrive = new MecanumDrive(frontLeftDriveMotor, backLeftDriveMotor, frontRightDriveMotor,
+            backRightDriveMotor);
 
     // Magic number for the deadband for the analog triggers.
     // If the analog triggers are below this value, they will
@@ -87,15 +88,17 @@ class DriveThread implements Runnable {
         threadName = name;
 
         // Constructing the motors, giving them their IDs, and making them brushless.
-        frontLeftMotor = new CANSparkMax(FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
-        backLeftMotor = new CANSparkMax(BACK_LEFT_SPARK_ID, MotorType.kBrushless);
-        frontRightMotor = new CANSparkMax(FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
-        backRightMotor = new CANSparkMax(BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
+        frontLeftDriveMotor = new CANSparkMax(FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
+        backLeftDriveMotor = new CANSparkMax(BACK_LEFT_SPARK_ID, MotorType.kBrushless);
+        frontRightDriveMotor = new CANSparkMax(FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
+        backRightDriveMotor = new CANSparkMax(BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
 
+        // Creating a new instance of the Variables class.
         variables = new Variables();
 
-        driveThread = new Thread(this, threadName); // Actually creating the Thread.
-        driveThread.start(); // Start the thread.
+        // Actually creating the Thread.
+        driveThread = new Thread(this, threadName);
+        driveThread.start(); // Start the Thread.
     }
 
     // Function that actually runs stuff.
@@ -155,18 +158,18 @@ class DriveThread implements Runnable {
     //
     // Remarks:
     // In order to strafe left...
-    // the frontLeftMotor has to spin backwards...
-    // the backLeftMotor has to spin forwards...
+    // the frontLeftDriveMotor has to spin backwards...
+    // the backLeftDriveMotor has to spin forwards...
     // the frontRightMotor has to spin forwards...
-    // and the backRightMotor has to spin backwards.
+    // and the backRightDriveMotor has to spin backwards.
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     public void strafeLeft() {
-        frontLeftMotor.set(-PS4LeftAnalogTrigger);
-        backLeftMotor.set(PS4LeftAnalogTrigger);
-        frontRightMotor.set(PS4LeftAnalogTrigger);
-        backRightMotor.set(-PS4LeftAnalogTrigger);
+        frontLeftDriveMotor.set(-PS4LeftAnalogTrigger);
+        backLeftDriveMotor.set(PS4LeftAnalogTrigger);
+        frontRightDriveMotor.set(PS4LeftAnalogTrigger);
+        backRightDriveMotor.set(-PS4LeftAnalogTrigger);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -182,18 +185,18 @@ class DriveThread implements Runnable {
     //
     // Remarks:
     // In order to strafe right...
-    // the frontLeftMotor has to spin forwards...
-    // the backLeftMotor has to spin backwards...
+    // the frontLeftDriveMotor has to spin forwards...
+    // the backLeftDriveMotor has to spin backwards...
     // the frontRightMotor has to spin backwards...
-    // and the backRightMotor has to spin forwards.
+    // and the backRightDriveMotor has to spin forwards.
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     public void strafeRight() {
-        frontLeftMotor.set(PS4LeftAnalogTrigger);
-        backLeftMotor.set(-PS4LeftAnalogTrigger);
-        frontRightMotor.set(-PS4LeftAnalogTrigger);
-        backRightMotor.set(PS4LeftAnalogTrigger);
+        frontLeftDriveMotor.set(PS4LeftAnalogTrigger);
+        backLeftDriveMotor.set(-PS4LeftAnalogTrigger);
+        frontRightDriveMotor.set(-PS4LeftAnalogTrigger);
+        backRightDriveMotor.set(PS4LeftAnalogTrigger);
     }
 
 }
