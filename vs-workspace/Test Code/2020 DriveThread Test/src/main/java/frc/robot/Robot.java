@@ -115,7 +115,7 @@ public class Robot extends TimedRobot {
   final int LEFT_X_AXIS_PORT = 0;
   final int LEFT_Y_AXIS_PORT = 1;
   final int RIGHT_X_AXIS_PORT = 2;
-  final int RIGHTT_Y_AXIS_PORT = 5;
+  final int RIGHT_Y_AXIS_PORT = 5;
 
   @Override
   public void robotInit() {
@@ -196,7 +196,7 @@ public class Robot extends TimedRobot {
     PS4LeftXAxis = PS4.getRawAxis(LEFT_X_AXIS_PORT);
     PS4LeftYAxis = PS4.getRawAxis(LEFT_Y_AXIS_PORT);
     PS4RightXAxis = PS4.getRawAxis(RIGHT_X_AXIS_PORT);
-    PS4RightYAxis = PS4.getRawAxis(RIGHTT_Y_AXIS_PORT);
+    PS4RightYAxis = PS4.getRawAxis(RIGHT_Y_AXIS_PORT);
 
     // read the sensors
     // sensor_status.readSensors();
