@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 class DriveThread implements Runnable {
 
     // Name of the Thread.
-    String name;
+    String threadName;
 
     // Creating instance of the Thread class by
     // creating a thread (reserving memory for this object).
@@ -78,13 +78,13 @@ class DriveThread implements Runnable {
     // Creating the Controller.
     Joystick PS4 = new Joystick(PS4_ID);
 
-    // DriveThread constructor.
+    // DriveThread constructor. We pass in the Thread name.
     // String threadName is what is inputted when the Thread is created in the code.
     // Normally, you would have like "DriveThread" or something.
-    DriveThread(String threadName) {
+    DriveThread(String name) {
 
         // Assigning the name of the Thread to the argument.
-        name = threadName;
+        threadName = name;
 
         // Constructing the motors, giving them their IDs, and making them brushless.
         frontLeftMotor = new CANSparkMax(FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
@@ -105,12 +105,12 @@ class DriveThread implements Runnable {
         while (driveThread.isAlive() == true) {
 
             if (DriverStation.getInstance().isAutonomous()) {
-                // Auto functions called here.
+                // TODO Auto functions called here.
             } else {
                 // Have teleop stuff here.
                 // Getting the values of the PS4 Controller's axes.
                 PS4LeftXAxis = PS4.getRawAxis(variables.PS4_L_X_AXIS_ID);
-                PS4LeftYAxis = PS4.getRawAxis(variables.PS4_L_Y_AXIS_ID);
+                PS4LeftYAxis = PS4.getRawAxis(-variables.PS4_L_Y_AXIS_ID);
                 PS4LeftAnalogTrigger = PS4.getRawAxis(variables.PS4_L_ANALOG_TRIG_ID);
                 PS4RightAnalogTrigger = PS4.getRawAxis(variables.PS4_R_ANALOG_TRIG_ID);
 
@@ -132,10 +132,10 @@ class DriveThread implements Runnable {
             try {
                 driveThread.join();
             } catch (InterruptedException e) {
-                System.out.println(name + "Interrupted.");
+                System.out.println(threadName + "Interrupted.");
             }
 
-            System.out.println(name + "Exiting Drive Thread");
+            System.out.println(threadName + "Exiting Drive Thread");
             runtime.gc(); // force garbage collection (freeing of memory resources)
 
         }
