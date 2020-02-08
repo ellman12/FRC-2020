@@ -13,17 +13,22 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    // Calling the DriveThread, and telling it to do its thing.
+    // Calling the DriveThread, and telling it to get ready to/start running.
     // Calling it once in robotInit() should help prevent it from
     // being called a gazillion times in autoPeriodic/teleopPeriodic().
     driveThread = new DriveThread("driveThread");
-
   }
 
   @Override
   public void robotPeriodic() {
-    sensors.readSensors();
 
+    // Calling the readSensors() function.
+    // It is constantly being called in robotPeriodic(), and thus all of the sensors
+    // in the Sensors class are constantly being read.
+    // This helps reduce redundancy, because the same sensors don't need to be read
+    // multiple times, the variable they're stored in can just be accessed whenever
+    // necessary.
+    sensors.readSensors();
   }
 
   @Override
