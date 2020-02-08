@@ -70,13 +70,14 @@ class DriveThread implements Runnable {
     DriveThread(String threadName) {
 
         // Constructing the motors, giving them their IDs, and making them brushless.
-    frontLeftMotor = new CANSparkMax(FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
-    backLeftMotor = new CANSparkMax(BACK_LEFT_SPARK_ID, MotorType.kBrushless);
-    frontRightMotor = new CANSparkMax(FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
-    backRightMotor = new CANSparkMax(BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
+        frontLeftMotor = new CANSparkMax(FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
+        backLeftMotor = new CANSparkMax(BACK_LEFT_SPARK_ID, MotorType.kBrushless);
+        frontRightMotor = new CANSparkMax(FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
+        backRightMotor = new CANSparkMax(BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
 
         driveThread = new Thread(this, threadName); // Actually creating the Thread.
         driveThread.start(); // Start the thread.
+    }
 
     public void run() {
 
