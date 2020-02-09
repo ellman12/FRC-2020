@@ -388,5 +388,12 @@ class ComputeTrajectory {
         ballShootThread.ballShoot(ballShootThread.FRONT_SHOOTER_MOTORS_SPEED,
                 ballShootThread.BACK_SHOOTER_MOTORS_SPEED);
 
+        // Move Ball Shooter back to initial position.
+        while (sensors.wormDriveGyroAngle > initTheta) {
+            wormDriveThread.wormDriveFalcon.set(-wormDriveThread.WORM_DRIVE_FALCON_SPEED);
+        }
+
+        // End of adjustAngleOfShooter().
+
     }
 }
