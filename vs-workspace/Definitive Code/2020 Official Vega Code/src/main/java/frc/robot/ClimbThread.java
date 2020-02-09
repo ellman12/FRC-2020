@@ -18,7 +18,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-class ClimbThread {
+class ClimbThread implements Runnable {
 
     ClimbThread(String threadName) {
 

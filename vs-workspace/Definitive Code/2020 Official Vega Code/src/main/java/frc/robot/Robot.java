@@ -5,11 +5,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 public class Robot extends TimedRobot {
 
   // distances expressed in inches; velocity in ft/sec
-  static double v = 25.0; // velocity
-  static double x0 = 0; // initial x value
-  static double x = 96; // target x value
-  static double y0 = 24; // launch location
-  static double y = 98.25; // target y value
+  static double v = 25.0; // Ball velocity.
+  static double x0 = 0; // Initial x value.
+  static double y0 = 24; // Launch location (initial y value).
+  static double y = 98.25; // Target of y (height of inner goal of the tower (in inches)).
 
   // Calling the Thread classes in Robot.java.
   // Creating an instance of DriveThread.

@@ -19,7 +19,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-class BallIntakeThread {
+class BallIntakeThread implements Runnable {
 
     String name;
 

@@ -344,13 +344,17 @@ class ComputeTrajectory {
         // Get the distance from the robot to the tower (the x value).
         double xProxSensorDistance = sensors.proximitySensorDistance;
 
-        // Get the current angle of the ball shooter.
+        // Get the initial angle of the ball shooter.
         double initTheta = sensors.wormDriveGyroAngle; // Initial angle.
-        double targetFiringTheta = sensors.wormDriveGyroAngle; // Target angle.
+
+        // I don't know if this was necessary. Commented out on 2/09/2020 at 11:51 AM.
+        // double targetFiringTheta = sensors.wormDriveGyroAngle; // Target angle.
 
         // Compute the theta needed for the right trajectory.
-        // Pass in the values so it can do the math.
-        compute_theta_plus(y0, y, x0, x);
+        // Passing in the values so it can do the math.
+        // Returns a double representing the angle we need to adjust to; store it in a
+        // double "targetFiringTheta".
+        double targetFiringTheta = compute_theta_plus(y0, y, x0, xProxSensorDistance);
 
         // If our initial angle is greater than OR less than our intended angle,
         // move it to there.

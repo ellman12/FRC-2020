@@ -73,11 +73,10 @@ class DriveThread implements Runnable {
     final int FRONT_RIGHT_SPARK_ID = 3;
     final int BACK_RIGHT_SPARK_ID = 4;
 
-    // ID for PS4 Controller.
-    final int PS4_ID = 1;
-
-    // Creating the Controller.
-    Joystick PS4 = new Joystick(PS4_ID);
+    // Creating the PS4 Controller, and giving it the ID of 0
+    // Controllers in the Driver Station start at 0, and go to up to 5.
+    // If you somehow have 5 controllers, you're insane.
+    Joystick PS4 = new Joystick(0);
 
     // DriveThread constructor.
     // The name of the Thread is passed in as an argument.

@@ -21,7 +21,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
-class BallShootThread {
+class BallShootThread implements Runnable {
 
     // Name of the Thread.
     String threadName;

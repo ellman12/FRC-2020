@@ -18,7 +18,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-class WormDriveThread {
+class WormDriveThread implements Runnable {
 
     // Name of the Thread.
     String threadName;
