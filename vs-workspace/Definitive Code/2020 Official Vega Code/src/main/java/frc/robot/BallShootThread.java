@@ -63,9 +63,8 @@ class BallShootThread {
     // Grouping motors together, so it's easier to control them.
     SpeedControllerGroup frontShooterMotors, backShooterMotors;
 
-    // DriveThread constructor.
-    // String threadName is what is inputted when the Thread is created in the code.
-    // Normally, you would have like "DriveThread" or something.
+    // BallShootThread constructor.
+    // The name of the Thread is passed in as an argument.
     BallShootThread(String name) {
 
         // Assigning the name of the Thread to the argument.
@@ -77,7 +76,8 @@ class BallShootThread {
         backLeftShooterMotor = new WPI_TalonFX(BACK_LEFT_SHOOTER_MOTOR_ID);
         backRightShooterMotor = new WPI_TalonFX(BACK_RIGHT_SHOOTER_MOTOR_ID);
 
-        // Creating the SpeedControllerGroups.
+        // Creating the SpeedControllerGroups linking the front and back
+        // shooter motors together.
         frontShooterMotors = new SpeedControllerGroup(frontLeftShooterMotor, frontLeftShooterMotor);
         backShooterMotors = new SpeedControllerGroup(backRightShooterMotor, backLeftShooterMotor);
 

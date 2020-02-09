@@ -78,9 +78,8 @@ class DriveThread implements Runnable {
     // Creating the Controller.
     Joystick PS4 = new Joystick(PS4_ID);
 
-    // DriveThread constructor. We pass in the Thread name.
-    // String threadName is what is inputted when the Thread is created in the code.
-    // Normally, you would have like "DriveThread" or something.
+    // DriveThread constructor.
+    // The name of the Thread is passed in as an argument.
     DriveThread(String name) {
 
         // Assigning the name of the Thread to the argument.
