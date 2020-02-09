@@ -28,7 +28,7 @@ class BallShootThread {
 
     // Creating instance of the Thread class by
     // creating a thread (reserving memory for this object).
-    Thread ballShooThread;
+    Thread ballShootThread;
 
     // Create an instance of the DriveThread
     // Just used for getting the PS4 button press.
@@ -86,8 +86,8 @@ class BallShootThread {
         backRightShooterMotor.setInverted(true);
 
         // Actually creating the Thread.
-        ballShooThread = new Thread(ballShooThread, threadName);
-        ballShooThread.start(); // Start the Thread.
+        ballShootThread = new Thread(ballShootThread, threadName);
+        ballShootThread.start(); // Start the Thread.
 
     }
 
@@ -95,10 +95,16 @@ class BallShootThread {
     public void run() {
 
         // While the Thread is alive, do stuff.
-        while (ballShooThread.isAlive() == true) {
+        while (ballShootThread.isAlive() == true) {
 
-            // While this Thread is running, have this function ready to go.
-            ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
+            // If the driver pushes the X Button on the PS4 Controller,
+            // run the ballShoot() function.
+            if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
+                ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
+            } else {
+                // Do not move the motors.
+                ballShoot(0, 0);
+            }
 
         }
 
@@ -108,7 +114,7 @@ class BallShootThread {
         // t.join() will make sure that t is terminated before the next instruction is
         // executed by the program.
         try {
-            ballShooThread.join();
+            ballShootThread.join();
         } catch (InterruptedException e) {
             System.out.println(threadName + "Interrupted.");
         }
@@ -129,7 +135,7 @@ class BallShootThread {
     // button is pressed.
     //
     // Arguments: double frontFalconSpeed, double backFalconSpeed
-    // Speeds for the front and back motors.
+    // Speeds for the front and back motors respectively.
     //
     // Returns: void
     //
@@ -138,13 +144,8 @@ class BallShootThread {
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     public void ballShoot(double frontFalconSpeed, double backFalconSpeed) {
-        if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
-            frontShooterMotors.set(frontFalconSpeed);
-            backShooterMotors.set(backFalconSpeed);
-        } else {
-            frontShooterMotors.set(0);
-            backShooterMotors.set(0);
-        }
+        frontShooterMotors.set(frontFalconSpeed);
+        backShooterMotors.set(backFalconSpeed);
     }
 
 }

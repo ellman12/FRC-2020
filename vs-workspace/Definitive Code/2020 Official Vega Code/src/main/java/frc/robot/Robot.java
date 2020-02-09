@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
 
     // Setting Thread priorities.
     driveThread.driveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
-    ballShootThread.ballShooThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
+    ballShootThread.ballShootThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
     wormDriveThread.wormDriveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
   }
 

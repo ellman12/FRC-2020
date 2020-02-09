@@ -20,7 +20,9 @@ package frc.robot;
 import java.io.*;
 import java.math.*;
 
-class computeTrajectory {
+import edu.wpi.first.wpilibj.Timer;
+
+class ComputeTrajectory {
 
     // Create an instance of the Sensors.java class in here.
     // Used for determining trajectory.
@@ -28,6 +30,9 @@ class computeTrajectory {
 
     // Creating an instance of the WormDriveThread in this file.
     WormDriveThread wormDriveThread = new WormDriveThread("WormDriveThread");
+
+    // Creating an instance of the BallShootThread in this file.
+    BallShootThread ballShootThread = new BallShootThread("BallShootThread");
 
     // Distances expressed in inches; velocity in ft/sec.
     double v; // velocity
@@ -56,7 +61,7 @@ class computeTrajectory {
     //
     /////////////////////////////////////////////////////
     /////////////////////////////////////////////////////
-    computeTrajectory(double x0_val, double x_val, double y0_val, double y_val, double v_val) {
+    ComputeTrajectory(double x0_val, double x_val, double y0_val, double y_val, double v_val) {
         x0 = x0_val;
         x = x_val;
         y0 = y0_val;
@@ -347,6 +352,7 @@ class computeTrajectory {
 
         // If our initial angle is greater than OR less than our intended angle,
         // move it to there.
+        // Else if it's already there, do nothing.
         if (initTheta > targetFiringTheta) {
 
             while (initTheta > targetFiringTheta) {
@@ -374,6 +380,13 @@ class computeTrajectory {
         } else if (initTheta == targetFiringTheta) {
             // Do nothing.
         }
+
+        // Delay so the robot has adequate time to adjust the arm.
+        Timer.delay(0.75);
+
+        // Fire the balls using the ballShoot function.
+        ballShootThread.ballShoot(ballShootThread.FRONT_SHOOTER_MOTORS_SPEED,
+                ballShootThread.BACK_SHOOTER_MOTORS_SPEED);
 
     }
 }

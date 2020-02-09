@@ -31,6 +31,7 @@ class Variables {
     final int PS4_R_ANALOG_TRIG_ID = 5;
 
     // Magic numbers used for setting the priorities of Threads.
+    // 1 is the lowest priority; 10 is highest priority.
     final int MIN_THREAD_PRIORITY = 1;
     final int NORM_THREAD_PRIORITY = 5;
     final int MAX_THREAD_PRIORITY = 10;
