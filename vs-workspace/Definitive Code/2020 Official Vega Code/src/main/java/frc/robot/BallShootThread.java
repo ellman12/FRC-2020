@@ -34,6 +34,9 @@ class BallShootThread {
     // Just used for getting the PS4 button press.
     DriveThread driveThread = new DriveThread("DriveThread");
 
+    // Creating an instance of the ComputeTrajectory class in here.
+    ComputeTrajectory computeTrajectory = new ComputeTrajectory(x0_val, x_val, y0_val, y_val, v_val)
+
     // Create an instance of the Variables class.
     Variables variables = new Variables();
 
@@ -100,7 +103,8 @@ class BallShootThread {
             // If the driver pushes the X Button on the PS4 Controller,
             // run the ballShoot() function.
             if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
-                ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
+
+                // ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
             } else {
                 // Do not move the motors.
                 ballShoot(0, 0);

@@ -11,7 +11,9 @@
 // 
 // Environment: Microsoft VSCode Java
 // 
-// Remarks:
+// Remarks: Added into 2020 Official Vega Code on
+// 2/08/2020 at 8:25 PMish.
+// 
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
 
@@ -43,7 +45,7 @@ class ComputeTrajectory {
     double theta; // angle of firing
     final double GRAVITY_ACCEL = 9.81; // Acceleration due to gravity in m/s/s.
 
-    // Magic number for the height of the innter goal in inches.
+    // Magic number for the height of the inner goal in inches.
     final double INNER_GOAL_HEIGHT = 98.25;
 
     /////////////////////////////////////////////////////
@@ -365,6 +367,8 @@ class ComputeTrajectory {
 
             }
 
+            // If our initial angle is less than our intended target angle,
+            // move it to that angle.
         } else if (initTheta < targetFiringTheta) {
 
             while (initTheta < targetFiringTheta) {
