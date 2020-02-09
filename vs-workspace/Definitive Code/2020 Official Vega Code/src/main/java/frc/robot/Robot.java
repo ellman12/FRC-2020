@@ -4,11 +4,15 @@ import edu.wpi.first.wpilibj.TimedRobot;
 
 public class Robot extends TimedRobot {
 
-  // Creating instance of DriveThread.
+  // Calling the Thread classes in Robot.java.
+  // Creating an instance of DriveThread.
   DriveThread driveThread;
 
-  // Creating instance of BallShootThread.
+  // Creating an instance of BallShootThread.
   BallShootThread ballShootThread;
+
+  // Creating an instance of WormDriveThread.
+  WormDriveThread wormDriveThread;
 
   // Create instance of the Sensors class.
   Sensors sensors = new Sensors();
@@ -20,15 +24,20 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     // Calling the DriveThread, and telling it to get ready to/start running.
-    // Calling it once in robotInit() should help prevent it from
+    // Calling these Threads once in robotInit() should help prevent them from
     // being called a gazillion times in autoPeriodic/teleopPeriodic().
     driveThread = new DriveThread("DriveThread");
 
     // Calling the BallShootThread, and telling it to get ready to/start running.
     ballShootThread = new BallShootThread("BallShootThread");
 
-    // Setting initial Thread priorities.
+    // Calling the WormDriveThread, and telling it to get ready to/start running.
+    wormDriveThread = new WormDriveThread("WormDriveThread");
+
+    // Setting Thread priorities.
     driveThread.driveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
+    ballShootThread.ballShooThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
+    wormDriveThread.wormDriveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
   }
 
   @Override

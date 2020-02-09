@@ -19,6 +19,7 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -90,6 +91,12 @@ class DriveThread implements Runnable {
         backLeftDriveMotor = new CANSparkMax(BACK_LEFT_SPARK_ID, MotorType.kBrushless);
         frontRightDriveMotor = new CANSparkMax(FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
         backRightDriveMotor = new CANSparkMax(BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
+
+        // Set the drive motors to coast mode to help prevent tipping.
+        frontLeftDriveMotor.setIdleMode(IdleMode.kCoast);
+        frontRightDriveMotor.setIdleMode(IdleMode.kCoast);
+        backLeftDriveMotor.setIdleMode(IdleMode.kCoast);
+        backRightDriveMotor.setIdleMode(IdleMode.kCoast);
 
         // Creating a new instance of the Variables class.
         variables = new Variables();

@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 class WormDriveThread {
@@ -59,10 +60,16 @@ class WormDriveThread {
         // Assigning the name of the Thread to the argument.
         threadName = name;
 
+        // Creating the Worm Drive Falcon 500.
         wormDriveFalcon = new WPI_TalonFX(WORM_DRIVE_FALCON_ID);
 
+        // Set the wormDriveFalcon in brake mode, which should help it keep the ball
+        // shooter up where we want it.
+        wormDriveFalcon.setNeutralMode(NeutralMode.Brake);
+
+        // Creating the Worm Drive Thread
         wormDriveThread = new Thread(wormDriveThread, threadName);
-        wormDriveThread.start();
+        wormDriveThread.start(); // Start the Thread.
 
     }
 
@@ -71,6 +78,7 @@ class WormDriveThread {
 
         while (wormDriveThread.isAlive() == true) {
 
+            // While this Thread is running, have this function ready to go.
             adjustShooterAngle(WORM_DRIVE_FALCON_SPEED);
 
         }
@@ -104,11 +112,22 @@ class WormDriveThread {
         } else if (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true) {
 
             wormDriveFalcon.set(wormDriveSpeed);
+        }
 
-        } else {
+        // If the driver is an idiot and is pressing BOTH the Square Button AND (&&) the
+        // Triangle Button at the same time, OR (||) if the driver is pushing neither
+        // button, set the motor speed to 0.
+        else if (((driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true)
+                && (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true))
+                || ((driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == false)
+                        && (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == false))) {
 
             wormDriveFalcon.set(0);
+        }
 
+        // Just in case.
+        else {
+            wormDriveFalcon.set(0);
         }
 
     }
