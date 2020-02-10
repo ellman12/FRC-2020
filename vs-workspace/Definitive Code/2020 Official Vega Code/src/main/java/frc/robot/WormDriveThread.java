@@ -67,7 +67,7 @@ class WormDriveThread implements Runnable {
         // shooter up where we want it.
         wormDriveFalcon.setNeutralMode(NeutralMode.Brake);
 
-        // Creating the Worm Drive Thread
+        // Creating the Worm Drive Thread.
         wormDriveThread = new Thread(wormDriveThread, threadName);
         wormDriveThread.start(); // Start the Thread.
 
@@ -80,6 +80,17 @@ class WormDriveThread implements Runnable {
 
             // While this Thread is running, have this function ready to go.
             adjustShooterAngle(WORM_DRIVE_FALCON_SPEED);
+
+            try {
+                driveThread.join();
+            } catch (InterruptedException e) {
+                System.out.println(threadName + "Interrupted.");
+            }
+
+            // Print out when the Thread is exiting, and force garbage collection (freeing
+            // of memory resources) (.gc()).
+            System.out.println(threadName + "Exiting Drive Thread");
+            runtime.gc();
 
         }
     }

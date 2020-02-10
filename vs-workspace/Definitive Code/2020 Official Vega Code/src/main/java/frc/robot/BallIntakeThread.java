@@ -40,6 +40,17 @@ class BallIntakeThread implements Runnable {
 
         while (ballIntakeThread.isAlive() == true) {
 
+            try {
+                driveThread.join();
+            } catch (InterruptedException e) {
+                System.out.println(threadName + "Interrupted.");
+            }
+
+            // Print out when the Thread is exiting, and force garbage collection (freeing
+            // of memory resources) (.gc()).
+            System.out.println(threadName + "Exiting Drive Thread");
+            runtime.gc();
+
         }
 
     }
