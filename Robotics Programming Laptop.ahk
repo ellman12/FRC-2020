@@ -90,6 +90,9 @@ return
 WinSet, AlwaysOnTop, Toggle, A
 return
 
+CapsLock::
+return
+
 ;Suspends hotkeys.
 #p::
 Suspend
