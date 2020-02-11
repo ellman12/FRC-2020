@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
@@ -32,10 +34,10 @@ public class Robot extends TimedRobot {
   // Creating an instance of the ComputeTrajectory class,
   // and passing in the required arguments.
   // TODO IDK if these arguments will work or not.
-  ComputeTrajectory ComputeTrajectory = new ComputeTrajectory(x0, sensors.proximitySensorDistance, y0, y, v);
+  ComputeTrajectory computeTrajectory = new ComputeTrajectory(x0, sensors.proximitySensorDistance, y0, y, v);
 
-  // Get the color for the control panel for Rotation Control.
-  String rotationControlColor = DriverStation.getInstance().getGameSpecificMessage();
+  // String for the color for Position Control, used in Teleop.
+  String rotationControlColor;
 
   @Override
   public void robotInit() {
@@ -55,6 +57,8 @@ public class Robot extends TimedRobot {
     driveThread.driveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
     ballShootThread.ballShootThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
     wormDriveThread.wormDriveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
+
+    // TODO Add other Threads in here...
   }
 
   @Override
@@ -79,6 +83,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+
+    // Get the color for the Position Control thing.
+    // This is in teleopInit() because it should only need to be run once.
+    rotationControlColor = DriverStation.getInstance().getGameSpecificMessage();
+
+    // Sends this value to the SmartDashboard to be viewed by the driver.
+    SmartDashboard.putString("Rotation Control Color:", rotationControlColor);
+
   }
 
   @Override

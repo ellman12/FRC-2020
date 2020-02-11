@@ -42,6 +42,10 @@ class BallShootThread implements Runnable {
     // Used for the ballShoot(...) function.
     Sensors sensors = new Sensors();
 
+    // Creating an instance of the ComputeTrajectory class in here.
+    ComputeTrajectory computeTrajectory = new ComputeTrajectory(Robot.x0, sensors.proximitySensorDistance, Robot.y0,
+            Robot.y, Robot.v);
+
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
     // According to page 461 chapter 11 of Java: The Complete Reference 9th edition
@@ -102,33 +106,43 @@ class BallShootThread implements Runnable {
         // While the Thread is alive, do stuff.
         while (ballShootThread.isAlive() == true) {
 
-            // If the driver pushes the X Button on the PS4 Controller,
+            // If the driver pushes the Right Bumper on the PS4 Controller,
             // run the ballShoot() function.
-            if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
-
-                // ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
+            if (driveThread.PS4.getRawButton(variables.PS4_RIGHT_BUMPER) == true) {
+                ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
             } else {
                 // Do not move the motors.
                 ballShoot(0, 0);
             }
 
-        }
+            // If the driver pushes the X Button on the PS4 Controller, run the
+            // adjustAngleOfShooter() function.
+            // This function is the magic function that uses math and stuff to compute
+            // trajectory and stuff.
+            if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
+                computeTrajectory.adjustAngleOfShooter();
+            } else {
+                // Do not move the motors.
+                // ballShoot(0, 0);
+            }
 
-        // Thread class provides the join() method which allows one thread to wait until
-        // another thread completes its execution.
-        // Basically, if t is a Thread object whose thread is currently executing, then
-        // t.join() will make sure that t is terminated before the next instruction is
-        // executed by the program.
-        try {
-            ballShootThread.join();
-        } catch (InterruptedException e) {
-            System.out.println(threadName + " Interrupted.");
-        }
+            // Thread class provides the join() method which allows one thread to wait until
+            // another thread completes its execution.
+            // Basically, if t is a Thread object whose thread is currently executing, then
+            // t.join() will make sure that t is terminated before the next instruction is
+            // executed by the program.
+            try {
+                ballShootThread.join();
+            } catch (InterruptedException e) {
+                System.out.println(threadName + " Interrupted.");
+            }
 
-        // Print out when the Thread is exiting, and force garbage collection (freeing
-        // of memory resources) (.gc()).
-        System.out.println(threadName + " Exiting");
-        runtime.gc();
+            // Print out when the Thread is exiting, and force garbage collection (freeing
+            // of memory resources) (.gc()).
+            System.out.println(threadName + " Exiting");
+            runtime.gc();
+
+        }
 
     }
 
