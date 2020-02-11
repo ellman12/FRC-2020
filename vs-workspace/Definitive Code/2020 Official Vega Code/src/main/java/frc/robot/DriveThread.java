@@ -59,7 +59,7 @@ class DriveThread implements Runnable {
     // Magic number for the deadband for the analog triggers.
     // If the analog triggers are below this value, they will
     // not cause the robot to strafe. This prevents accidental strafing.
-    final double PS4_ANALOG_TRIGGER_DEADBAND = 0.15;
+    final double PS4_ANALOG_TRIGGER_DEADBAND = 0.10;
 
     // Double variables for the values of the PS4 Controller axes.
     double PS4LeftXAxis;
@@ -142,9 +142,9 @@ class DriveThread implements Runnable {
                 System.out.println(threadName + "Interrupted.");
             }
 
-            // Print out when the Thread is exiting, and force garbage collection (freeing
-            // of memory resources) (.gc()).
-            System.out.println(threadName + "Exiting Drive Thread");
+            // Print out when the Thread is exiting, and force
+            // garbage collection (freeing of memory resources) (.gc()).
+            System.out.println(threadName + " Exiting");
             runtime.gc();
 
         }

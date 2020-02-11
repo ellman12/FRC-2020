@@ -89,7 +89,7 @@ class WormDriveThread implements Runnable {
 
             // Print out when the Thread is exiting, and force garbage collection (freeing
             // of memory resources) (.gc()).
-            System.out.println(threadName + "Exiting Drive Thread");
+            System.out.println(threadName + " Exiting");
             runtime.gc();
 
         }

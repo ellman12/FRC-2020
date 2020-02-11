@@ -139,14 +139,17 @@ class Sensors {
         driveGyroAngle = driveGyro.getAngle();
         wormDriveGyroAngle = wormDriveGyro.getAngle();
 
-        // Get if the robot is carrying ball(s) (true), or if it does not have any
-        // (false).
+        // Get if the robot is carrying ball(s) (true),
+        // or if it does not have any balls (false).
         robotCarryingBalls = ballLimitSwitch.get();
 
+        // Get the distance from the proximity sensor to the nearest object.
         proximitySensorDistance = getDistanceProxSensor();
 
+        // Get the color that the color sensor sees.
         getColorStringColorSensor();
 
+        // Getting encoder values for the drive motors.
         frontLeftDriveEncValue = frontLeftEncoder.getPosition();
         frontRightDriveEncValue = frontRightEncoder.getPosition();
     }
