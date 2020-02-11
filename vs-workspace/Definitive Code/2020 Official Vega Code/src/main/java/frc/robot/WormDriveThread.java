@@ -84,7 +84,7 @@ class WormDriveThread implements Runnable {
             try {
                 wormDriveThread.join();
             } catch (InterruptedException e) {
-                System.out.println(threadName + "Interrupted.");
+                System.out.println(threadName + " Interrupted.");
             }
 
             // Print out when the Thread is exiting, and force garbage collection (freeing

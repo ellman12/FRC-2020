@@ -67,7 +67,7 @@ class BallIntakeThread implements Runnable {
             try {
                 ballIntakeThread.join();
             } catch (InterruptedException e) {
-                System.out.println(threadName + "Interrupted.");
+                System.out.println(threadName + " Interrupted.");
             }
 
             // Print out when the Thread is exiting, and force

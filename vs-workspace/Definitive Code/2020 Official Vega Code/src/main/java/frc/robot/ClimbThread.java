@@ -66,7 +66,7 @@ class ClimbThread implements Runnable {
             try {
                 climbThread.join();
             } catch (InterruptedException e) {
-                System.out.println(threadName + "Interrupted.");
+                System.out.println(threadName + " Interrupted.");
             }
 
             // Print out when the Thread is exiting, and force

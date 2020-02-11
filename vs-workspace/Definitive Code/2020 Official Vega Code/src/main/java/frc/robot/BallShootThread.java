@@ -122,7 +122,7 @@ class BallShootThread implements Runnable {
         try {
             ballShootThread.join();
         } catch (InterruptedException e) {
-            System.out.println(threadName + "Interrupted.");
+            System.out.println(threadName + " Interrupted.");
         }
 
         // Print out when the Thread is exiting, and force garbage collection (freeing
