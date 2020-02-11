@@ -82,7 +82,7 @@ class WormDriveThread implements Runnable {
             adjustShooterAngle(WORM_DRIVE_FALCON_SPEED);
 
             try {
-                driveThread.join();
+                wormDriveThread.join();
             } catch (InterruptedException e) {
                 System.out.println(threadName + "Interrupted.");
             }

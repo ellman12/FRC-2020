@@ -19,9 +19,6 @@
 
 package frc.robot;
 
-import java.io.*;
-import java.math.*;
-
 import edu.wpi.first.wpilibj.Timer;
 
 class ComputeTrajectory {
@@ -273,7 +270,7 @@ class ComputeTrajectory {
     // Function: convert_inches2meters(...)
     /////////////////////////////////////////////////////
     //
-    // Purpose: Converts the agrument in inches to meters.
+    // Purpose: Converts the argument in inches to meters.
     //
     // Arguments: double inches.
     //
@@ -325,7 +322,8 @@ class ComputeTrajectory {
     //
     // Purpose: Used for adjusting the angle at which the ball shooter is
     // firing. Uses sensor readings and some fancy physics to adjust it to
-    // the right angle to shoot it into the inner hole.
+    // the right angle to shoot it into the inner hole. After it adjusts,
+    // it calls on the BallShootThread to fire the ball.
     //
     // Arguments: none
     //
@@ -347,9 +345,6 @@ class ComputeTrajectory {
         // Get the initial angle of the ball shooter.
         double initTheta = sensors.wormDriveGyroAngle; // Initial angle.
 
-        // I don't know if this was necessary. Commented out on 2/09/2020 at 11:51 AM.
-        // double targetFiringTheta = sensors.wormDriveGyroAngle; // Target angle.
-
         // Compute the theta needed for the right trajectory.
         // Passing in the values so it can do the math.
         // Returns a double representing the angle we need to adjust to; store it in a
@@ -361,7 +356,7 @@ class ComputeTrajectory {
         // Else if it's already there, do nothing.
         if (initTheta > targetFiringTheta) {
 
-            while (initTheta > targetFiringTheta) {
+            while (sensors.wormDriveGyroAngle > targetFiringTheta) {
 
                 wormDriveThread.wormDriveFalcon.set(-wormDriveThread.WORM_DRIVE_FALCON_SPEED);
 
@@ -375,7 +370,7 @@ class ComputeTrajectory {
             // move it to that angle.
         } else if (initTheta < targetFiringTheta) {
 
-            while (initTheta < targetFiringTheta) {
+            while (sensors.wormDriveGyroAngle < targetFiringTheta) {
 
                 wormDriveThread.wormDriveFalcon.set(wormDriveThread.WORM_DRIVE_FALCON_SPEED);
 
@@ -385,7 +380,7 @@ class ComputeTrajectory {
 
             }
 
-        } else if (initTheta == targetFiringTheta) {
+        } else if (sensors.wormDriveGyroAngle == targetFiringTheta) {
             // Do nothing.
         }
 

@@ -26,20 +26,21 @@ class ClimbThread implements Runnable {
 
     public void run() {
 
-         while the thread is alive {
+        // while the thread is alive {
 
-        try {
-            driveThread.join();
-        } catch (InterruptedException e) {
-            System.out.println(threadName + "Interrupted.");
-        }
+        // try {
+        // driveThread.join();
+        // } catch (InterruptedException e) {
+        // System.out.println(threadName + "Interrupted.");
+        // }
 
-        // Print out when the Thread is exiting, and force garbage collection (freeing
-        // of memory resources) (.gc()).
-        System.out.println(threadName + "Exiting Drive Thread");
-        runtime.gc();
+        // // Print out when the Thread is exiting, and force garbage collection
+        // (freeing
+        // // of memory resources) (.gc()).
+        // System.out.println(threadName + "Exiting Drive Thread");
+        // runtime.gc();
 
-    }
+        // }
 
     }
 }

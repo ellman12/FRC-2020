@@ -4,12 +4,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 
 public class Robot extends TimedRobot {
 
-  // distances expressed in inches; velocity in ft/sec
-  static double v = 25.0; // Ball velocity.
-  static double x0 = 0; // Initial x value.
-  static double y0 = 24; // Launch location (initial y value).
-  static double y = 98.25; // Target of y (height of inner goal of the tower (in inches)).
-
   // Calling the Thread classes in Robot.java.
   // Creating an instance of DriveThread.
   DriveThread driveThread;
@@ -26,8 +20,18 @@ public class Robot extends TimedRobot {
   // Creating an instance of the Variables class.
   Variables variables = new Variables();
 
-  // Creating an instance of the ComputeTrajectory class.
-  ComputeTrajectory ComputeTrajectory = new ComputeTrajectory(x0, x, y0, y, v);
+  // Variables used for ComputeTrajectory.java.
+  // Distances expressed in inches; velocity in ft/sec.
+  // Velocity and these other values might need to be adjusted.
+  static double v = 25.0; // Ball velocity.
+  static double x0 = 0; // Initial x value.
+  static double y0 = 24; // Launch location (initial y value).
+  static double y = 98.25; // Target of y (height of inner goal of the tower (in inches)).
+
+  // Creating an instance of the ComputeTrajectory class,
+  // and passing in the required arguments.
+  // TODO IDK if these arguments will work or not.
+  ComputeTrajectory ComputeTrajectory = new ComputeTrajectory(x0, sensors.proximitySensorDistance, y0, y, v);
 
   @Override
   public void robotInit() {

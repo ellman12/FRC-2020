@@ -20,6 +20,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
 
 class BallShootThread implements Runnable {
 
@@ -30,15 +31,16 @@ class BallShootThread implements Runnable {
     // creating a thread (reserving memory for this object).
     Thread ballShootThread;
 
-    // Create an instance of the DriveThread
+    // Creating an instance of the DriveThread
     // Just used for getting the PS4 button press.
     DriveThread driveThread = new DriveThread("DriveThread");
 
-    // Creating an instance of the ComputeTrajectory class in here.
-    ComputeTrajectory computeTrajectory = new ComputeTrajectory(x0_val, x_val, y0_val, y_val, v_val)
-
-    // Create an instance of the Variables class.
+    // Creating an instance of the Variables class.
     Variables variables = new Variables();
+
+    // Creating an instance of the Sensors class.
+    // Used for the ballShoot(...) function.
+    Sensors sensors = new Sensors();
 
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
@@ -139,17 +141,27 @@ class BallShootThread implements Runnable {
     // button is pressed.
     //
     // Arguments: double frontFalconSpeed, double backFalconSpeed
-    // Speeds for the front and back motors respectively.
+    // Speeds for the front and back motors, respectively.
     //
     // Returns: void
     //
-    // Remarks:
+    // Remarks: Used in adjustAngleOfShooter() in ComputeTrajectory.java.
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     public void ballShoot(double frontFalconSpeed, double backFalconSpeed) {
-        frontShooterMotors.set(frontFalconSpeed);
-        backShooterMotors.set(backFalconSpeed);
+
+        // While the robot has at least 1 ball left, run the shooter motors at the
+        // passed-in speed.
+        while (sensors.robotCarryingBalls == true) {
+
+            frontShooterMotors.set(frontFalconSpeed);
+            backShooterMotors.set(backFalconSpeed);
+
+            // TODO This delay might not be necessary...
+            Timer.delay(0.35);
+
+        }
     }
 
 }

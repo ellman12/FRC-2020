@@ -26,6 +26,7 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.util.Color;
@@ -43,7 +44,7 @@ class Sensors {
     // Proximity sensor distance value (in inches).
     double proximitySensorDistance;
 
-    // Doubles for storing encoder readings.
+    // Doubles for storing encoder readings for the left and right drive motors.
     double frontLeftDriveEncValue;
     double frontRightDriveEncValue;
 
@@ -53,6 +54,16 @@ class Sensors {
 
     // Creating the proximity sensor, with a channel of 0.
     static AnalogInput proximitySensor = new AnalogInput(0);
+
+    // Boolean used for the ballLimitSwitch, which tells the code if the robot is
+    // currently carrying balls. Defaults to true, since we start with balls in
+    // Autonomous.
+    boolean robotCarryingBalls = true;
+
+    // Creating the limit switch used for keeping track of how if the robot is still
+    // carrying balls, or if it needs to go and get some more.
+    // TODO Figure out what channel this thing will have.
+    DigitalInput ballLimitSwitch = new DigitalInput(0);
 
     // Magic numbers for proximity sensor.
     // Resolution of the proximity sensor.
@@ -75,7 +86,7 @@ class Sensors {
     private final int MIN_COLOR_SENSOR_PROX_VALUE = 50;
 
     // Creating an instance of the ColorMatch class.
-    // This is used for matching colors.
+    // This is used for matching colors with the color sensor.
     ColorMatch colorMatcher = new ColorMatch();
 
     // Assigning these RGB values to variables, so the color sensor can look for
@@ -101,13 +112,40 @@ class Sensors {
         frontRightEncoder = new CANEncoder(driveThread.frontRightDriveMotor);
     }
 
+    /////////////////////////////////////////////////////////////////////
+    // Function: readSensors()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Method used for reading all of the sensors on the robot
+    // at once, and assigning their values to variables to be used in
+    // other files and other functions. This helps simplify things because
+    // the sensors don't need to be read multiple times.
+    // This function is only called in robotPeriodic(). This is because
+    // code in there is always running, thus eliminating the need for a
+    // sensor thread, or equivalent.
+    //
+    // Arguments: None
+    //
+    // Returns: void
+    //
+    // Remarks: Every sensor on the robot lives in this file and is read
+    // using this method in robotPeriodic().
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
     public void readSensors() {
 
         // Assigns these variables with their measurements.
         driveGyroAngle = driveGyro.getAngle();
         wormDriveGyroAngle = wormDriveGyro.getAngle();
 
-        proximitySensorDistance = getDistance();
+        // Get if the robot is carrying ball(s) (true), or if it does not have any
+        // (false).
+        robotCarryingBalls = ballLimitSwitch.get();
+
+        proximitySensorDistance = getDistanceProxSensor();
+
+        getColorStringColorSensor();
 
         frontLeftDriveEncValue = frontLeftEncoder.getPosition();
         frontRightDriveEncValue = frontRightEncoder.getPosition();
@@ -130,7 +168,7 @@ class Sensors {
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
-    public double getDistance() {
+    public double getDistanceProxSensor() {
         double distance;
         measuredVoltage = proximitySensor.getVoltage();
         distance = (measuredVoltage * PROX_SENSOR_RES) / MM_PER_INCH;
@@ -151,7 +189,7 @@ class Sensors {
     // Remarks:
     //
     /////////////////////////////////////////////////////////////////////
-    String getColorString() {
+    String getColorStringColorSensor() {
         // Get instances of each of these classes.
         Color detectedColor;
         ColorMatchResult colorMatchResult;
@@ -187,7 +225,7 @@ class Sensors {
             colorOutput = "Invalid";
         }
 
-        // Returns the detected color
+        // Returns the detected color.
         return (colorOutput);
 
     }
