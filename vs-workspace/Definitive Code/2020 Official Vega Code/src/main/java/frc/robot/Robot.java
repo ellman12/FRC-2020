@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 public class Robot extends TimedRobot {
@@ -32,6 +33,9 @@ public class Robot extends TimedRobot {
   // and passing in the required arguments.
   // TODO IDK if these arguments will work or not.
   ComputeTrajectory ComputeTrajectory = new ComputeTrajectory(x0, sensors.proximitySensorDistance, y0, y, v);
+
+  // Get the color for the control panel for Rotation Control.
+  String rotationControlColor = DriverStation.getInstance().getGameSpecificMessage();
 
   @Override
   public void robotInit() {

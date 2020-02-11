@@ -138,6 +138,11 @@ class DriveThread implements Runnable {
 
             }
 
+            // Thread class provides the join() method which allows one thread to wait until
+            // another thread completes its execution.
+            // Basically, if t is a Thread object whose thread is currently executing, then
+            // t.join() will make sure that t is terminated before the next instruction is
+            // executed by the program.
             try {
                 driveThread.join();
             } catch (InterruptedException e) {
