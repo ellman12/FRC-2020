@@ -461,7 +461,7 @@ class DriveThread implements Runnable {
 			}
 		}
 
-        //  continue at max speed until instructed otherwise
+		// continue at max speed until instructed otherwise
 		Robot.diff_drive.arcadeDrive(MAX_SPEED, -corr * delta);
 	}
 
@@ -498,8 +498,8 @@ class DriveThread implements Runnable {
 			delay.delay_milliseconds(40.0);
 		}
 
-		//  Continue at slow speed until target is reached.
-		Robot.diff_drive.arcadeDrive(BRAKE_SPEED, -corr*delta);
+		// Continue at slow speed until target is reached.
+		Robot.diff_drive.arcadeDrive(BRAKE_SPEED, -corr * delta);
 	}
 
 	///////////////////////////////////////////////////////////////////////////
