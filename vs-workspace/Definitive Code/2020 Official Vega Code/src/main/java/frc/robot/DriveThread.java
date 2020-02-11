@@ -114,7 +114,7 @@ class DriveThread implements Runnable {
             if (DriverStation.getInstance().isAutonomous()) {
                 // TODO Auto functions called here.
             } else {
-                // Have teleop stuff here.
+                // Teleop stuff goes here.
                 // Getting the values of the PS4 Controller's axes.
                 PS4LeftXAxis = PS4.getRawAxis(variables.PS4_L_X_AXIS_ID);
                 PS4LeftYAxis = PS4.getRawAxis(-variables.PS4_L_Y_AXIS_ID);
@@ -124,12 +124,14 @@ class DriveThread implements Runnable {
                 // Controlling the Mecanum Drive with the Joystick axes.
                 mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
 
-                // If the analog triggers are pressed down sufficiently, strafe in the
-                // corresponding direction.
+                // If the left analog trigger is pressed down sufficiently,
+                // strafe in the left direction.
                 if (PS4LeftAnalogTrigger >= PS4_ANALOG_TRIGGER_DEADBAND) {
                     strafeLeft();
                 }
 
+                // If the right analog trigger is pressed down sufficiently,
+                // strafe in the right direction.
                 if (PS4_ANALOG_TRIGGER_DEADBAND >= PS4_ANALOG_TRIGGER_DEADBAND) {
                     strafeRight();
                 }
