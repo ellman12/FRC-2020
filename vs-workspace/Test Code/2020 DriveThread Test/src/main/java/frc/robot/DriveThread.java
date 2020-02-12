@@ -23,6 +23,48 @@
 //         time with the main execution thread or other threads
 //         that are active.  
 //
+//         01/05/2020 - 01/30/2020:  Attempted to add acceleration
+//         and decelaration to the autonomous movements.  I sure
+//         hope that previous versions that worked have been
+//         baked up.  At the end of this phase of development the
+//         robot would accelerate, stop, and spin circles.  Cause
+//         not known at this point, changes of 02/11/2020 are 
+//         extensive and should aid in discovery.  All loop exit
+//         strategies have been eliminated in driveFwd() for 
+//         simplicity.  Focus will be on getting this single
+//         function correct before proceeding.
+//
+//         02/11/2020:  Examination of the code indicated that
+//         the large and frequent number of print statements will 
+//         make determination of the cause of the issues very difficult.  
+//         The following changes have been made regarding the implementation
+//         of the key autonomous function "driveFwd( ... )".
+//
+//         1.  In the initial inequality following acceleration -
+//             the condition regarding fraction had the wrong sign.
+//             The fraction starts as 1.0 and decreases as the target
+//             encoder value is approached.  Therefore the condition
+//             for exiting the high speed while() loop should have
+//             been when the fraction is less than "BRAKE_FRACTION",
+//             i.e., while(( ... )&&(fraction>BRAKE_FRACTION)) exits
+//             when fraction<BRAKE_FRACTION.
+//         2.  Way too many print statements - impossible to tract
+//             key moments, i.e., exits from while loops.
+//         3.  Eliminated heading angle reads and corrections during 
+//             acceleration and deceleration.
+//         4.  The delays within the while() loop were increased
+//             from 0.010 to 0.020 seconds.  I just didn't we needed
+//             to update that fast.
+//
+//         It is anticipated that the parameters associated with
+//         fixed moves may need to be adjusted for different distances.
+//         At the front end of driveFwd() it may be necessary to
+//         create a series of if(),elseif(),.. etc. to accomodate
+//         a range of travel distances.  For a movement of 1 - 3 feet
+//         there may not be a need for acceleration and the start
+//         speed might be slow.  For distance of 15 feet the maximum
+//         speed might be larger that 0.6, etc..  You get the idea.
+//
 //
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -53,25 +95,25 @@ class DriveThread implements Runnable {
 	final double CM_PER_METER = 100.0;
 
 	// Encoders are now on the motors (NEOS). Output from the
-	// encoder in this case is 1.0. A gear reduction of 16:1 implies
-	// 16.0 per revolution of the output shaft. The precision of this
-	// is 42 counts per motor shaft revolution times 16 of the gear
+	// encoder in this case is 1.0. A gear reduction of 12.75:1 implies
+	// 12.75 per revolution of the output shaft. The precision of this
+	// is 42 counts per motor shaft revolution times 12.75 of the gear
 	// reduction = 1/672. An eight inch wheel diameter implies a distance
 	// traveled of PI*8.0 = 25.17 inches. Distance resolution of the
-	// encoder/gearbox comination is 25.17/672 = 0.037 inches/count. Should be
+	// encoder/gearbox combination is 25.17/672 = 0.037 inches/count. Should be
 	// good enough.
 	// However the output when reading the encoder function
-	// is 1.0 for each revolution of the motor, or 16 for one revolution
+	// is 1.0 for each revolution of the motor, or 12.75 for one revolution
 	// of the output shaft. This implies that the inch to output
-	// conversion is 25.17/16.0 or 1.572 inches per unit output
-	final double ENCODER_RESOLUTION = 1.572; // inches per output value
+	// conversion is 25.17/12.75 or 1.572 inches per unit output
+	final double ENCODER_RESOLUTION = 0.5065; // inches per output value
 
 	// Fixed parameters for driveFwd(...)/driveBwd(...)
 	final double START_SPEED = 0.1; // Also used in acceleration functions.
 	final double MAX_SPEED = 0.6;
-	final double MIN_SPEED = 1.0;
+	final double MIN_SPEED = 0.1;
 	final double BRAKE_SPEED = 0.3;
-	final double BRAKE_FRACTION = 0.25;
+	final double BRAKE_FRACTION = 0.4;
 
 	// Fixed parameters for console updates and while() loop escapes
 	final int ENC_CONSOLE_UPDATE = 20;
@@ -145,7 +187,7 @@ class DriveThread implements Runnable {
 
 			// turnAbsolute(-90);
 
-			driveFwd(5.0);
+			driveFwd(15.0);
 
 			// turnRight_Arcade(90);
 
@@ -179,7 +221,12 @@ class DriveThread implements Runnable {
 	// Returns: An double representing overshoot/undershoot of the movement
 	// in inches.
 	//
-	// Remarks:
+	// Remarks: 02/09/2020: Modified to include acceleration/deceleration
+	// 02/11/2020: Noted that the inequality regarding fraction
+	// should have been '>' vs. '<'
+	// Increased delays within while() loops
+	// Reduced print statements to make is easier
+	// to determine position and fraction.
 	//
 	/////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
@@ -229,36 +276,43 @@ class DriveThread implements Runnable {
 		// the
 		// program.
 
-		while (current_position < target) {
+		// get moving and accelerate to MAX_SPEED
+		if (current_position < target) {
+			accelerateFwd();
+		}
+		System.out.println("Acceleration complete");
 
-			if (fraction > BRAKE_FRACTION) {
-				// moveFwd(START_SPEED, heading);
-				accelerateFwd(heading);
-			} else {
-				// moveFwd(BRAKE_SPEED, heading);
-				decelerateFwd(heading);
-			}
-
-			Timer.delay(0.01);
-			System.out.println(
-					"current_position = " + current_position + " target = " + target + " fraction = " + fraction);
-
-			// We don't want to stay longer than we have to. Assumine
-			// move to 5 seconds for starters.g
-			// that the 10 msec is reasonably accurate we limit th
-			loop_count++;
-			if ((loop_count % ENC_CONSOLE_UPDATE) == 0) {
-				// Provide periodic status
-				System.out.println(
-						"current_position = " + current_position + " target = " + target + " fraction = " + fraction);
-			}
-			if (loop_count == ENC_LOOP_ESCAPE) {
-				break; // escape clause
-			}
-
+		// Monitor position and continue to travel at max speed until
+		// fraction<BRAKE_FRACTION. Note that fraction starts out at 1.0
+		// and decreases as we approach the target encoder value.
+		// 02/11/2020: Changed the sign of the inequality to '>'
+		// Changed the delay from 0.01 to 0.02
+		// Moved the position update outside of the while() loop
+		while ((current_position < target) && (fraction > BRAKE_FRACTION)) {
+			moveFwd(MAX_SPEED, heading);
 			current_position = Robot.left_enc.getPosition();
 			fraction = Math.abs((target - current_position) / (target - initial_position));
+			Timer.delay(0.02);
 		}
+
+		// Where are we?
+		System.out
+				.println("current_position = " + current_position + " target = " + target + " fraction = " + fraction);
+		System.out.println("Decelerating");
+		// Ok, we should be at the braking fraction. Time to decelerate to BRAKE_SPEED
+		decelerateFwd();
+
+		// Continue at BRAKE_SPEED until we reach the target encoder value
+		// 02/11/2020: Changed the delay from 0.01 to 0.02
+		// 02/11/2020: Moved the position update outside of the while() loop
+		while (current_position < target) {
+			moveFwd(BRAKE_SPEED, heading);
+			Timer.delay(0.02);
+			current_position = Robot.left_enc.getPosition();
+		}
+
+		System.out
+				.println("current_position = " + current_position + " target = " + target + " fraction = " + fraction);
 
 		// stop movement, compute error (overshoot or undershoot)
 		Robot.diff_drive.arcadeDrive(0, 0);
@@ -267,6 +321,135 @@ class DriveThread implements Runnable {
 		System.out.println("error = " + error + " inches");
 
 		return (error);
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Function: void moveFwd(double speed,double target)
+	///////////////////////////////////////////////////////////////////////////
+	//
+	// Purpose: Uses on_board gyro to drive the robot straight forward
+	// given a target angle as an argument.
+	// Requires use of the arcadeDrive function with the first
+	// argument being the forward speed and the second being
+	// the turn applied.
+	//
+	// Arguments: double speed. Must be between -1.0 and 1.0.
+	// double heading - the target angle.
+	//
+	// Returns: void
+	//
+	// Remarks: This function will be called every 20 msec. Updating
+	// the position and heading each time it is called will
+	// overwhelm the system.
+	// 02/11/2020: Commented out the print statement.
+	//
+	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	public void moveFwd(double speed, double heading) {
+
+		double corr = 0.2;
+		double angle = 0;
+		double delta; // The difference between the target and measured angle
+
+		angle = Robot.driveGyro.getAngle();
+
+		delta = angle - heading;
+
+		// According to the documentation for DifferentialDrive.arcadeDrive(speed,turn)
+		// the arguments are squared to accomodate lower drive speeds. If for example
+		// the gain coefficient is 0.05 and the angle error is 5 degrees, the turning
+		// argument would be 0.25*0.25 = 0.0625. This is a pretty slow correction.
+		// We needed a larger correction factor - trying 0.2 for now. The range for
+		// the turn is -1.0 to 1.0. Positive values are said to turn clockwise,
+		// negatives counterclockwise.
+		Robot.diff_drive.arcadeDrive(speed, -corr * delta);
+
+		// System.out.println(" heading = " + heading + " angle = " + angle + " delta =
+		// " + delta);
+
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	// Function: accelerateFwd( ... )
+	/////////////////////////////////////////////////////////////////////
+	//
+	// Purpose: Used for accelerating the robot with driveFwd().
+	//
+	// Arguments: double heading, i.e., the direction of travel.
+	//
+	// Returns: void
+	//
+	// Remarks: The listed speed increment and delay will allow
+	// approximately 2 seconds to accelerate from a
+	// speed of 0.1 to 0.6. We may want to alter these
+	// variables depending on the distance.
+	//
+	// 02/11/2020: Simplified the acceleration phase of
+	// the movement. Eliminated reading of angle and
+	// direction correction. This allowed eliminating
+	// the "heading" argument.
+	//
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	void accelerateFwd() {
+		double speed = 0.1;
+
+		while (speed < MAX_SPEED) {
+			Robot.diff_drive.arcadeDrive(speed, 0);
+			delay.delay_milliseconds(20.0);
+			speed += 0.01;
+		}
+	}
+
+	/*
+	 * void accelerateFwd(double heading) { int loop_count = 0;
+	 * 
+	 * double speed; double corr = 0.2; double angle = 0; double delta; // The
+	 * difference between the target and measured angle
+	 * 
+	 * angle = Robot.driveGyro.getAngle();
+	 * 
+	 * delta = angle - heading;
+	 * 
+	 * speed = 0.1;
+	 * 
+	 * while (speed < MAX_SPEED) { speed += 0.01;
+	 * Robot.diff_drive.arcadeDrive(speed, -corr * delta); //
+	 * System.out.println("accelSpeed: \t" + speed + "\t" + "delta: \t" + delta);
+	 * delay.delay_milliseconds(40.0); }
+	 * 
+	 * // continue at max speed. Robot.diff_drive.arcadeDrive(MAX_SPEED, -corr *
+	 * delta); }
+	 */
+	/////////////////////////////////////////////////////////////////////
+	// Function: decelerateFwd( ... )
+	/////////////////////////////////////////////////////////////////////
+	//
+	// Purpose: Used for declerating the robot with driveFwd().
+	//
+	// Arguments: double heading, i.e., the direction of travel
+	//
+	// Returns: void
+	//
+	// Remarks: The listed speed increment and delay will allow
+	// approximately 2 seconds to decelerate from a
+	// speed of 0.1 to 0.6. We may want to alter these
+	// variables depending on the distance.
+	//
+	// 02/11/2020: Simplified the deceleration phase of
+	// the movement. Eliminated reading of angle and
+	// direction correction.
+	//
+	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+	void decelerateFwd() {
+		double speed = MAX_SPEED;
+
+		while (speed > MIN_SPEED) {
+			Robot.diff_drive.arcadeDrive(speed, 0);
+			delay.delay_milliseconds(20.0);
+			speed -= 0.01;
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -375,134 +558,6 @@ class DriveThread implements Runnable {
 	}
 
 	///////////////////////////////////////////////////////////////////////////
-	// Function: void moveFwd(double speed,double target)
-	///////////////////////////////////////////////////////////////////////////
-	//
-	// Purpose: Uses on_board gyro to drive the robot straight forward
-	// given a target angle as an argument.
-	// Requires use of the arcadeDrive function with the first
-	// argument being the forward speed and the second being
-	// the turn applied.
-	//
-	// Arguments: double speed. Must be between -1.0 and 1.0.
-	// double angle - the target angle.
-	//
-	// Returns: void
-	//
-	// Remarks:
-	//
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-	public void moveFwd(double speed, double target) {
-
-		double corr = 0.2;
-		double angle = 0;
-		double delta; // The difference between the target and measured angle
-
-		angle = Robot.driveGyro.getAngle();
-
-		delta = angle - target;
-
-		// According to the documentation for DifferentialDrive.arcadeDrive(speed,turn)
-		// the arguments are squared to accomodate lower drive speeds. If for example
-		// the gain coefficient is 0.05 and the angle error is 5 degrees, the turning
-		// argument would be 0.25*0.25 = 0.0625. This is a pretty slow correction.
-		// We needed a larger correction factor - trying 0.2 for now. The range for
-		// the turn is -1.0 to 1.0. Positive values are said to turn clockwise,
-		// negatives counterclockwise.
-		Robot.diff_drive.arcadeDrive(speed, -corr * delta);
-
-		System.out.println(" target = " + target + " angle = " + angle + " delta = " + delta);
-
-	}
-
-	/////////////////////////////////////////////////////////////////////
-	// Function: accelerateFwd()
-	/////////////////////////////////////////////////////////////////////
-	//
-	// Purpose: Used for accelerating the robot with driveFwd().
-	//
-	// Arguments: double target
-	//
-	// Returns: void
-	//
-	// Remarks:
-	//
-	/////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////
-	void accelerateFwd(double target) {
-		int loop_count = 0;
-
-		double speed;
-		double corr = 0.2;
-		double angle = 0;
-		double delta; // The difference between the target and measured angle
-
-		angle = Robot.driveGyro.getAngle();
-
-		delta = angle - target;
-
-		speed = 0.1;
-
-		while (speed < MAX_SPEED) {
-
-			speed += 0.01;
-			Robot.diff_drive.arcadeDrive(speed, -corr * delta);
-			// System.out.println("accelSpeed: \t" + speed + "\t" + "delta: \t" + delta);
-			delay.delay_milliseconds(40.0);
-
-			// We don't want to stay longer than we have to. Assumine
-			// move to 5 seconds for starters.
-			// that the 10 msec is reasonably accurate we limit th
-			loop_count++;
-
-			if (loop_count == ENC_LOOP_ESCAPE) {
-				break; // escape clause
-			}
-		}
-
-		// continue at max speed until instructed otherwise
-		Robot.diff_drive.arcadeDrive(MAX_SPEED, -corr * delta);
-	}
-
-	/////////////////////////////////////////////////////////////////////
-	// Function: decelerateFwd()
-	/////////////////////////////////////////////////////////////////////
-	//
-	// Purpose: Used for declerating the robot with driveFwd().
-	//
-	// Arguments: double target
-	//
-	// Returns: void
-	//
-	// Remarks:
-	//
-	/////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////
-	void decelerateFwd(double target) {
-		double speed;
-		double corr = 0.2;
-		double angle = 0;
-		double delta; // The difference between the target and measured angle
-
-		angle = Robot.driveGyro.getAngle();
-
-		delta = angle - target;
-
-		speed = 0.6;
-
-		while (speed > MIN_SPEED) {
-
-			speed -= 0.01;
-			Robot.diff_drive.arcadeDrive(speed, -corr * delta);
-			delay.delay_milliseconds(40.0);
-		}
-
-		// Continue at slow speed until target is reached.
-		Robot.diff_drive.arcadeDrive(BRAKE_SPEED, -corr * delta);
-	}
-
-	///////////////////////////////////////////////////////////////////////////
 	// Function: void moveBwd()
 	///////////////////////////////////////////////////////////////////////////
 	//
@@ -573,7 +628,7 @@ class DriveThread implements Runnable {
 
 		distance *= 12.0; // convert feet to inches.
 
-		enc_change = distance / ENCODER_RESOLUTION;
+		enc_change = distance * ENCODER_RESOLUTION;
 
 		return (enc_change);
 
