@@ -187,9 +187,9 @@ class DriveThread implements Runnable {
 
 			// turnAbsolute(-90);
 
-			driveFwd(15.0);
+			// driveFwd(15.0);
 
-			// turnRight_Arcade(90);
+			turnRight_Arcade(90);
 
 			// Wait for the thread to complete
 			try {
