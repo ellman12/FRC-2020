@@ -2,8 +2,7 @@
 // File: ClimbThread.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: Thread used for controlling the mechanisms for climbing,
-// and also for spinning the Control Panel.
+// Purpose: Thread used for controlling the mechanisms for climbing.
 //
 // Authors: Elliot DuCharme and Noah Stigeler.
 //
@@ -34,8 +33,7 @@ class ClimbThread implements Runnable {
     // Worth a look.
     Runtime runtime = Runtime.getRuntime();
 
-    // TODO Create motors and methods and stuff for climbing,
-    // and also the color wheel.
+    // TODO Create motors and methods and stuff for climbing.
 
     // ClimbThread constructor.
     // The name of the Thread is passed in as an argument.
