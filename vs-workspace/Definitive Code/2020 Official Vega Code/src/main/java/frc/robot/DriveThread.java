@@ -24,7 +24,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 // Creating the class that implements the Runnable interface.
@@ -37,8 +36,14 @@ class DriveThread implements Runnable {
     // creating a thread (reserving memory for this object).
     Thread driveThread;
 
+    // Creating an instance of the DriveThreadFunctions class.
+    DriveThreadFunctions driveThreadFunctions = new DriveThreadFunctions();
+
     // Creating an instance of the Variables class.
-    Variables variables;
+    Variables variables = new Variables();
+
+    // Creating an instance of the Sensors class.
+    Sensors sensors = new Sensors();
 
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
@@ -98,9 +103,6 @@ class DriveThread implements Runnable {
         backLeftDriveMotor.setIdleMode(IdleMode.kCoast);
         backRightDriveMotor.setIdleMode(IdleMode.kCoast);
 
-        // Creating a new instance of the Variables class.
-        variables = new Variables();
-
         // Actually creating the Thread.
         driveThread = new Thread(this, threadName);
         driveThread.start(); // Start the Thread.
@@ -128,13 +130,13 @@ class DriveThread implements Runnable {
                 // If the left analog trigger is pressed down sufficiently,
                 // strafe in the left direction.
                 if (PS4LeftAnalogTrigger >= PS4_ANALOG_TRIGGER_DEADBAND) {
-                    strafeLeft();
+                    driveThreadFunctions.strafeLeft();
                 }
 
                 // If the right analog trigger is pressed down sufficiently,
                 // strafe in the right direction.
                 if (PS4_ANALOG_TRIGGER_DEADBAND >= PS4_ANALOG_TRIGGER_DEADBAND) {
-                    strafeRight();
+                    driveThreadFunctions.strafeRight();
                 }
 
             }
@@ -157,125 +159,6 @@ class DriveThread implements Runnable {
 
         }
 
-    }
-
-    /////////////////////////////////////////////////////////////////////
-    // Function: strafeLeft()
-    /////////////////////////////////////////////////////////////////////
-    //
-    // Purpose: Function called when the left analog trigger is pressed
-    // down. Causes the robot to strafe left.
-    //
-    // Arguments: None
-    //
-    // Returns: void
-    //
-    // Remarks:
-    // In order to strafe left...
-    // the frontLeftDriveMotor has to spin backwards...
-    // the backLeftDriveMotor has to spin forwards...
-    // the frontRightMotor has to spin forwards...
-    // and the backRightDriveMotor has to spin backwards.
-    //
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    public void strafeLeft() {
-        frontLeftDriveMotor.set(-PS4LeftAnalogTrigger);
-        backLeftDriveMotor.set(PS4LeftAnalogTrigger);
-        frontRightDriveMotor.set(PS4LeftAnalogTrigger);
-        backRightDriveMotor.set(-PS4LeftAnalogTrigger);
-    }
-
-    /////////////////////////////////////////////////////////////////////
-    // Function: strafeRight()
-    /////////////////////////////////////////////////////////////////////
-    //
-    // Purpose: Function called when the right analog trigger is pressed
-    // down. Causes the robot to strafe right.
-    //
-    // Arguments: None
-    //
-    // Returns: void
-    //
-    // Remarks:
-    // In order to strafe right...
-    // the frontLeftDriveMotor has to spin forwards...
-    // the backLeftDriveMotor has to spin backwards...
-    // the frontRightMotor has to spin backwards...
-    // and the backRightDriveMotor has to spin forwards.
-    //
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    public void strafeRight() {
-        frontLeftDriveMotor.set(PS4LeftAnalogTrigger);
-        backLeftDriveMotor.set(-PS4LeftAnalogTrigger);
-        frontRightDriveMotor.set(-PS4LeftAnalogTrigger);
-        backRightDriveMotor.set(PS4LeftAnalogTrigger);
-    }
-
-    /////////////////////////////////////////////////////////////////////
-    // Function: strafeLeftAuto(...)
-    /////////////////////////////////////////////////////////////////////
-    //
-    // Purpose: Used for strafing left in autonomous.
-    //
-    // Arguments: double speed, double time (how long to strafe in seconds).
-    //
-    // Returns: void
-    //
-    // Remarks:
-    //
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    public void strafeLeftAuto(double speed, double time) {
-
-        // Strafe at the inputted speed.
-        frontLeftDriveMotor.set(-speed);
-        backLeftDriveMotor.set(speed);
-        frontRightDriveMotor.set(speed);
-        backRightDriveMotor.set(-speed);
-
-        // Run the motors and stop after these many seconds.
-        Timer.delay(time);
-
-        // Stop the motors.
-        frontLeftDriveMotor.set(0);
-        backLeftDriveMotor.set(0);
-        frontRightDriveMotor.set(0);
-        backRightDriveMotor.set(0);
-
-    }
-
-    /////////////////////////////////////////////////////////////////////
-    // Function: strafeRightAuto(...)
-    /////////////////////////////////////////////////////////////////////
-    //
-    // Purpose: Used for strafing right in autonomous.
-    //
-    // Arguments: double speed, double time (how long to strafe in seconds).
-    //
-    // Returns: void
-    //
-    // Remarks:
-    //
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    public void strafeRightAuto(double speed, double time) {
-
-        // Strafe at the inputted speed.
-        frontLeftDriveMotor.set(speed);
-        backLeftDriveMotor.set(-speed);
-        frontRightDriveMotor.set(-speed);
-        backRightDriveMotor.set(speed);
-
-        // Run the motors and stop after these many seconds.
-        Timer.delay(time);
-
-        // Sets the motor speed to 0 (stops them).
-        frontLeftDriveMotor.set(0);
-        backLeftDriveMotor.set(0);
-        frontRightDriveMotor.set(0);
-        backRightDriveMotor.set(0);
     }
 
 }
