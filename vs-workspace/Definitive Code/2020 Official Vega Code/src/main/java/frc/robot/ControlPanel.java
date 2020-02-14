@@ -24,4 +24,10 @@ class ControlPanel {
 
     }
 
+    // 2 functions: 1 for rotation control, the other for position control.
+    // The latter gets the current color sensor value, and moves the wheel to the
+    // color that the FMS sends out.
+    // The former spins the control panel so many times, and has an argument for how
+    // fast we want to spin it (make a magic number).
+
 }

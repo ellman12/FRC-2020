@@ -78,6 +78,9 @@ class DriveThread implements Runnable {
     // If you somehow have 5 controllers, you're insane.
     Joystick PS4 = new Joystick(0);
 
+    // Toggle for if the joystick axes are inverted or not. Starts out as false.
+    boolean stickAxesInverted = false;
+
     // DriveThread constructor.
     // The name of the Thread is passed in as an argument.
     DriveThread(String name) {
@@ -120,7 +123,13 @@ class DriveThread implements Runnable {
                 PS4RightAnalogTrigger = PS4.getRawAxis(variables.PS4_R_ANALOG_TRIG_ID);
 
                 // Controlling the Mecanum Drive with the Joystick axes.
-                mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
+                // If the toggle is true, invert the axes.
+                // Else, don't invert them.
+                if (stickAxesInverted == true) {
+                    mecanumDrive.driveCartesian(-PS4.getY(), -PS4.getX(), -PS4.getZ());
+                } else if (stickAxesInverted == false) {
+                    mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
+                }
 
                 // If the left analog trigger is pressed down sufficiently,
                 // strafe in the left direction.

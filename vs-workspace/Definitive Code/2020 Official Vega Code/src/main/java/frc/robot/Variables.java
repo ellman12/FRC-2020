@@ -61,7 +61,7 @@ class Variables {
     final int PS4_CIRCLE_BUTTON = 3; // Used in BallIntakeThread.java for intaking balls.
     final int PS4_TRIANGLE_BUTTON = 4; // Used in WormDriveThread.java for raising the worm drive.
     final int PS4_LEFT_BUMPER = 5; // Used in BallShootThread.java for spitting out balls.
-    final int PS4_RIGHT_BUMPER = 6;
+    final int PS4_RIGHT_BUMPER = 6; // Used in DriveThreadFunctions.java for inverting the stick axes for driving.
     // ID's 7 and 8 are not included because they're
     // "button" ID's for the Analog Triggers.
     final int PS4_SHARE_BUTTON = 9;
