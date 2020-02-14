@@ -73,12 +73,6 @@ class DriveThread implements Runnable {
     double PS4LeftAnalogTrigger;
     double PS4RightAnalogTrigger;
 
-    // Magic numbers for Motor IDs.
-    final int FRONT_LEFT_SPARK_ID = 1;
-    final int BACK_LEFT_SPARK_ID = 2;
-    final int FRONT_RIGHT_SPARK_ID = 3;
-    final int BACK_RIGHT_SPARK_ID = 4;
-
     // Creating the PS4 Controller, and giving it the ID of 0
     // Controllers in the Driver Station start at 0, and go to up to 5.
     // If you somehow have 5 controllers, you're insane.
@@ -92,10 +86,10 @@ class DriveThread implements Runnable {
         threadName = name;
 
         // Constructing the motors, giving them their IDs, and making them brushless.
-        frontLeftDriveMotor = new CANSparkMax(FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
-        backLeftDriveMotor = new CANSparkMax(BACK_LEFT_SPARK_ID, MotorType.kBrushless);
-        frontRightDriveMotor = new CANSparkMax(FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
-        backRightDriveMotor = new CANSparkMax(BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
+        frontLeftDriveMotor = new CANSparkMax(variables.FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
+        backLeftDriveMotor = new CANSparkMax(variables.BACK_LEFT_SPARK_ID, MotorType.kBrushless);
+        frontRightDriveMotor = new CANSparkMax(variables.FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
+        backRightDriveMotor = new CANSparkMax(variables.BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
 
         // Set the drive motors to coast mode to help prevent tipping.
         frontLeftDriveMotor.setIdleMode(IdleMode.kCoast);

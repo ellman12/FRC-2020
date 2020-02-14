@@ -22,6 +22,19 @@ class Variables {
     ///////////////////// Variables ////////////////////
 
     ///////////////////// CONSTANTS ////////////////////
+
+    // Magic numbers for DriveThread Motor IDs.
+    final int FRONT_LEFT_SPARK_ID = 1;
+    final int BACK_LEFT_SPARK_ID = 2;
+    final int FRONT_RIGHT_SPARK_ID = 3;
+    final int BACK_RIGHT_SPARK_ID = 4;
+
+    // Magic numbers for BallShootThread Motor IDs.
+    final int FRONT_LEFT_SHOOTER_MOTOR_ID = 5;
+    final int FRONT_RIGHT_SHOOTER_MOTOR_ID = 6;
+    final int BACK_LEFT_SHOOTER_MOTOR_ID = 7;
+    final int BACK_RIGHT_SHOOTER_MOTOR_ID = 8;
+
     // Magic numbers for PS4 Controller Axes IDs.
     final int PS4_L_X_AXIS_ID = 0;
     final int PS4_L_Y_AXIS_ID = 1;

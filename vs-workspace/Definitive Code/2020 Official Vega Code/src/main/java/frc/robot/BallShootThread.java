@@ -59,12 +59,6 @@ class BallShootThread implements Runnable {
     // Creating the motors for the ball shooter.
     WPI_TalonFX frontLeftShooterMotor, frontRightShooterMotor, backLeftShooterMotor, backRightShooterMotor;
 
-    // Magic numbers for Motor IDs.
-    final int FRONT_LEFT_SHOOTER_MOTOR_ID = 5;
-    final int FRONT_RIGHT_SHOOTER_MOTOR_ID = 6;
-    final int BACK_LEFT_SHOOTER_MOTOR_ID = 7;
-    final int BACK_RIGHT_SHOOTER_MOTOR_ID = 8;
-
     // Magic numbers for controlling the speeds of the shooter motors.
     final double FRONT_SHOOTER_MOTORS_SPEED = 1; // 100%
     final double BACK_SHOOTER_MOTORS_SPEED = 0.75; // 75%
@@ -80,10 +74,10 @@ class BallShootThread implements Runnable {
         threadName = name;
 
         // Creating the 4 shooter motors, and assigning them their ID's.
-        frontLeftShooterMotor = new WPI_TalonFX(FRONT_LEFT_SHOOTER_MOTOR_ID);
-        frontRightShooterMotor = new WPI_TalonFX(FRONT_RIGHT_SHOOTER_MOTOR_ID);
-        backLeftShooterMotor = new WPI_TalonFX(BACK_LEFT_SHOOTER_MOTOR_ID);
-        backRightShooterMotor = new WPI_TalonFX(BACK_RIGHT_SHOOTER_MOTOR_ID);
+        frontLeftShooterMotor = new WPI_TalonFX(variables.FRONT_LEFT_SHOOTER_MOTOR_ID);
+        frontRightShooterMotor = new WPI_TalonFX(variables.FRONT_RIGHT_SHOOTER_MOTOR_ID);
+        backLeftShooterMotor = new WPI_TalonFX(variables.BACK_LEFT_SHOOTER_MOTOR_ID);
+        backRightShooterMotor = new WPI_TalonFX(variables.BACK_RIGHT_SHOOTER_MOTOR_ID);
 
         // Creating the SpeedControllerGroups linking the front and back
         // shooter motors together.
