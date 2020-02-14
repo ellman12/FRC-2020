@@ -215,30 +215,28 @@ public class DriveThreadFunctions {
     //
     // Arguments:double distance, The distance to be traveled in feet.
     //
-    // Returns: An double representing overshoot/undershoot of the movement
+    // Returns: A double representing overshoot/undershoot of the movement
     // in inches.
     //
     // Remarks: 02/09/2020: Modified to include acceleration/deceleration
     // 02/11/2020: Noted that the inequality regarding fraction
     // should have been '>' vs. '<'
     // Increased delays within while() loops
-    // Reduced print statements to make is easier
+    // Reduced print statements to make it easier
     // to determine position and fraction.
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     public double driveFwd(double distance) {
-        int loop_count = 0;
+        double counts; // Encoder counts.
+        double initial_position; // Our initial position.
+        double current_position; // CUrrent position of the robot.
+        double target; // Init position + encoder counts.
 
-        double counts;
-        double initial_position;
-        double current_position;
-        double target;
+        double fraction; // How close we are to our target.
+        double heading; // Initial gyro angle.
 
-        double fraction;
-        double heading;
-
-        double error;
+        double error; // Overshoot/undershoot.
 
         // Determine where we are pointing - we want to maintain this heading during
         // this forward movement.
@@ -270,10 +268,9 @@ public class DriveThreadFunctions {
         // We want braking enabled.
         // We also need to put a timer within the while() loop to provide an escape in
         // the event that the system gets lost during autonomous requiring a restart of
-        // the
-        // program.
+        // the program.
 
-        // get moving and accelerate to MAX_SPEED
+        // Get moving and accelerate to MAX_SPEED.
         if (current_position < target) {
             accelerateFwd();
         }
@@ -296,7 +293,7 @@ public class DriveThreadFunctions {
         System.out
                 .println("current_position = " + current_position + " target = " + target + " fraction = " + fraction);
         System.out.println("Decelerating");
-        // Ok, we should be at the braking fraction. Time to decelerate to BRAKE_SPEED
+        // Ok, we should be at the braking fraction. Time to decelerate to BRAKE_SPEED.
         decelerateFwd();
 
         // Continue at BRAKE_SPEED until we reach the target encoder value
@@ -456,20 +453,18 @@ public class DriveThreadFunctions {
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     public double driveBwd(double distance) {
-        int loop_count = 0;
-        double counts;
-        double initial_position;
-        double current_position;
-        double target;
+        double counts; // Encoder counts.
+        double initial_position; // Our initial position.
+        double current_position; // CUrrent position of the robot.
+        double target; // Init position + encoder counts.
 
-        double fraction;
-        double heading;
+        double fraction; // How close we are to our target.
+        double heading; // Initial gyro angle.
 
-        double error;
+        double error; // Overshoot/undershoot.
 
         // Determine where we are pointing - we want to maintain this heading during
-        // this
-        // forward movement.
+        // this forward movement.
         heading = sensors.driveGyro.getAngle();
         sensors.frontLeftEncoder.setPosition(0.0);
 
@@ -509,18 +504,7 @@ public class DriveThreadFunctions {
                 moveBwd(BRAKE_SPEED, heading);
             }
             Timer.delay(0.01);
-            // We don't want to stay longer than we have to. Assuming
-            // that the 10 msec is reasonably accurate we limit the
-            // move to 5 seconds for starters.
-            loop_count++;
-            if ((loop_count % ENC_CONSOLE_UPDATE) == 0) {
-                // Provide periodic status
-                System.out.println(
-                        "current_position = " + current_position + " target = " + target + " fraction = " + fraction);
-            }
-            if (loop_count == ENC_LOOP_ESCAPE) {
-                break; // escape clause
-            }
+
             current_position = sensors.frontLeftEncoder.getPosition();
             fraction = Math.abs((target - current_position) / (target - initial_position));
         }
