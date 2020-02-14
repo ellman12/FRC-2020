@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
+  // TODO Make a SD thing for our minimun distance from the tower (high goal).
+
   // SmartDashboard stuff
   // Strings for where our autonomous starting position is.
   private static final String leftPosition = "Left Position";
