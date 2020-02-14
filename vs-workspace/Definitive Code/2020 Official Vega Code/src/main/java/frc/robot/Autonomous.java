@@ -15,8 +15,6 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-
 class Autonomous {
 
     Autonomous() {
