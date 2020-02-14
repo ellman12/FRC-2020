@@ -166,7 +166,6 @@ class BallShootThread implements Runnable {
             frontShooterMotors.set(frontFalconSpeed);
             backShooterMotors.set(backFalconSpeed);
 
-            // TODO This delay might not be necessary...
             Timer.delay(0.35);
 
         }

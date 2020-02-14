@@ -110,7 +110,7 @@ class DriveThread implements Runnable {
         while (driveThread.isAlive() == true) {
 
             if (DriverStation.getInstance().isAutonomous()) {
-                // TODO Auto functions called here.
+                // Auto functions called here.
             } else {
                 // Teleop stuff goes here.
                 // Getting the values of the PS4 Controller's axes.

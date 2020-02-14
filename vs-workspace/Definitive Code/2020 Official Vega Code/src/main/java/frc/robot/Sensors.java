@@ -44,9 +44,14 @@ class Sensors {
     // Proximity sensor distance value (in inches).
     double proximitySensorDistance;
 
-    // Doubles for storing encoder readings for the left and right drive motors.
+    // Creating the drive encoder, and also the right worm drive encoder..
+    CANEncoder frontLeftEncoder, rightWormDriveEncoder;
+
+    // Double for storing encoder readings for the left drive motor.
     double frontLeftDriveEncValue;
-    double frontRightDriveEncValue;
+
+    // Double for storing the right worm drive motor encoder values.
+    double rightWormDriveEncoderValue;
 
     // Creating the 2 gyros.
     ADXRS450_Gyro driveGyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
@@ -62,7 +67,6 @@ class Sensors {
 
     // Creating the limit switch used for keeping track of how if the robot is still
     // carrying balls, or if it needs to go and get some more.
-    // TODO Figure out what channel this thing will have.
     DigitalInput ballLimitSwitch = new DigitalInput(0);
 
     // Magic numbers for proximity sensor.
@@ -96,9 +100,6 @@ class Sensors {
     private final Color colorRed = ColorMatch.makeColor(0.561, 0.232, 0.114);
     private final Color colorYellow = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
-    // Creating the 2 drive encoders.
-    CANEncoder frontLeftEncoder, frontRightEncoder;
-
     // Sensors class constructor.
     Sensors() {
 
@@ -109,7 +110,6 @@ class Sensors {
         colorMatcher.addColorMatch(colorYellow);
 
         frontLeftEncoder = new CANEncoder(driveThread.frontLeftDriveMotor);
-        frontRightEncoder = new CANEncoder(driveThread.frontRightDriveMotor);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -149,9 +149,9 @@ class Sensors {
         // Get the color that the color sensor sees.
         getColorStringColorSensor();
 
-        // Getting encoder values for the drive motors.
+        // Getting encoder values for the drive motor and the worm drive encoder.
         frontLeftDriveEncValue = frontLeftEncoder.getPosition();
-        frontRightDriveEncValue = frontRightEncoder.getPosition();
+        rightWormDriveEncoderValue = rightWormDriveEncoder.getPosition();
     }
 
     /////////////////////////////////////////////////////////////////////

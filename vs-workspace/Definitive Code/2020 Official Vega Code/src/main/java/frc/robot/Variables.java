@@ -22,7 +22,6 @@ class Variables {
     ///////////////////// Variables ////////////////////
 
     ///////////////////// CONSTANTS ////////////////////
-
     // Magic numbers for DriveThread Motor IDs.
     final int FRONT_LEFT_SPARK_ID = 1;
     final int BACK_LEFT_SPARK_ID = 2;

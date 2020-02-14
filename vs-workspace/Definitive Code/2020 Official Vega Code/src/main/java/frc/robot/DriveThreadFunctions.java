@@ -78,7 +78,7 @@ public class DriveThreadFunctions {
     // Constructor.
     DriveThreadFunctions() {
 
-        // We want to establish an initial encoder reading. This will enable reseting
+        // We want to establish an initial encoder reading. This will enable resetting
         // encoder position to zero when we start moving. We use absolute values to
         // make the subsequent subtraction more easily interpreted.
         sensors.frontLeftEncoder.setPosition(0.0);
@@ -350,7 +350,7 @@ public class DriveThreadFunctions {
         delta = angle - heading;
 
         // According to the documentation for DifferentialDrive.arcadeDrive(speed,turn)
-        // the arguments are squared to accomodate lower drive speeds. If for example
+        // the arguments are squared to accommodate lower drive speeds. If for example
         // the gain coefficient is 0.05 and the angle error is 5 degrees, the turning
         // argument would be 0.25*0.25 = 0.0625. This is a pretty slow correction.
         // We needed a larger correction factor - trying 0.2 for now. The range for
@@ -399,7 +399,7 @@ public class DriveThreadFunctions {
     // Function: decelerateFwd( ... )
     /////////////////////////////////////////////////////////////////////
     //
-    // Purpose: Used for declerating the robot with driveFwd().
+    // Purpose: Used for decelerating the robot with driveFwd().
     //
     // Arguments: double heading, i.e., the direction of travel
     //
@@ -548,7 +548,7 @@ public class DriveThreadFunctions {
         delta = angle - target;
 
         // According to the documentation for DifferentialDrive.arcadeDrive(speed,turn)
-        // the arguments are squared to accomodate lower drive speeds. If for example
+        // the arguments are squared to accommodate lower drive speeds. If for example
         // the gain coefficient is 0.05 and the angle error is 5 degrees, the turning
         // argument would be 0.25*0.25 = 0.0625. This is a pretty slow correction.
         // We needed a larger correction factor - trying 0.2 for now. The range for
@@ -823,8 +823,6 @@ public class DriveThreadFunctions {
         boolean ccw = false;
         boolean cw = false;
 
-        double target = 0.0;
-        double angle = 0.0; // instantaneous angle measurement
         double result = 0.0;
 
         if (degrees < 0.0) { // we will rotate ccw
@@ -853,7 +851,7 @@ public class DriveThreadFunctions {
     //
     // Arguments:Accepts a double representing the target heading
     //
-    // Returns: The Acheived heading or a ridiculous value in the
+    // Returns: The achieved heading or a ridiculous value in the
     // event that a negative heading is entered.
     //
     // Remarks:

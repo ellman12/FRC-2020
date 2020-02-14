@@ -1,18 +1,15 @@
 /////////////////////////////////////////////////////////////////////
-// File: BallShootThread.java
+// File: ClimbThread.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: Thread used for controlling the mechanisms for shooting
-// lemons (power cells).
+// Purpose: Thread used for controlling the mechanisms for climbing,
+// and also for spinning the Control Panel.
 //
 // Authors: Elliot DuCharme and Noah Stigeler.
 //
 // Environment: Microsoft VSCode Java
 //
 // Remarks: Created on 2/08/2020.
-// 
-// TODO Actually finish this Thread, once us programmers know more
-// about the robot and how it's going to work.
 //
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -37,7 +34,8 @@ class ClimbThread implements Runnable {
     // Worth a look.
     Runtime runtime = Runtime.getRuntime();
 
-    // TODO Create motors and the like in here...
+    // TODO Create motors and methods and stuff for climbing,
+    // and also the color wheel.
 
     // ClimbThread constructor.
     // The name of the Thread is passed in as an argument.

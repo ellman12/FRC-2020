@@ -11,9 +11,6 @@
 // Remarks: Created on 2/08/2020.
 // This for the first argument wasn't working, even though in
 // DriveThread that is how we do it...?
-// 
-// TODO Actually finish this Thread, once us programmers know more
-// about the robot and how it's going to work.
 //
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////

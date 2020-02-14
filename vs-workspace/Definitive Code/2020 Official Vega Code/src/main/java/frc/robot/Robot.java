@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
-  // TODO Make a SD thing for our minimun distance from the tower (high goal).
-
   // SmartDashboard stuff.
   // Strings for where our autonomous starting position is.
   public final String leftPosition = "Left Position";
@@ -20,8 +18,8 @@ public class Robot extends TimedRobot {
   // Gets assigned later in autonomousInit().
   public String positionChoice;
 
-  // The SmartDashboard list that allows the driver to pick our starting positio
-  // Akin to a drop-down list you'd find in Windows or something
+  // The SmartDashboard list that allows the driver to pick our starting position.
+  // Akin to a drop-down list you'd find in Windows or something.
   public SendableChooser<String> positionSendableChooser = new SendableChooser<>();
 
   // The various goal choices that the driver can pick
@@ -60,14 +58,23 @@ public class Robot extends TimedRobot {
   public SendableChooser<String> minDistSendableChooser = new SendableChooser<>();
 
   // Calling the Thread classes in Robot.java
-  // Creating an instance of DriveThread
-  DriveThread driveThread;
+  // Creating an instance of the BallIntakeThread.
+  BallIntakeThread ballIntakeThread;
 
   // Creating an instance of BallShootThread.
   BallShootThread ballShootThread;
 
+  // Creating an instance of the ClimbThread.
+  ClimbThread climbThread;
+
+  // Creating an instance of DriveThread
+  DriveThread driveThread;
+
   // Creating an instance of WormDriveThread.
   WormDriveThread wormDriveThread;
+
+  // Creating an instance of the Autonomous class.
+  Autonomous autonomous = new Autonomous();
 
   // Create instance of the Sensors class.
   Sensors sensors = new Sensors();
@@ -85,7 +92,6 @@ public class Robot extends TimedRobot {
 
   // Creating an instance of the ComputeTrajectory class,
   // and passing in the required arguments.
-  // TODO IDK if these arguments will work or not.
   ComputeTrajectory computeTrajectory = new ComputeTrajectory(x0, sensors.proximitySensorDistance, y0, y, v);
 
   // String for the color for Position Control, used in Teleop.
@@ -116,23 +122,30 @@ public class Robot extends TimedRobot {
     // when attempting to fire power cells in Auto.
     SmartDashboard.putData("Min Distance from Tower", minDistSendableChooser);
 
-    // Calling the DriveThread, and telling it to get ready to/start running.
     // Calling these Threads once in robotInit() should help prevent them from
     // being called a gazillion times in autoPeriodic/teleopPeriodic().
-    driveThread = new DriveThread("DriveThread");
+
+    // Calling the BallShootThread, and telling it to get ready to/start running.
+    ballIntakeThread = new BallIntakeThread("BallIntakeThread");
 
     // Calling the BallShootThread, and telling it to get ready to/start running.
     ballShootThread = new BallShootThread("BallShootThread");
+
+    // Calling the ClimbThread, and telling it to get ready to/start running.
+    climbThread = new ClimbThread("ClimbThread");
+
+    // Calling the DriveThread, and telling it to get ready to/start running.
+    driveThread = new DriveThread("DriveThread");
 
     // Calling the WormDriveThread, and telling it to get ready to/start running.
     wormDriveThread = new WormDriveThread("WormDriveThread");
 
     // Setting Thread priorities.
-    driveThread.driveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
+    ballIntakeThread.ballIntakeThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
     ballShootThread.ballShootThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
+    climbThread.climbThread.setPriority(variables.NORM_THREAD_PRIORITY); // Thread priority of 5 (normal).
+    driveThread.driveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
     wormDriveThread.wormDriveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
-
-    // TODO Add other Threads in here...
   }
 
   @Override
@@ -163,6 +176,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+
+    // Calling the function in Autonomous.java that runs all of our Auto code.
+    autonomous.autoFunctions();
   }
 
   @Override
@@ -174,7 +190,6 @@ public class Robot extends TimedRobot {
 
     // Sends this value to the SmartDashboard to be viewed by the driver.
     SmartDashboard.putString("Rotation Control Color:", rotationControlColor);
-
   }
 
   @Override

@@ -49,13 +49,14 @@ class Autonomous {
     // Function: autoFunctions()
     /////////////////////////////////////////////////////////////////////
     //
-    // Purpose:
+    // Purpose: The function that calls other functions to make the robot
+    // do what the driver picks it to do in SmartDashboard.
     //
     // Arguments: None
     //
     // Returns: void
     //
-    // Remarks:
+    // Remarks: Created on 2/14/2020.
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
@@ -121,7 +122,7 @@ class Autonomous {
             // If our target is the low goal, move the ball shooter to there.
         } else if (target == "Low Goal") {
 
-            // TODO Low Goal stuff.
+            // Low Goal stuff.
 
         } else {
             ; // Do nothing.
@@ -150,24 +151,18 @@ class Autonomous {
         switch (orderChoice) {
 
         case "Going First":
-
             // No delay, because we're going first.
-
             break;
 
         case "Going Second":
-
             // Wait this many seconds.
             Timer.delay(GOING_SECOND_DELAY);
-
             break;
 
         // Our default value is "Going Last".
         default:
-
             // Wait this many seconds.
             Timer.delay(GOING_LAST_DELAY);
-
         }
 
     }

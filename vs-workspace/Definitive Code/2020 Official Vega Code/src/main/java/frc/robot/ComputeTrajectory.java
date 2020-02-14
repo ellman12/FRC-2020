@@ -360,7 +360,8 @@ class ComputeTrajectory {
 
                 wormDriveThread.wormDriveMotors.set(-wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
 
-                if (initTheta == targetFiringTheta) {
+                // Once we get there, stop the motors and break out of the while loop.
+                if (sensors.wormDriveGyroAngle == targetFiringTheta) {
                     wormDriveThread.wormDriveMotors.set(0);
                     break; // Break out of the while loop.
                 }
@@ -375,7 +376,8 @@ class ComputeTrajectory {
 
                 wormDriveThread.wormDriveMotors.set(wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
 
-                if (initTheta == targetFiringTheta) {
+                // Once we get there, stop the motors and break out of the while loop.
+                if (sensors.wormDriveGyroAngle == targetFiringTheta) {
                     wormDriveThread.wormDriveMotors.set(0);
                     break; // Break out of the while loop.
                 }

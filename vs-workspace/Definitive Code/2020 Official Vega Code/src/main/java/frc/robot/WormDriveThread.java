@@ -15,8 +15,6 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -25,8 +23,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 
 class WormDriveThread implements Runnable {
-
-    // TODO Color Wheel stuff.
 
     // Name of the Thread.
     String threadName;
@@ -63,6 +59,10 @@ class WormDriveThread implements Runnable {
     // Magic number for controlling how fast we want the
     // worm drive motors to spin in the function down below.
     final double WORM_DRIVE_MOTORS_SPEED = 0.5;
+
+    // Resolution of the NEO motor encoders.
+    // 0.1/42 = 0.024ish.
+    final double NEO_ENCODER_RESOLUTION = 0.0024;
 
     // WormDriveThread constructor.
     // The name of the Thread is passed in as an argument.
@@ -162,7 +162,7 @@ class WormDriveThread implements Runnable {
     // Function: wormDriveControlAutoGyro(...)
     /////////////////////////////////////////////////////////////////////
     //
-    // Purpose: Controls the worm drive motors in autonomous.
+    // Purpose: Controls the worm drive motors in autonomous with the gyro.
     //
     // Arguments: double targetAngle (our angle we want to be at).
     //
@@ -217,6 +217,70 @@ class WormDriveThread implements Runnable {
         Timer.delay(0.75);
 
         // End of wormDriveControlAutoGyro(...).
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: wormDriveControlAutoEncoder(...)
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Controls the worm drive motors in autonomous with the encoder.
+    //
+    // Arguments: double targetEncCounts (our encoder value we want to be at).
+    //
+    // Returns: void
+    //
+    // Remarks: Created on 2/14/2020 at 3:59 PM.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void wormDriveControlAutoEncoder(double targetEncCounts) {
+
+        // Get our initial encoder counts.
+        double initCounts = sensors.rightWormDriveEncoderValue;
+
+        // If our initial encoder reading is greater than OR less than our intended
+        // reading, move it to there.
+        // Else if it's already there, do nothing.
+        if (initCounts > targetEncCounts) {
+
+            while (sensors.rightWormDriveEncoderValue > targetEncCounts) {
+
+                wormDriveMotors.set(-WORM_DRIVE_MOTORS_SPEED);
+
+                // Once we get there, stop the motors and break out of the while loop.
+                if (sensors.rightWormDriveEncoderValue == targetEncCounts) {
+                    wormDriveMotors.set(0);
+                    break; // Break out of the while loop.
+                }
+
+            }
+
+            // If our initial angle is less than our intended target angle,
+            // move it to that angle.
+        } else if (initCounts < targetEncCounts) {
+
+            while (sensors.rightWormDriveEncoderValue < targetEncCounts) {
+
+                wormDriveMotors.set(WORM_DRIVE_MOTORS_SPEED);
+
+                // Once we get there, stop the motors and break out of the while loop.
+                if (sensors.rightWormDriveEncoderValue == targetEncCounts) {
+                    wormDriveMotors.set(0);
+                    break; // Break out of the while loop.
+                }
+
+            }
+
+            // If we're already at our target angle, do nothing.
+        } else if (sensors.rightWormDriveEncoderValue == targetEncCounts) {
+            // Do nothing.
+        }
+
+        // Delay so the robot has adequate time to adjust the arm.
+        Timer.delay(0.75);
+
+        // End of wormDriveControlAutoEncoder(...).
+
     }
 
 }
