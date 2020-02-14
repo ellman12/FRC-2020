@@ -48,9 +48,6 @@ class WormDriveThread implements Runnable {
     // Creating the Falcon 500 that controls the worm drive.
     WPI_TalonFX wormDriveFalcon;
 
-    // Magic number for the ID for the worm drive Falcon 500.
-    final int WORM_DRIVE_FALCON_ID = 9;
-
     // Magic number for controlling how fast we want the
     // worm drive Falcon 500 to spin.
     final double WORM_DRIVE_FALCON_SPEED = 0.5;
@@ -63,7 +60,7 @@ class WormDriveThread implements Runnable {
         threadName = name;
 
         // Creating the Worm Drive Falcon 500.
-        wormDriveFalcon = new WPI_TalonFX(WORM_DRIVE_FALCON_ID);
+        wormDriveFalcon = new WPI_TalonFX(variables.WORM_DRIVE_FALCON_ID);
 
         // Set the wormDriveFalcon in brake mode, which should help it keep the ball
         // shooter up where we want it.
@@ -101,7 +98,7 @@ class WormDriveThread implements Runnable {
     // Function: adjustShooterAngle()
     /////////////////////////////////////////////////////////////////////
     //
-    // Purpose: Adjusts the angle of the ball shooter, by running the
+    // Purpose: Adjusts the angle of the ball shooter manually, by running the
     // worm drive motors either forwards or backwards.
     //
     // Arguments: double wormDriveSpeed

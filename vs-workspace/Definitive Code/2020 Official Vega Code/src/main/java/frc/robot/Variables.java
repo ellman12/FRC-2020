@@ -35,6 +35,9 @@ class Variables {
     final int BACK_LEFT_SHOOTER_MOTOR_ID = 7;
     final int BACK_RIGHT_SHOOTER_MOTOR_ID = 8;
 
+    // Magic number for the ID for the worm drive Falcon 500.
+    final int WORM_DRIVE_FALCON_ID = 9;
+
     // Magic numbers for PS4 Controller Axes IDs.
     final int PS4_L_X_AXIS_ID = 0;
     final int PS4_L_Y_AXIS_ID = 1;
