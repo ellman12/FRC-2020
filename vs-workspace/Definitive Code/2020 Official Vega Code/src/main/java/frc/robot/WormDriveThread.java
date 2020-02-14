@@ -20,6 +20,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 class WormDriveThread implements Runnable {
 
+    // TODO Color Wheel stuff.
+
     // Name of the Thread.
     String threadName;
 
