@@ -42,6 +42,10 @@ class BallShootThread implements Runnable {
     // Used for the ballShoot(...) function.
     Sensors sensors = new Sensors();
 
+    // Creating an instance of the ComputeTrajectory class in here.
+    ComputeTrajectory computeTrajectory = new ComputeTrajectory(Robot.x0, sensors.proximitySensorDistance, Robot.y0,
+            Robot.y, Robot.v);
+
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
     // According to page 461 chapter 11 of Java: The Complete Reference 9th edition
@@ -54,12 +58,6 @@ class BallShootThread implements Runnable {
 
     // Creating the motors for the ball shooter.
     WPI_TalonFX frontLeftShooterMotor, frontRightShooterMotor, backLeftShooterMotor, backRightShooterMotor;
-
-    // Magic numbers for Motor IDs.
-    final int FRONT_LEFT_SHOOTER_MOTOR_ID = 5;
-    final int FRONT_RIGHT_SHOOTER_MOTOR_ID = 6;
-    final int BACK_LEFT_SHOOTER_MOTOR_ID = 7;
-    final int BACK_RIGHT_SHOOTER_MOTOR_ID = 8;
 
     // Magic numbers for controlling the speeds of the shooter motors.
     final double FRONT_SHOOTER_MOTORS_SPEED = 1; // 100%
@@ -76,10 +74,10 @@ class BallShootThread implements Runnable {
         threadName = name;
 
         // Creating the 4 shooter motors, and assigning them their ID's.
-        frontLeftShooterMotor = new WPI_TalonFX(FRONT_LEFT_SHOOTER_MOTOR_ID);
-        frontRightShooterMotor = new WPI_TalonFX(FRONT_RIGHT_SHOOTER_MOTOR_ID);
-        backLeftShooterMotor = new WPI_TalonFX(BACK_LEFT_SHOOTER_MOTOR_ID);
-        backRightShooterMotor = new WPI_TalonFX(BACK_RIGHT_SHOOTER_MOTOR_ID);
+        frontLeftShooterMotor = new WPI_TalonFX(variables.FRONT_LEFT_SHOOTER_MOTOR_ID);
+        frontRightShooterMotor = new WPI_TalonFX(variables.FRONT_RIGHT_SHOOTER_MOTOR_ID);
+        backLeftShooterMotor = new WPI_TalonFX(variables.BACK_LEFT_SHOOTER_MOTOR_ID);
+        backRightShooterMotor = new WPI_TalonFX(variables.BACK_RIGHT_SHOOTER_MOTOR_ID);
 
         // Creating the SpeedControllerGroups linking the front and back
         // shooter motors together.
@@ -102,33 +100,43 @@ class BallShootThread implements Runnable {
         // While the Thread is alive, do stuff.
         while (ballShootThread.isAlive() == true) {
 
-            // If the driver pushes the X Button on the PS4 Controller,
+            // If the driver pushes the Right Bumper on the PS4 Controller,
             // run the ballShoot() function.
-            if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
-
-                // ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
+            if (driveThread.PS4.getRawButton(variables.PS4_RIGHT_BUMPER) == true) {
+                ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
             } else {
                 // Do not move the motors.
                 ballShoot(0, 0);
             }
 
-        }
+            // If the driver pushes the X Button on the PS4 Controller, run the
+            // adjustAngleOfShooter() function.
+            // This function is the magic function that uses math and stuff to compute
+            // trajectory and stuff.
+            if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
+                computeTrajectory.adjustAngleOfShooter();
+            } else {
+                // Do not move the motors.
+                // ballShoot(0, 0);
+            }
 
-        // Thread class provides the join() method which allows one thread to wait until
-        // another thread completes its execution.
-        // Basically, if t is a Thread object whose thread is currently executing, then
-        // t.join() will make sure that t is terminated before the next instruction is
-        // executed by the program.
-        try {
-            ballShootThread.join();
-        } catch (InterruptedException e) {
-            System.out.println(threadName + " Interrupted.");
-        }
+            // Thread class provides the join() method which allows one thread to wait until
+            // another thread completes its execution.
+            // Basically, if t is a Thread object whose thread is currently executing, then
+            // t.join() will make sure that t is terminated before the next instruction is
+            // executed by the program.
+            try {
+                ballShootThread.join();
+            } catch (InterruptedException e) {
+                System.out.println(threadName + " Interrupted.");
+            }
 
-        // Print out when the Thread is exiting, and force garbage collection (freeing
-        // of memory resources) (.gc()).
-        System.out.println(threadName + " Exiting");
-        runtime.gc();
+            // Print out when the Thread is exiting, and force garbage collection (freeing
+            // of memory resources) (.gc()).
+            System.out.println(threadName + " Exiting");
+            runtime.gc();
+
+        }
 
     }
 
@@ -158,7 +166,6 @@ class BallShootThread implements Runnable {
             frontShooterMotors.set(frontFalconSpeed);
             backShooterMotors.set(backFalconSpeed);
 
-            // TODO This delay might not be necessary...
             Timer.delay(0.35);
 
         }

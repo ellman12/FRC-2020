@@ -11,18 +11,24 @@
 // Remarks: Created on 2/08/2020.
 // This for the first argument wasn't working, even though in
 // DriveThread that is how we do it...?
-// 
-// TODO Actually finish this Thread, once us programmers know more
-// about the robot and how it's going to work.
 //
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 class BallIntakeThread implements Runnable {
 
     // Name of the Thread.
     String threadName;
+
+    // Creating an instance of the Variables class.
+    Variables variables = new Variables();
+
+    // Creating an instance of the DriveThread
+    // Just used for getting the PS4 button press.
+    DriveThread driveThread = new DriveThread("DriveThread");
 
     // Creating instance of the Thread class by
     // creating a thread (reserving memory for this object).
@@ -38,7 +44,8 @@ class BallIntakeThread implements Runnable {
     // Worth a look.
     Runtime runtime = Runtime.getRuntime();
 
-    // TODO Some motors or something here, possibly a SpeedControllerGroup or 2...
+    // Creating the Falcon 500 for the ball intake.
+    WPI_TalonFX ballIntakeMotor;
 
     // BallIntakeThread constructor.
     // The name of the Thread is passed in as an argument.
@@ -47,10 +54,12 @@ class BallIntakeThread implements Runnable {
         // Assigning the name of the Thread to the argument.
         threadName = name;
 
+        // Creating ans assigning the intake Falcon an ID.
+        ballIntakeMotor = new WPI_TalonFX(variables.BALL_INTAKE_MOTOR_ID);
+
         // Actually creating the Thread.
         ballIntakeThread = new Thread(ballIntakeThread, threadName);
         ballIntakeThread.start(); // Start the Thread.
-
     }
 
     // Function that actually runs stuff.
@@ -58,6 +67,15 @@ class BallIntakeThread implements Runnable {
 
         // While the Thread is alive, do stuff.
         while (ballIntakeThread.isAlive() == true) {
+
+            // If the driver pushes the Circle Button on the PS4 Controller,
+            // run the intake motors.
+            if (driveThread.PS4.getRawButton(variables.PS4_CIRCLE_BUTTON) == true) {
+                ballIntake();
+            } else {
+                // Else, set the motor to 0 (don't run it).
+                ballIntakeMotor.set(0);
+            }
 
             // Thread class provides the join() method which allows one thread to wait until
             // another thread completes its execution.
@@ -76,6 +94,26 @@ class BallIntakeThread implements Runnable {
             runtime.gc();
 
         }
+
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: ballIntake()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Function used for intaking balls.
+    //
+    // Arguments: None
+    //
+    // Returns: void
+    //
+    // Remarks:
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void ballIntake() {
+
+        ballIntakeMotor.set(.65);
 
     }
 }

@@ -36,8 +36,14 @@ class DriveThread implements Runnable {
     // creating a thread (reserving memory for this object).
     Thread driveThread;
 
+    // Creating an instance of the DriveThreadFunctions class.
+    DriveThreadFunctions driveThreadFunctions = new DriveThreadFunctions();
+
     // Creating an instance of the Variables class.
-    Variables variables;
+    Variables variables = new Variables();
+
+    // Creating an instance of the Sensors class.
+    Sensors sensors = new Sensors();
 
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
@@ -67,16 +73,13 @@ class DriveThread implements Runnable {
     double PS4LeftAnalogTrigger;
     double PS4RightAnalogTrigger;
 
-    // Magic numbers for Motor IDs.
-    final int FRONT_LEFT_SPARK_ID = 1;
-    final int BACK_LEFT_SPARK_ID = 2;
-    final int FRONT_RIGHT_SPARK_ID = 3;
-    final int BACK_RIGHT_SPARK_ID = 4;
-
     // Creating the PS4 Controller, and giving it the ID of 0
     // Controllers in the Driver Station start at 0, and go to up to 5.
     // If you somehow have 5 controllers, you're insane.
     Joystick PS4 = new Joystick(0);
+
+    // Toggle for if the joystick axes are inverted or not. Starts out as false.
+    boolean stickAxesInverted = false;
 
     // DriveThread constructor.
     // The name of the Thread is passed in as an argument.
@@ -86,19 +89,17 @@ class DriveThread implements Runnable {
         threadName = name;
 
         // Constructing the motors, giving them their IDs, and making them brushless.
-        frontLeftDriveMotor = new CANSparkMax(FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
-        backLeftDriveMotor = new CANSparkMax(BACK_LEFT_SPARK_ID, MotorType.kBrushless);
-        frontRightDriveMotor = new CANSparkMax(FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
-        backRightDriveMotor = new CANSparkMax(BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
+        frontLeftDriveMotor = new CANSparkMax(variables.FRONT_LEFT_SPARK_ID, MotorType.kBrushless);
+        backLeftDriveMotor = new CANSparkMax(variables.BACK_LEFT_SPARK_ID, MotorType.kBrushless);
+        frontRightDriveMotor = new CANSparkMax(variables.FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
+        backRightDriveMotor = new CANSparkMax(variables.BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
 
-        // Set the drive motors to coast mode to help prevent tipping.
+        // Set the drive motors to coast mode to help prevent tipping,
+        // and to make the drive less jerky.
         frontLeftDriveMotor.setIdleMode(IdleMode.kCoast);
         frontRightDriveMotor.setIdleMode(IdleMode.kCoast);
         backLeftDriveMotor.setIdleMode(IdleMode.kCoast);
         backRightDriveMotor.setIdleMode(IdleMode.kCoast);
-
-        // Creating a new instance of the Variables class.
-        variables = new Variables();
 
         // Actually creating the Thread.
         driveThread = new Thread(this, threadName);
@@ -112,7 +113,7 @@ class DriveThread implements Runnable {
         while (driveThread.isAlive() == true) {
 
             if (DriverStation.getInstance().isAutonomous()) {
-                // TODO Auto functions called here.
+                // Auto functions called here.
             } else {
                 // Teleop stuff goes here.
                 // Getting the values of the PS4 Controller's axes.
@@ -122,18 +123,24 @@ class DriveThread implements Runnable {
                 PS4RightAnalogTrigger = PS4.getRawAxis(variables.PS4_R_ANALOG_TRIG_ID);
 
                 // Controlling the Mecanum Drive with the Joystick axes.
-                mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
+                // If the toggle is true, invert the axes.
+                // Else, don't invert them.
+                if (stickAxesInverted == true) {
+                    mecanumDrive.driveCartesian(-PS4.getY(), -PS4.getX(), -PS4.getZ());
+                } else if (stickAxesInverted == false) {
+                    mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
+                }
 
                 // If the left analog trigger is pressed down sufficiently,
                 // strafe in the left direction.
                 if (PS4LeftAnalogTrigger >= PS4_ANALOG_TRIGGER_DEADBAND) {
-                    strafeLeft();
+                    driveThreadFunctions.strafeLeft();
                 }
 
                 // If the right analog trigger is pressed down sufficiently,
                 // strafe in the right direction.
                 if (PS4_ANALOG_TRIGGER_DEADBAND >= PS4_ANALOG_TRIGGER_DEADBAND) {
-                    strafeRight();
+                    driveThreadFunctions.strafeRight();
                 }
 
             }
@@ -156,60 +163,6 @@ class DriveThread implements Runnable {
 
         }
 
-    }
-
-    /////////////////////////////////////////////////////////////////////
-    // Function: strafeLeft()
-    /////////////////////////////////////////////////////////////////////
-    //
-    // Purpose: Function called when the left analog trigger is pressed
-    // down. Causes the robot to strafe left.
-    //
-    // Arguments: None
-    //
-    // Returns: void
-    //
-    // Remarks:
-    // In order to strafe left...
-    // the frontLeftDriveMotor has to spin backwards...
-    // the backLeftDriveMotor has to spin forwards...
-    // the frontRightMotor has to spin forwards...
-    // and the backRightDriveMotor has to spin backwards.
-    //
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    public void strafeLeft() {
-        frontLeftDriveMotor.set(-PS4LeftAnalogTrigger);
-        backLeftDriveMotor.set(PS4LeftAnalogTrigger);
-        frontRightDriveMotor.set(PS4LeftAnalogTrigger);
-        backRightDriveMotor.set(-PS4LeftAnalogTrigger);
-    }
-
-    /////////////////////////////////////////////////////////////////////
-    // Function: strafeRight()
-    /////////////////////////////////////////////////////////////////////
-    //
-    // Purpose: Function called when the right analog trigger is pressed
-    // down. Causes the robot to strafe right.
-    //
-    // Arguments: None
-    //
-    // Returns: void
-    //
-    // Remarks:
-    // In order to strafe right...
-    // the frontLeftDriveMotor has to spin forwards...
-    // the backLeftDriveMotor has to spin backwards...
-    // the frontRightMotor has to spin backwards...
-    // and the backRightDriveMotor has to spin forwards.
-    //
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    public void strafeRight() {
-        frontLeftDriveMotor.set(PS4LeftAnalogTrigger);
-        backLeftDriveMotor.set(-PS4LeftAnalogTrigger);
-        frontRightDriveMotor.set(-PS4LeftAnalogTrigger);
-        backRightDriveMotor.set(PS4LeftAnalogTrigger);
     }
 
 }
