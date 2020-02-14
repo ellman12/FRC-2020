@@ -358,9 +358,10 @@ class ComputeTrajectory {
 
             while (sensors.wormDriveGyroAngle > targetFiringTheta) {
 
-                wormDriveThread.wormDriveFalcon.set(-wormDriveThread.WORM_DRIVE_FALCON_SPEED);
+                wormDriveThread.wormDriveMotors.set(-wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
 
                 if (initTheta == targetFiringTheta) {
+                    wormDriveThread.wormDriveMotors.set(0);
                     break; // Break out of the while loop.
                 }
 
@@ -372,15 +373,18 @@ class ComputeTrajectory {
 
             while (sensors.wormDriveGyroAngle < targetFiringTheta) {
 
-                wormDriveThread.wormDriveFalcon.set(wormDriveThread.WORM_DRIVE_FALCON_SPEED);
+                wormDriveThread.wormDriveMotors.set(wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
 
                 if (initTheta == targetFiringTheta) {
+                    wormDriveThread.wormDriveMotors.set(0);
                     break; // Break out of the while loop.
                 }
 
             }
 
+            // If we're already at our target angle, do nothing.
         } else if (sensors.wormDriveGyroAngle == targetFiringTheta) {
+            wormDriveThread.wormDriveMotors.set(0);
             // Do nothing.
         }
 
@@ -393,7 +397,7 @@ class ComputeTrajectory {
 
         // Move Ball Shooter back to initial position.
         while (sensors.wormDriveGyroAngle > initTheta) {
-            wormDriveThread.wormDriveFalcon.set(-wormDriveThread.WORM_DRIVE_FALCON_SPEED);
+            wormDriveThread.wormDriveMotors.set(-wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
         }
 
         // End of adjustAngleOfShooter().

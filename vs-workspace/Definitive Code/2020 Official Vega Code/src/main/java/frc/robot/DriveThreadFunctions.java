@@ -166,7 +166,7 @@ public class DriveThreadFunctions {
         // Run the motors and stop after these many seconds.
         Timer.delay(time);
 
-        // Stop the motors.
+        // Stop the motors after "time" amount of seconds.
         driveThread.frontLeftDriveMotor.set(0);
         driveThread.backLeftDriveMotor.set(0);
         driveThread.frontRightDriveMotor.set(0);
@@ -199,7 +199,7 @@ public class DriveThreadFunctions {
         // Run the motors and stop after these many seconds.
         Timer.delay(time);
 
-        // Sets the motor speed to 0 (stops them).
+        // Stop the motors after "time" amount of seconds.
         driveThread.frontLeftDriveMotor.set(0);
         driveThread.backLeftDriveMotor.set(0);
         driveThread.frontRightDriveMotor.set(0);

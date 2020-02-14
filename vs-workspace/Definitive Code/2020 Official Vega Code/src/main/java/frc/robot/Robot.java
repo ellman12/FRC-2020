@@ -11,53 +11,53 @@ public class Robot extends TimedRobot {
 
   // SmartDashboard stuff.
   // Strings for where our autonomous starting position is.
-  private final String leftPosition = "Left Position";
-  private final String middlePosition = "Middle Position";
-  private final String rightPosition = "Right Position";
+  public final String leftPosition = "Left Position";
+  public final String middlePosition = "Middle Position";
+  public final String rightPosition = "Right Position";
 
   // String used for Autonomous.java Switch statements.
   // Stores the position the drives chooses.
   // Gets assigned later in autonomousInit().
-  private String positionChoice;
+  public String positionChoice;
 
   // The SmartDashboard list that allows the driver to pick our starting positio
   // Akin to a drop-down list you'd find in Windows or something
-  private SendableChooser<String> positionSendableChooser = new SendableChooser<>();
+  public SendableChooser<String> positionSendableChooser = new SendableChooser<>();
 
   // The various goal choices that the driver can pick
-  private final String highGoal = "High Goal";
-  private final String lowGoal = "Low Goal";
+  public final String highGoal = "High Goal";
+  public final String lowGoal = "Low Goal";
 
   // Stores the goal the driver chooses
   // Gets assigned later in autonomousInit()
-  private String goalChoice;
+  public String goalChoice;
 
   // The SmartDashboard list that allows the driver
   // to pick our goal to shoot balls into (high or low)
   // Akin to a drop-down list you'd find in Windows or something
-  private SendableChooser<String> goalSendableChooser = new SendableChooser<>();
+  public SendableChooser<String> goalSendableChooser = new SendableChooser<>();
 
   // Choices for if our robot is going before our other 2 alliance partners, after
   // the first and before the third, or if we're going last
-  private final String goingFirst = "Going First";
-  private final String goingSecond = "Going Second";
-  private final String goingLast = "Going Last";
+  public final String goingFirst = "Going First";
+  public final String goingSecond = "Going Second";
+  public final String goingLast = "Going Last";
 
   // Stores the choice for if going first, second, or third
   // Gets assigned later in autonomousInit()
-  private String orderChoice;
+  public String orderChoice;
 
   // The SmartDashboard list that allows the driver to pick when our robot is
   // going to drive over to the goal and shoot
   // Akin to a drop-down list you'd find in Windows or something
-  private SendableChooser<String> orderSendableChooser = new SendableChooser<>();
+  public SendableChooser<String> orderSendableChooser = new SendableChooser<>();
 
   // SmartDashboard thing that allows the driver to specify how far back the robot
   // will be from the tower when attempting to fire power cells in Auto in inches.
   // Default value is 120 inches.
-  private double minTowerDistance = 120;
+  public double minTowerDistance = 120;
 
-  private SendableChooser<String> minDistSendableChooser = new SendableChooser<>();
+  public SendableChooser<String> minDistSendableChooser = new SendableChooser<>();
 
   // Calling the Thread classes in Robot.java
   // Creating an instance of DriveThread

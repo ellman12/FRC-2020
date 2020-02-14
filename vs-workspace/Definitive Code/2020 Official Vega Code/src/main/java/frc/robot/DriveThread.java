@@ -91,7 +91,8 @@ class DriveThread implements Runnable {
         frontRightDriveMotor = new CANSparkMax(variables.FRONT_RIGHT_SPARK_ID, MotorType.kBrushless);
         backRightDriveMotor = new CANSparkMax(variables.BACK_RIGHT_SPARK_ID, MotorType.kBrushless);
 
-        // Set the drive motors to coast mode to help prevent tipping.
+        // Set the drive motors to coast mode to help prevent tipping,
+        // and to make the drive less jerky.
         frontLeftDriveMotor.setIdleMode(IdleMode.kCoast);
         frontRightDriveMotor.setIdleMode(IdleMode.kCoast);
         backLeftDriveMotor.setIdleMode(IdleMode.kCoast);

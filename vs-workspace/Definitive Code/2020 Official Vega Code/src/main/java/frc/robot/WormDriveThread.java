@@ -17,6 +17,12 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
 
 class WormDriveThread implements Runnable {
 
@@ -35,6 +41,9 @@ class WormDriveThread implements Runnable {
     // Creating an instance of the Variables class in here.
     Variables variables = new Variables();
 
+    // Creating an instance of the Sensors class.
+    Sensors sensors = new Sensors();
+
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
     // According to page 461 chapter 11 of Java: The Complete Reference 9th edition
@@ -45,12 +54,15 @@ class WormDriveThread implements Runnable {
     // Worth a look.
     Runtime runtime = Runtime.getRuntime();
 
-    // Creating the Falcon 500 that controls the worm drive.
-    WPI_TalonFX wormDriveFalcon;
+    // Creating the motors used to power the worm drive.
+    CANSparkMax rightWormDriveMotor, leftWormDriveMotor;
+
+    // Creating a SpeedControllerGroup for grouping the 2 worm drive motors.
+    SpeedControllerGroup wormDriveMotors;
 
     // Magic number for controlling how fast we want the
-    // worm drive Falcon 500 to spin.
-    final double WORM_DRIVE_FALCON_SPEED = 0.5;
+    // worm drive motors to spin in the function down below.
+    final double WORM_DRIVE_MOTORS_SPEED = 0.5;
 
     // WormDriveThread constructor.
     // The name of the Thread is passed in as an argument.
@@ -59,17 +71,21 @@ class WormDriveThread implements Runnable {
         // Assigning the name of the Thread to the argument.
         threadName = name;
 
-        // Creating the Worm Drive Falcon 500.
-        wormDriveFalcon = new WPI_TalonFX(variables.WORM_DRIVE_FALCON_ID);
+        // Creating the 2 worm drive motors.
+        rightWormDriveMotor = new CANSparkMax(9, MotorType.kBrushless);
+        leftWormDriveMotor = new CANSparkMax(10, MotorType.kBrushless);
 
-        // Set the wormDriveFalcon in brake mode, which should help it keep the ball
+        // Set the worm drive motors in brake mode, which should help it keep the ball
         // shooter up where we want it.
-        wormDriveFalcon.setNeutralMode(NeutralMode.Brake);
+        rightWormDriveMotor.setIdleMode(IdleMode.kBrake);
+        leftWormDriveMotor.setIdleMode(IdleMode.kBrake);
+
+        // Grouping the motors.
+        wormDriveMotors = new SpeedControllerGroup(rightWormDriveMotor, leftWormDriveMotor);
 
         // Creating the Worm Drive Thread.
         wormDriveThread = new Thread(wormDriveThread, threadName);
         wormDriveThread.start(); // Start the Thread.
-
     }
 
     // Function that actually runs stuff.
@@ -78,7 +94,7 @@ class WormDriveThread implements Runnable {
         while (wormDriveThread.isAlive() == true) {
 
             // While this Thread is running, have this function ready to go.
-            adjustShooterAngle(WORM_DRIVE_FALCON_SPEED);
+            adjustShooterAngle(WORM_DRIVE_MOTORS_SPEED);
 
             try {
                 wormDriveThread.join();
@@ -115,13 +131,13 @@ class WormDriveThread implements Runnable {
         // set the worm drive Falcon to go backwards (lower it).
         if (driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true) {
 
-            wormDriveFalcon.set(-wormDriveSpeed);
+            wormDriveMotors.set(-wormDriveSpeed);
 
             // If the driver pushes the Triangle Button on the PS4 Controller,
             // set the worm drive Falcon to go forwards (raise it up).
         } else if (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true) {
 
-            wormDriveFalcon.set(wormDriveSpeed);
+            wormDriveMotors.set(wormDriveSpeed);
         }
 
         // If the driver is an idiot and is pressing BOTH the Square Button AND (&&) the
@@ -132,13 +148,75 @@ class WormDriveThread implements Runnable {
                 || ((driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == false)
                         && (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == false))) {
 
-            wormDriveFalcon.set(0);
+            wormDriveMotors.set(0);
         }
 
         // Just in case.
         else {
-            wormDriveFalcon.set(0);
+            wormDriveMotors.set(0);
         }
 
     }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: wormDriveControlAutoGyro(...)
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Controls the worm drive motors in autonomous.
+    //
+    // Arguments: double targetAngle (our angle we want to be at).
+    //
+    // Returns: void
+    //
+    // Remarks: Created on 2/14/2020 at 1:48 PM.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void wormDriveControlAutoGyro(double targetAngle) {
+
+        // Get our initial gyro angle.
+        double initAngle = sensors.wormDriveGyroAngle;
+
+        // If our initial angle is greater than OR less than our intended angle,
+        // move it to there.
+        // Else if it's already there, do nothing.
+        if (initAngle > targetAngle) {
+
+            while (sensors.wormDriveGyroAngle > targetAngle) {
+
+                wormDriveMotors.set(-WORM_DRIVE_MOTORS_SPEED);
+
+                if (initAngle == targetAngle) {
+                    wormDriveMotors.set(0);
+                    break; // Break out of the while loop.
+                }
+
+            }
+
+            // If our initial angle is less than our intended target angle,
+            // move it to that angle.
+        } else if (initAngle < targetAngle) {
+
+            while (sensors.wormDriveGyroAngle < targetAngle) {
+
+                wormDriveMotors.set(WORM_DRIVE_MOTORS_SPEED);
+
+                if (initAngle == targetAngle) {
+                    wormDriveMotors.set(0);
+                    break; // Break out of the while loop.
+                }
+
+            }
+
+            // If we're already at our target angle, do nothing.
+        } else if (sensors.wormDriveGyroAngle == targetAngle) {
+            // Do nothing.
+        }
+
+        // Delay so the robot has adequate time to adjust the arm.
+        Timer.delay(0.75);
+
+        // End of wormDriveControlAutoGyro(...).
+    }
+
 }
