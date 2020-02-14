@@ -7,8 +7,51 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
-  // Calling the Thread classes in Robot.java.
-  // Creating an instance of DriveThread.
+  // SmartDashboard stuff
+  // Strings for where our autonomous starting position is.
+  private static final String leftPosition = "Left Position";
+  private static final String middlePosition = "Middle Position";
+  private static final String rightPosition = "Right Position";
+
+  // String used for Autonomous.java Switch statements.
+  // Stores the position the drives chooses.
+  // Gets assigned later in autonomousInit().
+  private String positionChoice;
+
+  // The SmartDashboard list that allows the driver to pick our starting positio
+  // Akin to a drop-down list you'd find in Windows or something
+  private SendableChooser<String> positionSendableChooser = new SendableChooser<>();
+
+  // The various goal choices that the driver can pick
+  private static final String highGoal = "High Goal";
+  private static final String lowGoal = "Low Goal";
+
+  // Stores the goal the driver chooses
+  // Gets assigned later in autonomousInit()
+  private String goalChoice;
+
+  // The SmartDashboard list that allows the driver
+  // to pick our goal to shoot balls into (high or low)
+  // Akin to a drop-down list you'd find in Windows or something
+  private SendableChooser<String> goalSendableChooser = new SendableChooser<>();
+
+  // Choices for if our robot is going before our other 2 alliance partners, after
+  // the first and before the third, or if we're going last
+  private static final String goingFirst = "Going First";
+  private static final String goingSecond = "Going Second";
+  private static final String goingLast = "Going Last";
+
+  // Stores the choice for if going first, second, or third
+  // Gets assigned later in autonomousInit()
+  private String orderChoice;
+
+  // The SmartDashboard list that allows the driver to pick when our robot is
+  // going to drive over to the goal and shoot
+  // Akin to a drop-down list you'd find in Windows or something
+  private SendableChooser<String> orderSendableChooser = new SendableChooser<>();
+
+  // Calling the Thread classes in Robot.java
+  // Creating an instance of DriveThread
   DriveThread driveThread;
 
   // Creating an instance of BallShootThread.
@@ -41,6 +84,21 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+
+    // Adding these objects to SmartDashboard; Middle is the default option.
+    // Adding choices for our starting position.
+    positionSendableChooser.addOption("Left", leftPosition);
+    positionSendableChooser.setDefaultOption("Middle", middlePosition);
+    positionSendableChooser.addOption("Right", rightPosition);
+
+    // Adding choices for the goal we're going for.
+    goalSendableChooser.addOption("High", highGoal);
+    goalSendableChooser.addOption("Low", lowGoal);
+
+    // Adding choices for if we're going first, second, or last.
+    orderSendableChooser.addOption("Going First", goingFirst);
+    orderSendableChooser.addOption("Going Second", goingSecond);
+    orderSendableChooser.addOption("Going Last", goingLast);
 
     // Calling the DriveThread, and telling it to get ready to/start running.
     // Calling these Threads once in robotInit() should help prevent them from
@@ -75,6 +133,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+
+    // Assigning these variables to whatever the driver picked in SmartDashboard.
+    // They're used in autonomousPeriodic() to allow the robot to decide what to do.
+    positionChoice = positionSendableChooser.getSelected();
+    goalChoice = goalSendableChooser.getSelected();
+    orderChoice = orderSendableChooser.getSelected();
   }
 
   @Override
