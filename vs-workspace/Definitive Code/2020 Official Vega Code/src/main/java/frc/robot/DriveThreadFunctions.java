@@ -19,25 +19,24 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class DriveThreadFunctions {
 
+    /*
+     * Drive encoders are on the drive motors. The output from the encoders is 1.0.
+     * A gear reduction of 12.75:1 implies 12.75 per revolution of the output shaft.
+     * The precision of this is 42 counts per motor shaft revolution times 12.75 of
+     * the gear reduction = 1/535.5 (1/(42*12.75)). A 6 inch wheel diameter implies
+     * a distance traveled of PI*6.0 = 18.84 inches. Distance resolution of the
+     * encoder/gearbox combination is 18.84/535.5 = 0.0352 inches per count. OK I
+     * guess. However the output when reading the encoder function is 1.0 for each
+     * revolution of the motor, or 12.75 for one revolution of the output shaft.
+     * This implies that the inch to output conversion is 25.17/12.75 or 1.478
+     * inches per unit output
+     */
+    final double ENCODER_RESOLUTION = 1.478; // inches per output value
+
     // Fixed parameters for conversion of distance to encoder counts
-    // final double WHEEL_DIAMETER = 8.0;
+    final double WHEEL_DIAMETER = 8.0;
     final double INCHES_PER_FOOT = 12.0;
     final double CM_PER_METER = 100.0;
-
-    // TODO Figure out the encoder resolution.
-    // Encoders are now on the motors (NEOS). Output from the
-    // encoder in this case is 1.0. A gear reduction of 12.75:1 implies
-    // 12.75 per revolution of the output shaft. The precision of this
-    // is 42 counts per motor shaft revolution times 12.75 of the gear
-    // reduction = 1/672. An eight inch wheel diameter implies a distance
-    // traveled of PI*8.0 = 25.17 inches. Distance resolution of the
-    // encoder/gearbox combination is 25.17/672 = 0.037 inches/count. Should be
-    // good enough.
-    // However the output when reading the encoder function
-    // is 1.0 for each revolution of the motor, or 12.75 for one revolution
-    // of the output shaft. This implies that the inch to output
-    // conversion is 25.17/12.75 or 1.572 inches per unit output
-    final double ENCODER_RESOLUTION = 0.5065; // inches per output value
 
     // Fixed parameters for driveFwd(...)/driveBwd(...)
     final double START_SPEED = 0.1; // Also used in acceleration functions.
