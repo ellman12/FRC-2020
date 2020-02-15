@@ -206,11 +206,13 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
 
     // Run this in test to try vision stuff. Finally using testPeriodic() for once.
-    for (double area : areas) {
-      System.out.print(area + " ");
+    // An enhanced for loop, designed for iterating through array indexes.
+    for (double areaArrayIndex : areas) {
+      System.out.print(areaArrayIndex + " ");
     }
 
     System.out.println();
+
   }
 
 }
