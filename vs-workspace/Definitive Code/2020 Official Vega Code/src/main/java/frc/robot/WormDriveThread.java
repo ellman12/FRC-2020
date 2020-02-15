@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -52,6 +53,7 @@ class WormDriveThread implements Runnable {
 
     // Creating the motors used to power the worm drive.
     CANSparkMax rightWormDriveMotor, leftWormDriveMotor;
+    // WPI_TalonFX rightWormDriveMotor, leftWormDriveMotor;
 
     // Creating a SpeedControllerGroup for grouping the 2 worm drive motors.
     SpeedControllerGroup wormDriveMotors;
@@ -72,13 +74,17 @@ class WormDriveThread implements Runnable {
         threadName = name;
 
         // Creating the 2 worm drive motors.
-        rightWormDriveMotor = new CANSparkMax(9, MotorType.kBrushless);
-        leftWormDriveMotor = new CANSparkMax(10, MotorType.kBrushless);
+        rightWormDriveMotor = new CANSparkMax(variables.RIGHT_WORM_DRIVE_MOTOR_ID, MotorType.kBrushless);
+        leftWormDriveMotor = new CANSparkMax(variables.LEFT_WORM_DRIVE_MOTOR_ID, MotorType.kBrushless);
+        // rightWormDriveMotor = new WPI_TalonFX(variables.RIGHT_WORM_DRIVE_MOTOR_ID);
+        // leftWormDriveMotor = new WPI_TalonFX(variables.LEFT_WORM_DRIVE_MOTOR_ID);
 
-        // Set the worm drive motors in brake mode, which should help it keep the ball
-        // shooter up where we want it.
+        // Set the worm drive motors in brake mode,
+        // which should help it keep the ball shooter up where we want it.
         rightWormDriveMotor.setIdleMode(IdleMode.kBrake);
         leftWormDriveMotor.setIdleMode(IdleMode.kBrake);
+        // rightWormDriveMotor.setNeutralMode(NeutralMode.Brake);
+        // leftWormDriveMotor.setNeutralMode(NeutralMode.Brake);
 
         // Grouping the motors.
         wormDriveMotors = new SpeedControllerGroup(rightWormDriveMotor, leftWormDriveMotor);

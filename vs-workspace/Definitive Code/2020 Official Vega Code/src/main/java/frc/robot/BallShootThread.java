@@ -17,6 +17,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -83,6 +84,12 @@ class BallShootThread implements Runnable {
         // shooter motors together.
         frontShooterMotors = new SpeedControllerGroup(frontLeftShooterMotor, frontLeftShooterMotor);
         backShooterMotors = new SpeedControllerGroup(backRightShooterMotor, backLeftShooterMotor);
+
+        // Setting the shooter motors in brake mode.
+        frontLeftShooterMotor.setNeutralMode(NeutralMode.Brake);
+        frontRightShooterMotor.setNeutralMode(NeutralMode.Brake);
+        backLeftShooterMotor.setNeutralMode(NeutralMode.Brake);
+        backRightShooterMotor.setNeutralMode(NeutralMode.Brake);
 
         // Invert shooter motors, so they spin the right way.
         frontRightShooterMotor.setInverted(true);
