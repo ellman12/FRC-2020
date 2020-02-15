@@ -32,9 +32,14 @@ class BallShootThread implements Runnable {
     // creating a thread (reserving memory for this object).
     Thread ballShootThread;
 
+    // Creating an instance of the Robot class in here.
+    // Used for accessing the other Thread classes,
+    // which are created in that file.
+    Robot robot = new Robot();
+
     // Creating an instance of the DriveThread
     // Just used for getting the PS4 button press.
-    DriveThread driveThread = new DriveThread("DriveThread");
+    // DriveThread driveThread = new DriveThread("DriveThread");
 
     // Creating an instance of the Variables class.
     Variables variables = new Variables();
@@ -109,7 +114,7 @@ class BallShootThread implements Runnable {
 
             // If the driver pushes the Right Bumper on the PS4 Controller,
             // run the ballShoot() function.
-            if (driveThread.PS4.getRawButton(variables.PS4_RIGHT_BUMPER) == true) {
+            if (robot.driveThread.PS4.getRawButton(variables.PS4_RIGHT_BUMPER) == true) {
                 ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
             } else {
                 // Do not move the motors.
@@ -120,7 +125,7 @@ class BallShootThread implements Runnable {
             // adjustAngleOfShooter() function.
             // This function is the magic function that uses math and stuff to compute
             // trajectory and stuff.
-            if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
+            if (robot.driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
                 computeTrajectory.adjustAngleOfShooter();
             } else {
                 // Do not move the motors.

@@ -24,12 +24,17 @@ class BallIntakeThread implements Runnable {
     // Name of the Thread.
     String threadName;
 
+    // Creating an instance of the Robot class in here.
+    // Used for accessing the other Thread classes,
+    // which are created in that file.
+    Robot robot = new Robot();
+
     // Creating an instance of the Variables class.
     Variables variables = new Variables();
 
     // Creating an instance of the DriveThread
     // Just used for getting the PS4 button press.
-    DriveThread driveThread = new DriveThread("DriveThread");
+    // DriveThread driveThread = new DriveThread("DriveThread");
 
     // Creating instance of the Thread class by
     // creating a thread (reserving memory for this object).
@@ -74,7 +79,7 @@ class BallIntakeThread implements Runnable {
 
             // If the driver pushes the Circle Button on the PS4 Controller,
             // run the intake motors.
-            if (driveThread.PS4.getRawButton(variables.PS4_CIRCLE_BUTTON) == true) {
+            if (robot.driveThread.PS4.getRawButton(variables.PS4_CIRCLE_BUTTON) == true) {
                 ballIntake();
             } else {
                 // Else, set the motor to 0 (don't run it).

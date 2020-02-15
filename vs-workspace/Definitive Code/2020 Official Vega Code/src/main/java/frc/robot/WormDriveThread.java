@@ -32,8 +32,13 @@ class WormDriveThread implements Runnable {
     // creating a thread (reserving memory for this object).
     Thread wormDriveThread;
 
+    // Creating an instance of the Robot class in here.
+    // Used for accessing the other Thread classes,
+    // which are created in that file.
+    Robot robot = new Robot();
+
     // Creating an instance of the DriveThread class in here.
-    DriveThread driveThread = new DriveThread("DriveThread");
+    // DriveThread driveThread = new DriveThread("DriveThread");
 
     // Creating an instance of the Variables class in here.
     Variables variables = new Variables();
@@ -135,13 +140,13 @@ class WormDriveThread implements Runnable {
 
         // If the driver pushes the Square Button on the PS4 Controller,
         // set the worm drive Falcon to go backwards (lower it).
-        if (driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true) {
+        if (robot.driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true) {
 
             wormDriveMotors.set(-wormDriveSpeed);
 
             // If the driver pushes the Triangle Button on the PS4 Controller,
             // set the worm drive Falcon to go forwards (raise it up).
-        } else if (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true) {
+        } else if (robot.driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true) {
 
             wormDriveMotors.set(wormDriveSpeed);
         }
@@ -149,10 +154,10 @@ class WormDriveThread implements Runnable {
         // If the driver is an idiot and is pressing BOTH the Square Button AND (&&) the
         // Triangle Button at the same time, OR (||) if the driver is pushing neither
         // button, set the motor speed to 0.
-        else if (((driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true)
-                && (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true))
-                || ((driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == false)
-                        && (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == false))) {
+        else if (((robot.driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true)
+                && (robot.driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true))
+                || ((robot.driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == false)
+                        && (robot.driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == false))) {
 
             wormDriveMotors.set(0);
         }

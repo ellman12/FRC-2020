@@ -36,6 +36,11 @@ class DriveThread implements Runnable {
     // creating a thread (reserving memory for this object).
     Thread driveThread;
 
+    // Creating an instance of the Robot class in here.
+    // Used for accessing the other Thread classes,
+    // which are created in that file.
+    Robot robot = new Robot();
+
     // Creating an instance of the DriveThreadFunctions class.
     DriveThreadFunctions driveThreadFunctions = new DriveThreadFunctions();
 
