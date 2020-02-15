@@ -22,6 +22,12 @@ class Autonomous {
     // Creating an instance of the Robot class in here.
     Robot robot = new Robot();
 
+    // Creating an instance of DriveThread.java in here.
+    DriveThread driveThread = new DriveThread("DriveThread");
+
+    // Creating an instance of an object of DriveThreadFunctions.java in here.
+    DriveThreadFunctions driveThreadFunctions = new DriveThreadFunctions();
+
     // Creating an instance of the Sensors class in here.
     Sensors sensors = new Sensors();
 
@@ -92,6 +98,39 @@ class Autonomous {
             ballShootAuto(robot.goalChoice);
 
         }
+
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: startup()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Function called every single time that autonomous is ran.
+    // Its main purpose is dropping the intake, akin to what we had to do
+    // for PowerUp, where our intake was dropped in auto so that way it
+    // starts inside the frame. Otherwise, we'd be violating the rules.
+    //
+    // Arguments: double startSpeed: the speed that our robot moves at to
+    // drop the intake down. double startDelay: how long in seconds to
+    // wait after running the drive forwards and backwards.
+    //
+    // Returns: void
+    //
+    // Remarks: Created on 2/15/2020 at 12:25 PM.
+    // Basically the way it works is it drives forward fast, then backwards
+    // quickly, creating a sort of "whiplash" effect.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void startup(double startSpeed, double startDelay) {
+
+        // RUn the motors forward at the inputted speed for 0.3 seconds.
+        driveThread.mecanumDrive.driveCartesian(0, startSpeed, 0);
+        Timer.delay(startDelay);
+
+        // Then drive backwards with the same delay.
+        driveThread.mecanumDrive.driveCartesian(0, -startSpeed, 0);
+        Timer.delay(startDelay);
 
     }
 
