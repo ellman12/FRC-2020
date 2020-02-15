@@ -149,13 +149,6 @@ public class Robot extends TimedRobot {
 
     // Calling the WormDriveThread, and telling it to get ready to/start running.
     wormDriveThread = new WormDriveThread("WormDriveThread");
-
-    // Setting Thread priorities.
-    ballIntakeThread.ballIntakeThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
-    ballShootThread.ballShootThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
-    climbThread.climbThread.setPriority(variables.NORM_THREAD_PRIORITY); // Thread priority of 5 (normal).
-    driveThread.driveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
-    wormDriveThread.wormDriveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
   }
 
   @Override
