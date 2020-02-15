@@ -199,11 +199,18 @@ public class Robot extends TimedRobot {
     rotationControlColor = DriverStation.getInstance().getGameSpecificMessage();
 
     // Sends this value to the SmartDashboard to be viewed by the driver.
-    SmartDashboard.putString("Rotation Control Color:", rotationControlColor);
+    SmartDashboard.putString("Rotation Control Color", rotationControlColor);
   }
 
   @Override
   public void testPeriodic() {
+
+    // Run this in test to try vision stuff. Finally using testPeriodic() for once.
+    for (double area : areas) {
+      System.out.print(area + " ");
+    }
+
+    System.out.println();
   }
 
 }
