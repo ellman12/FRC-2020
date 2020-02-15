@@ -107,6 +107,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
+    // Vision idk.
     table = NetworkTableInstance.getDefault().getTable("GRIP/mycontoursReport");
 
     // SmartDashboard stuff.

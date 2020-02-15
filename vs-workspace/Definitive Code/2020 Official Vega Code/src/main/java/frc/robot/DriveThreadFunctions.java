@@ -33,7 +33,7 @@ public class DriveThreadFunctions {
      */
     final double ENCODER_RESOLUTION = 1.478; // inches per output value
 
-    // Fixed parameters for conversion of distance to encoder counts
+    // Fixed parameters for conversion of distance to encoder counts.
     final double WHEEL_DIAMETER = 8.0;
     final double INCHES_PER_FOOT = 12.0;
     final double CM_PER_METER = 100.0;
@@ -45,7 +45,7 @@ public class DriveThreadFunctions {
     final double BRAKE_SPEED = 0.3;
     final double BRAKE_FRACTION = 0.4;
 
-    // Fixed parameters for console updates and while() loop escapes
+    // Fixed parameters for console updates and while() loop escapes.
     final int ENC_CONSOLE_UPDATE = 20;
     final int ENC_LOOP_ESCAPE = 250;
     final int GYRO_CONSOLE_UPDATE = 20;
