@@ -68,6 +68,10 @@ class Autonomous {
     /////////////////////////////////////////////////////////////////////
     public void autoFunctions() {
 
+        // Initialization function, running the drive at 60% speed,
+        // and a delay of 0.3 seconds.
+        startup(0.6, 0.3);
+
         // Switch statement for where on the field we are starting:
         // (right side of the field, left, or middle (default starting position)).
         switch (robot.positionChoice) {

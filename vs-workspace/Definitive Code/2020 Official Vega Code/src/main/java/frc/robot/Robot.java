@@ -188,6 +188,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
 
     // Calling the function in Autonomous.java that runs all of our Auto code.
+    // This helps to keep Robot.java smaller, neater, and more organized.
     autonomous.autoFunctions();
   }
 
