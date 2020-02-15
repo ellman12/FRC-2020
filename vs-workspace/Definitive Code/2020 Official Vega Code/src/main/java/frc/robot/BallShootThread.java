@@ -74,7 +74,7 @@ class BallShootThread implements Runnable {
         // Assigning the name of the Thread to the argument.
         threadName = name;
 
-        // Creating the 4 shooter motors, and assigning them their ID's.
+        // Creating the 4 shooter Falcon 500s, and assigning them their ID's.
         frontLeftShooterMotor = new WPI_TalonFX(variables.FRONT_LEFT_SHOOTER_MOTOR_ID);
         frontRightShooterMotor = new WPI_TalonFX(variables.FRONT_RIGHT_SHOOTER_MOTOR_ID);
         backLeftShooterMotor = new WPI_TalonFX(variables.BACK_LEFT_SHOOTER_MOTOR_ID);

@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 class BallIntakeThread implements Runnable {
@@ -54,8 +55,11 @@ class BallIntakeThread implements Runnable {
         // Assigning the name of the Thread to the argument.
         threadName = name;
 
-        // Creating ans assigning the intake Falcon an ID.
+        // Creating and assigning the intake Falcon an ID.
         ballIntakeMotor = new WPI_TalonFX(variables.BALL_INTAKE_MOTOR_ID);
+
+        // Setting the intake Falcon 500 motor in brake mode.
+        ballIntakeMotor.setNeutralMode(NeutralMode.Brake);
 
         // Actually creating the Thread.
         ballIntakeThread = new Thread(ballIntakeThread, threadName);
