@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -97,8 +99,15 @@ public class Robot extends TimedRobot {
   // String for the color for Position Control, used in Teleop.
   String rotationControlColor;
 
+  // vision crap
+  NetworkTable table;
+  double[] areas;
+  double[] defaultValue = new double[0];
+
   @Override
   public void robotInit() {
+
+    table = NetworkTableInstance.getDefault().getTable("GRIP/mycontoursReport");
 
     // SmartDashboard stuff.
     // Adding these objects to SmartDashboard; Middle is the default option.
