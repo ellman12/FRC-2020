@@ -21,7 +21,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.Timer;
 
 class BallShootThread implements Runnable {
 
@@ -114,7 +113,7 @@ class BallShootThread implements Runnable {
 
             // If the driver pushes the Right Bumper on the PS4 Controller,
             // run the ballShoot() function.
-            if (robot.driveThread.PS4.getRawButton(variables.PS4_RIGHT_BUMPER) == true) {
+            if (robot.driveThread.PS4.getRawButton(variables.PS4_CIRCLE_BUTTON) == true) {
                 ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
             } else {
                 // Do not move the motors.
@@ -125,12 +124,12 @@ class BallShootThread implements Runnable {
             // adjustAngleOfShooter() function.
             // This function is the magic function that uses math and stuff to compute
             // trajectory and stuff.
-            if (robot.driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
-                computeTrajectory.adjustAngleOfShooter();
-            } else {
-                // Do not move the motors.
-                // ballShoot(0, 0);
-            }
+            // if (robot.driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
+            // computeTrajectory.adjustAngleOfShooter();
+            // } else {
+            // Do not move the motors.
+            // ballShoot(0, 0);
+            // }
 
             // Thread class provides the join() method which allows one thread to wait until
             // another thread completes its execution.
@@ -173,14 +172,14 @@ class BallShootThread implements Runnable {
 
         // While the robot has at least 1 ball left, run the shooter motors at the
         // passed-in speed.
-        while (sensors.robotCarryingBalls == true) {
+        // while (sensors.robotCarryingBalls == true) {
 
-            frontShooterMotors.set(frontFalconSpeed);
-            backShooterMotors.set(backFalconSpeed);
+        frontShooterMotors.set(frontFalconSpeed);
+        backShooterMotors.set(backFalconSpeed);
 
-            Timer.delay(0.35);
+        // Timer.delay(0.35);
 
-        }
+        // }
     }
 
 }

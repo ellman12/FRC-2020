@@ -56,12 +56,12 @@ class Variables {
     final int MAX_THREAD_PRIORITY = 10;
 
     // Magic numbers used for the PS4 Controller button ID's.
-    final int PS4_SQUARE_BUTTON = 1; // Used in WormDriveThread.java for lowering the worm drive.
-    final int PS4_X_BUTTON = 2; // Used in BallShootThread.java for shooting balls into the inner goal.
-    final int PS4_CIRCLE_BUTTON = 3; // Used in BallIntakeThread.java for intaking balls.
-    final int PS4_TRIANGLE_BUTTON = 4; // Used in WormDriveThread.java for raising the worm drive.
-    final int PS4_LEFT_BUMPER = 5; // Used in BallShootThread.java for spitting out balls.
-    final int PS4_RIGHT_BUMPER = 6; // Used in DriveThreadFunctions.java for inverting the stick axes for driving.
+    final int PS4_SQUARE_BUTTON = 1;
+    final int PS4_X_BUTTON = 2;
+    final int PS4_CIRCLE_BUTTON = 3;
+    final int PS4_TRIANGLE_BUTTON = 4;
+    final int PS4_LEFT_BUMPER = 5;
+    final int PS4_RIGHT_BUMPER = 6;
     // ID's 7 and 8 are not included because they're
     // "button" ID's for the Analog Triggers.
     final int PS4_SHARE_BUTTON = 9;
@@ -73,7 +73,6 @@ class Variables {
 
     // Constructor.
     Variables() {
-
     }
 
 }

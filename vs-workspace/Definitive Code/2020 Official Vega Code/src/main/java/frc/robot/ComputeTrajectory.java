@@ -358,11 +358,11 @@ class ComputeTrajectory {
 
             while (sensors.wormDriveGyroAngle > targetFiringTheta) {
 
-                wormDriveThread.wormDriveMotors.set(-wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
+                wormDriveThread.rightWormDriveMotor.set(-wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
 
                 // Once we get there, stop the motors and break out of the while loop.
                 if (sensors.wormDriveGyroAngle == targetFiringTheta) {
-                    wormDriveThread.wormDriveMotors.set(0);
+                    wormDriveThread.rightWormDriveMotor.set(0);
                     break; // Break out of the while loop.
                 }
 
@@ -374,11 +374,11 @@ class ComputeTrajectory {
 
             while (sensors.wormDriveGyroAngle < targetFiringTheta) {
 
-                wormDriveThread.wormDriveMotors.set(wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
+                wormDriveThread.rightWormDriveMotor.set(wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
 
                 // Once we get there, stop the motors and break out of the while loop.
                 if (sensors.wormDriveGyroAngle == targetFiringTheta) {
-                    wormDriveThread.wormDriveMotors.set(0);
+                    wormDriveThread.rightWormDriveMotor.set(0);
                     break; // Break out of the while loop.
                 }
 
@@ -386,7 +386,7 @@ class ComputeTrajectory {
 
             // If we're already at our target angle, do nothing.
         } else if (sensors.wormDriveGyroAngle == targetFiringTheta) {
-            wormDriveThread.wormDriveMotors.set(0);
+            wormDriveThread.rightWormDriveMotor.set(0);
             // Do nothing.
         }
 
@@ -399,7 +399,7 @@ class ComputeTrajectory {
 
         // Move Ball Shooter back to initial position.
         while (sensors.wormDriveGyroAngle > initTheta) {
-            wormDriveThread.wormDriveMotors.set(-wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
+            wormDriveThread.rightWormDriveMotor.set(-wormDriveThread.WORM_DRIVE_MOTORS_SPEED);
         }
 
         // End of adjustAngleOfShooter().

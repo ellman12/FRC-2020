@@ -77,13 +77,18 @@ class BallIntakeThread implements Runnable {
         // While the Thread is alive, do stuff.
         while (ballIntakeThread.isAlive() == true) {
 
-            // If the driver pushes the Circle Button on the PS4 Controller,
-            // run the intake motors.
-            if (robot.driveThread.PS4.getRawButton(variables.PS4_CIRCLE_BUTTON) == true) {
-                ballIntake();
+            // If the driver pushes the right bumper button on the PS4 Controller,
+            // run the intake motors forward (inwards).
+            if (robot.driveThread.PS4.getRawButton(variables.PS4_RIGHT_BUMPER) == true) {
+                ballIntake(0.65, 0.5);
+
+                // Else if the driver pushes the left bumper button on the PS4 Controller,
+                // run the intake motors backwards (outward).
+            } else if (robot.driveThread.PS4.getRawButton(variables.PS4_LEFT_BUMPER) == true) {
+                ballIntake(-0.65, -0.5);
             } else {
-                // Else, set the motor to 0 (don't run it).
-                ballIntakeMotor.set(0);
+                // Else, set the motors to 0 (don't run them).
+                ballIntake(0, 0);
             }
 
             // Thread class provides the join() method which allows one thread to wait until
@@ -107,22 +112,28 @@ class BallIntakeThread implements Runnable {
     }
 
     /////////////////////////////////////////////////////////////////////
-    // Function: ballIntake()
+    // Function: ballIntake(...)
     /////////////////////////////////////////////////////////////////////
     //
     // Purpose: Function used for intaking balls.
+    // Runs the intake motor itself, and also the top belt of the shooter.
     //
-    // Arguments: None
+    // Arguments: double intakeSpeed (speed of the intake motor),
+    // double topBeltSpeed (speed of the belt on the top of the robot).
     //
     // Returns: void
     //
-    // Remarks:
+    // Remarks: Rewrote on 2/16/2020.
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
-    public void ballIntake() {
+    public void ballIntake(double intakeSpeed, double topBeltSpeed) {
 
-        ballIntakeMotor.set(.65);
+        // Run the intake motor at the inputted speed.
+        ballIntakeMotor.set(intakeSpeed);
+
+        // Run the back shooter motors at the inputted speed.
+        robot.ballShootThread.backShooterMotors.set(topBeltSpeed);
 
     }
 }

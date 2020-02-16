@@ -19,15 +19,20 @@ import edu.wpi.first.wpilibj.Timer;
 
 class Autonomous {
 
+    // Magic numbers for the robot's startup() speed, and the delay for it.
+    final double ROBOT_STARTING_SPEED = 0.6; // 60% speed.
+    final double STARTUP_DELAY = 0.3; // Seconds.
+
+    // Magic numbers for how long to wait for the other robots to go (in seconds).
+    final int GOING_SECOND_DELAY = 5;
+    final int GOING_LAST_DELAY = 8;
+
     // Creating an instance of the Robot class in here.
     // On 2/15/2020, Larry and Elliott realized that creating multiple instances of
     // the same Thread would be very problematic.
     // So, we create an instance of Robot.java,
     // which is where the Threads are initialized.
     Robot robot = new Robot();
-
-    // Creating an instance of DriveThread.java in here.
-    // DriveThread driveThread = new DriveThread("DriveThread");
 
     // Creating an instance of an object of DriveThreadFunctions.java in here.
     DriveThreadFunctions driveThreadFunctions = new DriveThreadFunctions();
@@ -46,13 +51,8 @@ class Autonomous {
     // Creating an instance of the ComputeTrajectory class.
     ComputeTrajectory computeTrajectory = new ComputeTrajectory(x0, sensors.proximitySensorDistance, y0, y, v);
 
-    // Magic numbers for how long to wait for the other robots to go (in seconds).
-    final int GOING_SECOND_DELAY = 5;
-    final int GOING_LAST_DELAY = 8;
-
     // Autonomous constructor.
     Autonomous() {
-
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ class Autonomous {
 
         // Initialization function, running the drive at 60% speed,
         // and a delay of 0.3 seconds.
-        startup(0.6, 0.3);
+        startup(ROBOT_STARTING_SPEED, STARTUP_DELAY);
 
         // Switch statement for where on the field we are starting:
         // (right side of the field, left, or middle (default starting position)).
@@ -101,7 +101,7 @@ class Autonomous {
         default:
 
             // move over to the goal somehow
-            ballShootAuto(robot.goalChoice);
+            orderChoiceAuto(robot.orderChoice);
             // Fire.
             ballShootAuto(robot.goalChoice);
 

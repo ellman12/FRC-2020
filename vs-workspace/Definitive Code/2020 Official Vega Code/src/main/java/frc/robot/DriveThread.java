@@ -29,6 +29,10 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 // Creating the class that implements the Runnable interface.
 class DriveThread implements Runnable {
 
+    // Deadbands for the PS4 axes for driving.
+    final double PS4_TRIGGER_DEADBAND_POSITIVE = 0.2;
+    final double PS4_TRIGGER_DEADBAND_NEGATIVE = -0.2;
+
     // Name of the Thread.
     String threadName;
 
@@ -129,11 +133,20 @@ class DriveThread implements Runnable {
 
                 // Controlling the Mecanum Drive with the Joystick axes.
                 // If the toggle is true, invert the axes.
-                // Else, don't invert them.
-                if (stickAxesInverted == true) {
-                    mecanumDrive.driveCartesian(-PS4.getY(), -PS4.getX(), -PS4.getZ());
-                } else if (stickAxesInverted == false) {
-                    mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
+                // // Else, don't invert them.
+                // if (stickAxesInverted == true) {
+                // mecanumDrive.driveCartesian(-PS4.getY(), -PS4.getX(), -PS4.getZ());
+                // } else if (stickAxesInverted == false) {
+                // mecanumDrive.driveCartesian(PS4.getY(), PS4.getX(), PS4.getZ());
+                // }
+
+                // This disgusting if statement is for the deadband for the PS4 Controller.
+                // TODO Try and improve this nasty thing.
+                if (((PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE) || (PS4.getY() > PS4_TRIGGER_DEADBAND_POSITIVE)
+                        || (PS4.getZ() > PS4_TRIGGER_DEADBAND_POSITIVE))
+                        || ((PS4.getX() < PS4_TRIGGER_DEADBAND_NEGATIVE) || (PS4.getY() < PS4_TRIGGER_DEADBAND_NEGATIVE)
+                                || (PS4.getZ() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
+                    mecanumDrive.driveCartesian(PS4.getY(), PS4.getZ(), PS4.getX());
                 }
 
                 // If the left analog trigger is pressed down sufficiently,
@@ -148,23 +161,23 @@ class DriveThread implements Runnable {
                     driveThreadFunctions.strafeRight();
                 }
 
-            }
+                // Thread class provides the join() method which allows one thread to wait until
+                // another thread completes its execution.
+                // Basically, if t is a Thread object whose thread is currently executing, then
+                // t.join() will make sure that t is terminated before the next instruction is
+                // executed by the program.
+                try {
+                    driveThread.join();
+                } catch (InterruptedException e) {
+                    System.out.println(threadName + " Interrupted.");
+                }
 
-            // Thread class provides the join() method which allows one thread to wait until
-            // another thread completes its execution.
-            // Basically, if t is a Thread object whose thread is currently executing, then
-            // t.join() will make sure that t is terminated before the next instruction is
-            // executed by the program.
-            try {
-                driveThread.join();
-            } catch (InterruptedException e) {
-                System.out.println(threadName + " Interrupted.");
-            }
+                // Print out when the Thread is exiting, and force
+                // garbage collection (freeing of memory resources) (.gc()).
+                System.out.println(threadName + " Exiting");
+                runtime.gc();
 
-            // Print out when the Thread is exiting, and force
-            // garbage collection (freeing of memory resources) (.gc()).
-            System.out.println(threadName + " Exiting");
-            runtime.gc();
+            }
 
         }
 
