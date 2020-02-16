@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -97,8 +99,16 @@ public class Robot extends TimedRobot {
   // String for the color for Position Control, used in Teleop.
   String rotationControlColor;
 
+  // vision crap
+  NetworkTable table;
+  double[] areas;
+  double[] defaultValue = new double[0];
+
   @Override
   public void robotInit() {
+
+    // Vision idk.
+    table = NetworkTableInstance.getDefault().getTable("GRIP/mycontoursReport");
 
     // SmartDashboard stuff.
     // Adding these objects to SmartDashboard; Middle is the default option.
@@ -139,13 +149,6 @@ public class Robot extends TimedRobot {
 
     // Calling the WormDriveThread, and telling it to get ready to/start running.
     wormDriveThread = new WormDriveThread("WormDriveThread");
-
-    // Setting Thread priorities.
-    ballIntakeThread.ballIntakeThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
-    ballShootThread.ballShootThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
-    climbThread.climbThread.setPriority(variables.NORM_THREAD_PRIORITY); // Thread priority of 5 (normal).
-    driveThread.driveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
-    wormDriveThread.wormDriveThread.setPriority(variables.MAX_THREAD_PRIORITY); // Thread priority of 10 (max).
   }
 
   @Override
@@ -178,6 +181,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
 
     // Calling the function in Autonomous.java that runs all of our Auto code.
+    // This helps to keep Robot.java smaller, neater, and more organized.
     autonomous.autoFunctions();
   }
 
@@ -189,11 +193,20 @@ public class Robot extends TimedRobot {
     rotationControlColor = DriverStation.getInstance().getGameSpecificMessage();
 
     // Sends this value to the SmartDashboard to be viewed by the driver.
-    SmartDashboard.putString("Rotation Control Color:", rotationControlColor);
+    SmartDashboard.putString("Rotation Control Color", rotationControlColor);
   }
 
   @Override
   public void testPeriodic() {
+
+    // Run this in test to try vision stuff. Finally using testPeriodic() for once.
+    // An enhanced for loop, designed for iterating through array indexes.
+    for (double areaArrayIndex : areas) {
+      System.out.print(areaArrayIndex + " ");
+    }
+
+    System.out.println();
+
   }
 
 }

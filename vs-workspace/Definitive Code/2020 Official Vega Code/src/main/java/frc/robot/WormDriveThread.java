@@ -31,8 +31,13 @@ class WormDriveThread implements Runnable {
     // creating a thread (reserving memory for this object).
     Thread wormDriveThread;
 
+    // Creating an instance of the Robot class in here.
+    // Used for accessing the other Thread classes,
+    // which are created in that file.
+    Robot robot = new Robot();
+
     // Creating an instance of the DriveThread class in here.
-    DriveThread driveThread = new DriveThread("DriveThread");
+    // DriveThread driveThread = new DriveThread("DriveThread");
 
     // Creating an instance of the Variables class in here.
     Variables variables = new Variables();
@@ -52,6 +57,7 @@ class WormDriveThread implements Runnable {
 
     // Creating the motors used to power the worm drive.
     CANSparkMax rightWormDriveMotor, leftWormDriveMotor;
+    // WPI_TalonFX rightWormDriveMotor, leftWormDriveMotor;
 
     // Creating a SpeedControllerGroup for grouping the 2 worm drive motors.
     SpeedControllerGroup wormDriveMotors;
@@ -72,13 +78,17 @@ class WormDriveThread implements Runnable {
         threadName = name;
 
         // Creating the 2 worm drive motors.
-        rightWormDriveMotor = new CANSparkMax(9, MotorType.kBrushless);
-        leftWormDriveMotor = new CANSparkMax(10, MotorType.kBrushless);
+        rightWormDriveMotor = new CANSparkMax(variables.RIGHT_WORM_DRIVE_MOTOR_ID, MotorType.kBrushless);
+        leftWormDriveMotor = new CANSparkMax(variables.LEFT_WORM_DRIVE_MOTOR_ID, MotorType.kBrushless);
+        // rightWormDriveMotor = new WPI_TalonFX(variables.RIGHT_WORM_DRIVE_MOTOR_ID);
+        // leftWormDriveMotor = new WPI_TalonFX(variables.LEFT_WORM_DRIVE_MOTOR_ID);
 
-        // Set the worm drive motors in brake mode, which should help it keep the ball
-        // shooter up where we want it.
+        // Set the worm drive motors in brake mode,
+        // which should help it keep the ball shooter up where we want it.
         rightWormDriveMotor.setIdleMode(IdleMode.kBrake);
         leftWormDriveMotor.setIdleMode(IdleMode.kBrake);
+        // rightWormDriveMotor.setNeutralMode(NeutralMode.Brake);
+        // leftWormDriveMotor.setNeutralMode(NeutralMode.Brake);
 
         // Grouping the motors.
         wormDriveMotors = new SpeedControllerGroup(rightWormDriveMotor, leftWormDriveMotor);
@@ -129,13 +139,13 @@ class WormDriveThread implements Runnable {
 
         // If the driver pushes the Square Button on the PS4 Controller,
         // set the worm drive Falcon to go backwards (lower it).
-        if (driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true) {
+        if (robot.driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true) {
 
             wormDriveMotors.set(-wormDriveSpeed);
 
             // If the driver pushes the Triangle Button on the PS4 Controller,
             // set the worm drive Falcon to go forwards (raise it up).
-        } else if (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true) {
+        } else if (robot.driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true) {
 
             wormDriveMotors.set(wormDriveSpeed);
         }
@@ -143,10 +153,10 @@ class WormDriveThread implements Runnable {
         // If the driver is an idiot and is pressing BOTH the Square Button AND (&&) the
         // Triangle Button at the same time, OR (||) if the driver is pushing neither
         // button, set the motor speed to 0.
-        else if (((driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true)
-                && (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true))
-                || ((driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == false)
-                        && (driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == false))) {
+        else if (((robot.driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == true)
+                && (robot.driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == true))
+                || ((robot.driveThread.PS4.getRawButton(variables.PS4_SQUARE_BUTTON) == false)
+                        && (robot.driveThread.PS4.getRawButton(variables.PS4_TRIANGLE_BUTTON) == false))) {
 
             wormDriveMotors.set(0);
         }

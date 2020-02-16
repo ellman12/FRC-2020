@@ -19,25 +19,24 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class DriveThreadFunctions {
 
-    // Fixed parameters for conversion of distance to encoder counts
-    // final double WHEEL_DIAMETER = 8.0;
+    /*
+     * Drive encoders are on the drive motors. The output from the encoders is 1.0.
+     * A gear reduction of 12.75:1 implies 12.75 per revolution of the output shaft.
+     * The precision of this is 42 counts per motor shaft revolution times 12.75 of
+     * the gear reduction = 1/535.5 (1/(42*12.75)). A 6 inch wheel diameter implies
+     * a distance traveled of PI*6.0 = 18.84 inches. Distance resolution of the
+     * encoder/gearbox combination is 18.84/535.5 = 0.0352 inches per count. OK I
+     * guess. However the output when reading the encoder function is 1.0 for each
+     * revolution of the motor, or 12.75 for one revolution of the output shaft.
+     * This implies that the inch to output conversion is 25.17/12.75 or 1.478
+     * inches per unit output
+     */
+    final double ENCODER_RESOLUTION = 1.478; // inches per output value
+
+    // Fixed parameters for conversion of distance to encoder counts.
+    final double WHEEL_DIAMETER = 8.0;
     final double INCHES_PER_FOOT = 12.0;
     final double CM_PER_METER = 100.0;
-
-    // TODO Figure out the encoder resolution.
-    // Encoders are now on the motors (NEOS). Output from the
-    // encoder in this case is 1.0. A gear reduction of 12.75:1 implies
-    // 12.75 per revolution of the output shaft. The precision of this
-    // is 42 counts per motor shaft revolution times 12.75 of the gear
-    // reduction = 1/672. An eight inch wheel diameter implies a distance
-    // traveled of PI*8.0 = 25.17 inches. Distance resolution of the
-    // encoder/gearbox combination is 25.17/672 = 0.037 inches/count. Should be
-    // good enough.
-    // However the output when reading the encoder function
-    // is 1.0 for each revolution of the motor, or 12.75 for one revolution
-    // of the output shaft. This implies that the inch to output
-    // conversion is 25.17/12.75 or 1.572 inches per unit output
-    final double ENCODER_RESOLUTION = 0.5065; // inches per output value
 
     // Fixed parameters for driveFwd(...)/driveBwd(...)
     final double START_SPEED = 0.1; // Also used in acceleration functions.
@@ -46,7 +45,7 @@ public class DriveThreadFunctions {
     final double BRAKE_SPEED = 0.3;
     final double BRAKE_FRACTION = 0.4;
 
-    // Fixed parameters for console updates and while() loop escapes
+    // Fixed parameters for console updates and while() loop escapes.
     final int ENC_CONSOLE_UPDATE = 20;
     final int ENC_LOOP_ESCAPE = 250;
     final int GYRO_CONSOLE_UPDATE = 20;
@@ -69,8 +68,13 @@ public class DriveThreadFunctions {
     // Initial drive gyro angle.
     public double initDriveGyroAngle;
 
+    // Creating an instance of the Robot class in here.
+    // Used for accessing the other Thread classes,
+    // which are created in that file.
+    Robot robot = new Robot();
+
     // Creating an instance of the DriveThread.
-    DriveThread driveThread = new DriveThread("DriveThread");
+    // DriveThread driveThread = new DriveThread("DriveThread");
 
     // Creating an instance of the Sensors class.
     Sensors sensors = new Sensors();
@@ -108,10 +112,10 @@ public class DriveThreadFunctions {
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     public void strafeLeft() {
-        driveThread.frontLeftDriveMotor.set(-driveThread.PS4LeftAnalogTrigger);
-        driveThread.backLeftDriveMotor.set(driveThread.PS4LeftAnalogTrigger);
-        driveThread.frontRightDriveMotor.set(driveThread.PS4LeftAnalogTrigger);
-        driveThread.backRightDriveMotor.set(-driveThread.PS4LeftAnalogTrigger);
+        robot.driveThread.frontLeftDriveMotor.set(-robot.driveThread.PS4LeftAnalogTrigger);
+        robot.driveThread.backLeftDriveMotor.set(robot.driveThread.PS4LeftAnalogTrigger);
+        robot.driveThread.frontRightDriveMotor.set(robot.driveThread.PS4LeftAnalogTrigger);
+        robot.driveThread.backRightDriveMotor.set(-robot.driveThread.PS4LeftAnalogTrigger);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -135,10 +139,10 @@ public class DriveThreadFunctions {
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     public void strafeRight() {
-        driveThread.frontLeftDriveMotor.set(driveThread.PS4LeftAnalogTrigger);
-        driveThread.backLeftDriveMotor.set(-driveThread.PS4LeftAnalogTrigger);
-        driveThread.frontRightDriveMotor.set(-driveThread.PS4LeftAnalogTrigger);
-        driveThread.backRightDriveMotor.set(driveThread.PS4LeftAnalogTrigger);
+        robot.driveThread.frontLeftDriveMotor.set(robot.driveThread.PS4LeftAnalogTrigger);
+        robot.driveThread.backLeftDriveMotor.set(-robot.driveThread.PS4LeftAnalogTrigger);
+        robot.driveThread.frontRightDriveMotor.set(-robot.driveThread.PS4LeftAnalogTrigger);
+        robot.driveThread.backRightDriveMotor.set(robot.driveThread.PS4LeftAnalogTrigger);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -158,19 +162,19 @@ public class DriveThreadFunctions {
     public void strafeLeftAuto(double speed, double time) {
 
         // Strafe at the inputted speed.
-        driveThread.frontLeftDriveMotor.set(-speed);
-        driveThread.backLeftDriveMotor.set(speed);
-        driveThread.frontRightDriveMotor.set(speed);
-        driveThread.backRightDriveMotor.set(-speed);
+        robot.driveThread.frontLeftDriveMotor.set(-speed);
+        robot.driveThread.backLeftDriveMotor.set(speed);
+        robot.driveThread.frontRightDriveMotor.set(speed);
+        robot.driveThread.backRightDriveMotor.set(-speed);
 
         // Run the motors and stop after these many seconds.
         Timer.delay(time);
 
         // Stop the motors after "time" amount of seconds.
-        driveThread.frontLeftDriveMotor.set(0);
-        driveThread.backLeftDriveMotor.set(0);
-        driveThread.frontRightDriveMotor.set(0);
-        driveThread.backRightDriveMotor.set(0);
+        robot.driveThread.frontLeftDriveMotor.set(0);
+        robot.driveThread.backLeftDriveMotor.set(0);
+        robot.driveThread.frontRightDriveMotor.set(0);
+        robot.driveThread.backRightDriveMotor.set(0);
 
     }
 
@@ -191,19 +195,19 @@ public class DriveThreadFunctions {
     public void strafeRightAuto(double speed, double time) {
 
         // Strafe at the inputted speed.
-        driveThread.frontLeftDriveMotor.set(speed);
-        driveThread.backLeftDriveMotor.set(-speed);
-        driveThread.frontRightDriveMotor.set(-speed);
-        driveThread.backRightDriveMotor.set(speed);
+        robot.driveThread.frontLeftDriveMotor.set(speed);
+        robot.driveThread.backLeftDriveMotor.set(-speed);
+        robot.driveThread.frontRightDriveMotor.set(-speed);
+        robot.driveThread.backRightDriveMotor.set(speed);
 
         // Run the motors and stop after these many seconds.
         Timer.delay(time);
 
         // Stop the motors after "time" amount of seconds.
-        driveThread.frontLeftDriveMotor.set(0);
-        driveThread.backLeftDriveMotor.set(0);
-        driveThread.frontRightDriveMotor.set(0);
-        driveThread.backRightDriveMotor.set(0);
+        robot.driveThread.frontLeftDriveMotor.set(0);
+        robot.driveThread.backLeftDriveMotor.set(0);
+        robot.driveThread.frontRightDriveMotor.set(0);
+        robot.driveThread.backRightDriveMotor.set(0);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -309,7 +313,7 @@ public class DriveThreadFunctions {
                 .println("current_position = " + current_position + " target = " + target + " fraction = " + fraction);
 
         // stop movement, compute error (overshoot or undershoot)
-        driveThread.mecanumDrive.driveCartesian(0, 0, 0);
+        robot.driveThread.mecanumDrive.driveCartesian(0, 0, 0);
         current_position = sensors.frontLeftEncoder.getPosition();
         error = calcDistance_SAE(current_position - target);
         System.out.println("error = " + error + " inches");
@@ -356,7 +360,7 @@ public class DriveThreadFunctions {
         // We needed a larger correction factor - trying 0.2 for now. The range for
         // the turn is -1.0 to 1.0. Positive values are said to turn clockwise,
         // negatives counterclockwise.
-        driveThread.mecanumDrive.driveCartesian(0, speed, -corr * delta);
+        robot.driveThread.mecanumDrive.driveCartesian(0, speed, -corr * delta);
 
         // System.out.println(" heading = " + heading + " angle = " + angle + " delta =
         // " + delta);
@@ -389,7 +393,7 @@ public class DriveThreadFunctions {
         double speed = 0.1;
 
         while (speed < MAX_SPEED) {
-            driveThread.mecanumDrive.driveCartesian(0, speed, 0);
+            robot.driveThread.mecanumDrive.driveCartesian(0, speed, 0);
             Timer.delay(0.02);
             speed += 0.01;
         }
@@ -420,7 +424,7 @@ public class DriveThreadFunctions {
         double speed = MAX_SPEED;
 
         while (speed > MIN_SPEED) {
-            driveThread.mecanumDrive.driveCartesian(0, speed, 0);
+            robot.driveThread.mecanumDrive.driveCartesian(0, speed, 0);
             Timer.delay(0.02);
             speed -= 0.01;
         }
@@ -510,7 +514,7 @@ public class DriveThreadFunctions {
         }
 
         // stop movement, compute error (overshoot or undershoot)
-        driveThread.mecanumDrive.driveCartesian(0, 0, 0);
+        robot.driveThread.mecanumDrive.driveCartesian(0, 0, 0);
         current_position = sensors.frontLeftEncoder.getPosition();
         error = calcDistance_SAE(current_position - target);
         System.out.println("error = " + error + " inches");
@@ -554,7 +558,7 @@ public class DriveThreadFunctions {
         // We needed a larger correction factor - trying 0.2 for now. The range for
         // the turn is -1.0 to 1.0. Positive values are said to turn clockwise,
         // negatives counterclockwise.
-        driveThread.mecanumDrive.driveCartesian(0, -speed, -corr * delta);
+        robot.driveThread.mecanumDrive.driveCartesian(0, -speed, -corr * delta);
 
         // System.out.println(" target = " + target + " angle = " + angle + " delta = "
         // + delta);
@@ -677,7 +681,7 @@ public class DriveThreadFunctions {
             if (count == GYRO_LOOP_ESCAPE)
                 break;
         }
-        driveThread.mecanumDrive.driveCartesian(0, 0, 0);
+        robot.driveThread.mecanumDrive.driveCartesian(0, 0, 0);
         angle = sensors.driveGyro.getAngle();
         error = target - angle; // the error
         System.out.println("Turning Error = " + error + " degrees");
@@ -704,7 +708,7 @@ public class DriveThreadFunctions {
         if (rot_spd > 1.0) {
             return (-1);
         }
-        driveThread.mecanumDrive.driveCartesian(0, 0, rot_spd);
+        robot.driveThread.mecanumDrive.driveCartesian(0, 0, rot_spd);
         return (0);
     }
 
@@ -757,7 +761,7 @@ public class DriveThreadFunctions {
             if (count == GYRO_LOOP_ESCAPE)
                 break;
         }
-        driveThread.mecanumDrive.driveCartesian(0, 0, 0);
+        robot.driveThread.mecanumDrive.driveCartesian(0, 0, 0);
         angle = sensors.driveGyro.getAngle();
         System.out.println("angle = " + angle);
         error = target - angle;
@@ -786,7 +790,7 @@ public class DriveThreadFunctions {
         if (rot_spd > 1.0) {
             return (-1);
         }
-        driveThread.mecanumDrive.driveCartesian(0, 0, -rot_spd);
+        robot.driveThread.mecanumDrive.driveCartesian(0, 0, -rot_spd);
         return (0);
     }
 

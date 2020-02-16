@@ -17,6 +17,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -31,9 +32,14 @@ class BallShootThread implements Runnable {
     // creating a thread (reserving memory for this object).
     Thread ballShootThread;
 
+    // Creating an instance of the Robot class in here.
+    // Used for accessing the other Thread classes,
+    // which are created in that file.
+    Robot robot = new Robot();
+
     // Creating an instance of the DriveThread
     // Just used for getting the PS4 button press.
-    DriveThread driveThread = new DriveThread("DriveThread");
+    // DriveThread driveThread = new DriveThread("DriveThread");
 
     // Creating an instance of the Variables class.
     Variables variables = new Variables();
@@ -73,7 +79,7 @@ class BallShootThread implements Runnable {
         // Assigning the name of the Thread to the argument.
         threadName = name;
 
-        // Creating the 4 shooter motors, and assigning them their ID's.
+        // Creating the 4 shooter Falcon 500s, and assigning them their ID's.
         frontLeftShooterMotor = new WPI_TalonFX(variables.FRONT_LEFT_SHOOTER_MOTOR_ID);
         frontRightShooterMotor = new WPI_TalonFX(variables.FRONT_RIGHT_SHOOTER_MOTOR_ID);
         backLeftShooterMotor = new WPI_TalonFX(variables.BACK_LEFT_SHOOTER_MOTOR_ID);
@@ -83,6 +89,12 @@ class BallShootThread implements Runnable {
         // shooter motors together.
         frontShooterMotors = new SpeedControllerGroup(frontLeftShooterMotor, frontLeftShooterMotor);
         backShooterMotors = new SpeedControllerGroup(backRightShooterMotor, backLeftShooterMotor);
+
+        // Setting the shooter motors in brake mode.
+        frontLeftShooterMotor.setNeutralMode(NeutralMode.Brake);
+        frontRightShooterMotor.setNeutralMode(NeutralMode.Brake);
+        backLeftShooterMotor.setNeutralMode(NeutralMode.Brake);
+        backRightShooterMotor.setNeutralMode(NeutralMode.Brake);
 
         // Invert shooter motors, so they spin the right way.
         frontRightShooterMotor.setInverted(true);
@@ -102,7 +114,7 @@ class BallShootThread implements Runnable {
 
             // If the driver pushes the Right Bumper on the PS4 Controller,
             // run the ballShoot() function.
-            if (driveThread.PS4.getRawButton(variables.PS4_RIGHT_BUMPER) == true) {
+            if (robot.driveThread.PS4.getRawButton(variables.PS4_RIGHT_BUMPER) == true) {
                 ballShoot(FRONT_SHOOTER_MOTORS_SPEED, BACK_SHOOTER_MOTORS_SPEED);
             } else {
                 // Do not move the motors.
@@ -113,7 +125,7 @@ class BallShootThread implements Runnable {
             // adjustAngleOfShooter() function.
             // This function is the magic function that uses math and stuff to compute
             // trajectory and stuff.
-            if (driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
+            if (robot.driveThread.PS4.getRawButton(variables.PS4_X_BUTTON) == true) {
                 computeTrajectory.adjustAngleOfShooter();
             } else {
                 // Do not move the motors.

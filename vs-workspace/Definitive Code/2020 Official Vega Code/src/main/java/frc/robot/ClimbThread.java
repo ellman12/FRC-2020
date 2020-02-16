@@ -23,6 +23,11 @@ class ClimbThread implements Runnable {
     // creating a thread (reserving memory for this object).
     Thread climbThread;
 
+    // Creating an instance of the Robot class in here.
+    // Used for accessing the other Thread classes,
+    // which are created in that file.
+    Robot robot = new Robot();
+
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
     // According to page 461 chapter 11 of Java: The Complete Reference 9th edition

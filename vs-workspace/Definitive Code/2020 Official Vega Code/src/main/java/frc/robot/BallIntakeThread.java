@@ -16,6 +16,7 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 class BallIntakeThread implements Runnable {
@@ -23,12 +24,17 @@ class BallIntakeThread implements Runnable {
     // Name of the Thread.
     String threadName;
 
+    // Creating an instance of the Robot class in here.
+    // Used for accessing the other Thread classes,
+    // which are created in that file.
+    Robot robot = new Robot();
+
     // Creating an instance of the Variables class.
     Variables variables = new Variables();
 
     // Creating an instance of the DriveThread
     // Just used for getting the PS4 button press.
-    DriveThread driveThread = new DriveThread("DriveThread");
+    // DriveThread driveThread = new DriveThread("DriveThread");
 
     // Creating instance of the Thread class by
     // creating a thread (reserving memory for this object).
@@ -54,8 +60,11 @@ class BallIntakeThread implements Runnable {
         // Assigning the name of the Thread to the argument.
         threadName = name;
 
-        // Creating ans assigning the intake Falcon an ID.
+        // Creating and assigning the intake Falcon an ID.
         ballIntakeMotor = new WPI_TalonFX(variables.BALL_INTAKE_MOTOR_ID);
+
+        // Setting the intake Falcon 500 motor in brake mode.
+        ballIntakeMotor.setNeutralMode(NeutralMode.Brake);
 
         // Actually creating the Thread.
         ballIntakeThread = new Thread(ballIntakeThread, threadName);
@@ -70,7 +79,7 @@ class BallIntakeThread implements Runnable {
 
             // If the driver pushes the Circle Button on the PS4 Controller,
             // run the intake motors.
-            if (driveThread.PS4.getRawButton(variables.PS4_CIRCLE_BUTTON) == true) {
+            if (robot.driveThread.PS4.getRawButton(variables.PS4_CIRCLE_BUTTON) == true) {
                 ballIntake();
             } else {
                 // Else, set the motor to 0 (don't run it).

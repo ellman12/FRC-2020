@@ -20,7 +20,17 @@ import edu.wpi.first.wpilibj.Timer;
 class Autonomous {
 
     // Creating an instance of the Robot class in here.
+    // On 2/15/2020, Larry and Elliott realized that creating multiple instances of
+    // the same Thread would be very problematic.
+    // So, we create an instance of Robot.java,
+    // which is where the Threads are initialized.
     Robot robot = new Robot();
+
+    // Creating an instance of DriveThread.java in here.
+    // DriveThread driveThread = new DriveThread("DriveThread");
+
+    // Creating an instance of an object of DriveThreadFunctions.java in here.
+    DriveThreadFunctions driveThreadFunctions = new DriveThreadFunctions();
 
     // Creating an instance of the Sensors class in here.
     Sensors sensors = new Sensors();
@@ -62,6 +72,10 @@ class Autonomous {
     /////////////////////////////////////////////////////////////////////
     public void autoFunctions() {
 
+        // Initialization function, running the drive at 60% speed,
+        // and a delay of 0.3 seconds.
+        startup(0.6, 0.3);
+
         // Switch statement for where on the field we are starting:
         // (right side of the field, left, or middle (default starting position)).
         switch (robot.positionChoice) {
@@ -92,6 +106,39 @@ class Autonomous {
             ballShootAuto(robot.goalChoice);
 
         }
+
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: startup()
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Function called every single time that autonomous is ran.
+    // Its main purpose is dropping the intake, akin to what we had to do
+    // for PowerUp, where our intake was dropped in auto so that way it
+    // starts inside the frame. Otherwise, we'd be violating the rules.
+    //
+    // Arguments: double startSpeed: the speed that our robot moves at to
+    // drop the intake down. double startDelay: how long in seconds to
+    // wait after running the drive forwards and backwards.
+    //
+    // Returns: void
+    //
+    // Remarks: Created on 2/15/2020 at 12:25 PM.
+    // Basically the way it works is it drives forward fast, then backwards
+    // quickly, creating a sort of "whiplash" effect.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void startup(double startSpeed, double startDelay) {
+
+        // RUn the motors forward at the inputted speed for 0.3 seconds.
+        robot.driveThread.mecanumDrive.driveCartesian(0, startSpeed, 0);
+        Timer.delay(startDelay);
+
+        // Then drive backwards with the same delay.
+        robot.driveThread.mecanumDrive.driveCartesian(0, -startSpeed, 0);
+        Timer.delay(startDelay);
 
     }
 
