@@ -52,6 +52,9 @@ public class Robot extends TimedRobot {
   double PS4_Left_Y;
   double PS4_Left_Z;
 
+  final double PS4_TRIGGER_DEADBAND_POSITIVE = 0.2;
+  final double PS4_TRIGGER_DEADBAND_NEGATIVE = -0.2;
+
   @Override
   public void robotInit() {
 
@@ -161,8 +164,10 @@ public class Robot extends TimedRobot {
     PS4_Left_Y = PS4.getY();
     PS4_Left_Z = PS4.getZ();
 
-    if (((PS4.getX() > 0.2) && (PS4.getY() > 0.2) && (PS4.getZ() > 0.2))
-        || ((PS4.getX() < -0.2) && (PS4.getY() < -0.2) && (PS4.getZ() < -0.2))) {
+    if (((PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE) && (PS4.getY() > PS4_TRIGGER_DEADBAND_POSITIVE)
+        && (PS4.getZ() > PS4_TRIGGER_DEADBAND_POSITIVE))
+        || ((PS4.getX() < PS4_TRIGGER_DEADBAND_NEGATIVE) && (PS4.getY() < PS4_TRIGGER_DEADBAND_NEGATIVE)
+            && (PS4.getZ() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
       mecanumDrive.driveCartesian(PS4.getZ(), PS4.getX(), PS4.getY(), 0);
     }
 
