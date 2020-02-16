@@ -48,9 +48,7 @@ public class Robot extends TimedRobot {
 
   SpeedControllerGroup wormDrive;
 
-  double PS4_Left_X;
-  double PS4_Left_Y;
-  double PS4_Left_Z;
+  double PS4_L_Y;
 
   final double PS4_TRIGGER_DEADBAND_POSITIVE = 0.2;
   final double PS4_TRIGGER_DEADBAND_NEGATIVE = -0.2;
@@ -97,6 +95,9 @@ public class Robot extends TimedRobot {
 
     wormDrive = new SpeedControllerGroup(rworm, lworm);
 
+    mecanumDrive.setSafetyEnabled(false);
+    // mecanumDrive.setDeadband(0.3);
+
   }
 
   @Override
@@ -115,9 +116,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+    PS4_L_Y = PS4.getY();
+
     if (PS4.getRawButton(9) == true) {
-      fLShooter.set(0.3);
-      frshooter.set(-0.3);
+      fLShooter.set(1.0);
+      frshooter.set(-1.0);
     } else {
       fLShooter.set(0);
       frshooter.set(0);
@@ -129,12 +132,12 @@ public class Robot extends TimedRobot {
       // brshooter.set(-0.3);
       // bLshooter.set(0.3);
       // wormDrive.set(0.3);
-      wormDrive.set(0.10);
+      wormDrive.set(0.30);
 
     } else if (PS4.getRawButton(2) == true) {
 
       // wormDrive.set(-0.3);
-      wormDrive.set(-0.10);
+      wormDrive.set(-0.30);
 
     } else {
       // fLShooter.set(0.0);
@@ -158,25 +161,24 @@ public class Robot extends TimedRobot {
       brshooter.set(0.0);
     }
 
-    // Drive the robot's Mecanum Drive with the PS4 controller.
-
-    PS4_Left_X = PS4.getX();
-    PS4_Left_Y = PS4.getY();
-    PS4_Left_Z = PS4.getZ();
-
-    if (((PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE) && (PS4.getY() > PS4_TRIGGER_DEADBAND_POSITIVE)
-        && (PS4.getZ() > PS4_TRIGGER_DEADBAND_POSITIVE))
-        || ((PS4.getX() < PS4_TRIGGER_DEADBAND_NEGATIVE) && (PS4.getY() < PS4_TRIGGER_DEADBAND_NEGATIVE)
-            && (PS4.getZ() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
-      mecanumDrive.driveCartesian(PS4.getZ(), PS4.getX(), PS4.getY(), 0);
+    if (PS4_L_Y < 0.2 || PS4_L_Y > -0.2) {
+      PS4_L_Y = 0;
     }
 
-    // mecanumDrive.driveCartesian(PS4.getX(), PS4.getY(), PS4.getZ(), 0);
+    // Long-ass if statement that acts as a deadband for the drive.
+    if (((PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE) || (PS4.getY() > PS4_TRIGGER_DEADBAND_POSITIVE)
+        || (PS4.getZ() > PS4_TRIGGER_DEADBAND_POSITIVE))
+        || ((PS4.getX() < PS4_TRIGGER_DEADBAND_NEGATIVE) || (PS4.getY() < PS4_TRIGGER_DEADBAND_NEGATIVE)
+            || (PS4.getZ() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
+      // mecanumDrive.driveCartesian(-PS4_L_Y, PS4.getZ(), PS4.getX());
+      mecanumDrive.driveCartesian(PS4.getY(), PS4.getZ(), PS4.getX());
 
-    // IDK about the Z axis.
-    // Our 2nd year robot (Kova) could strafe using the 2 analog triggers. We should
-    // do that?
+      // mecanumDrive.drivePolar(magnitude, angle, zRotation);
+    } else {
+      mecanumDrive.driveCartesian(0, 0, 0);
+    }
 
+    // TODO polar stuff.
     // IDK which one we should use; not much documentation on each.
     // mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation, gyroAngle);
     // mecanumDrive.drivePolar(magnitude, angle, zRotation);
