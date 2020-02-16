@@ -5,7 +5,7 @@
 // Purpose: Houses miscellaneous variables and the like.
 // Also houses miscellaneous constants.
 // Variables and constants are typically housed here if they don't
-// really belong anywhere else.
+// really belong anywhere else, instead of having them in Robot.java.
 //
 // Authors: Noah S. and Elliot D.
 //
