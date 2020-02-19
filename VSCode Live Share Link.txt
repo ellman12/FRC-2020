@@ -2,4 +2,4 @@ Link for joining a VSCode Live session for FRC Team #5914. Is different each tim
 
 Updated on: 2/4/2020 at 6:46 PM
 
-https://prod.liveshare.vsengsaas.visualstudio.com/join?1B79A31A65ACAA4F46DCD58B887744E8CD52
+https://prod.liveshare.vsengsaas.visualstudio.com/join?4C670DFB8949FE4C7428BD5FF273D01A119E
