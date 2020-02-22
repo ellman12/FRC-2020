@@ -14,21 +14,22 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
+
+  // TODO Delete 2020 Auto Strafe Test.
+
+  boolean autoOnce = true;
 
   // Creating the drive motors.
   CANSparkMax frontLeftDriveMotor, backLeftDriveMotor, frontRightDriveMotor, backRightDriveMotor;
@@ -46,6 +47,11 @@ public class Robot extends TimedRobot {
   final double PS4_TRIGGER_DEADBAND_POSITIVE = 0.2;
   final double PS4_TRIGGER_DEADBAND_NEGATIVE = -0.2;
 
+  CANEncoder frontLeftDriveEnc;
+
+  // Magic number for the speed for how fast the robot strafes.
+  final double STRAFE_SPEED = 0.5;
+
   @Override
   public void robotInit() {
 
@@ -61,6 +67,19 @@ public class Robot extends TimedRobot {
     PS4 = new Joystick(0);
 
     driveGyro = new ADXRS450_Gyro();
+
+    frontLeftDriveEnc = new CANEncoder(frontLeftDriveMotor);
+
+    // Putting the drive motors in coast mode.
+    // frontLeftDriveMotor.setIdleMode(IdleMode.kCoast);
+    // frontRightDriveMotor.setIdleMode(IdleMode.kCoast);
+    // backLeftDriveMotor.setIdleMode(IdleMode.kCoast);
+    // backRightDriveMotor.setIdleMode(IdleMode.kCoast);
+
+    frontLeftDriveMotor.setIdleMode(IdleMode.kBrake);
+    frontRightDriveMotor.setIdleMode(IdleMode.kBrake);
+    backLeftDriveMotor.setIdleMode(IdleMode.kBrake);
+    backRightDriveMotor.setIdleMode(IdleMode.kBrake);
 
     mecanumDrive.setSafetyEnabled(false);
     // mecanumDrive.setDeadband(0.3);
@@ -78,6 +97,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
+    if (autoOnce == true) {
+      strafeLeftAuto(5);
+      strafeRightAuto(5);
+      autoOnce = false;
+    }
   }
 
   @Override
@@ -138,6 +162,120 @@ public class Robot extends TimedRobot {
 
     // Return the value, to be used elsewhere.
     return zAxis;
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Function:
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose:
+  //
+  // Arguments:
+  //
+  // Returns:
+  //
+  // Remarks:
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public void strafeLeftAuto(double feet) {
+
+    // Initialize the encoder to 0 (reset it).
+    frontLeftDriveEnc.setPosition(0);
+
+    // Convert feet to inches.
+    double inches = feet * 12.0;
+
+    // Our current encoder count reading.
+    double currentCounts = 0;
+
+    // 1.15 is a magic number for the calibration for the encoders.
+    // This should give us how many counts.
+    double encoderCounts = inches / 1.15;
+
+    while (currentCounts < encoderCounts) {
+
+      // Strafe left.
+      frontLeftDriveMotor.set(-STRAFE_SPEED);
+      backLeftDriveMotor.set(-STRAFE_SPEED);
+      frontRightDriveMotor.set(STRAFE_SPEED);
+      backRightDriveMotor.set(STRAFE_SPEED);
+
+      // Delay for 20 ms.
+      Timer.delay(0.02);
+
+      // Read the encoder, and get our current counts.
+      currentCounts = Math.abs(frontLeftDriveEnc.getPosition());
+
+      // System.out.println("currentCounts: " + currentCounts + "\tencoderCounts: " +
+      // encoderCounts);
+
+    }
+
+    // Stop the motors.
+    // mecanumDrive.stopMotor();
+    frontLeftDriveMotor.set(0);
+    backLeftDriveMotor.set(0);
+    frontRightDriveMotor.set(0);
+    backRightDriveMotor.set(0);
+
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Function:
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose:
+  //
+  // Arguments:
+  //
+  // Returns:
+  //
+  // Remarks:
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public void strafeRightAuto(double feet) {
+
+    // Initialize the encoder to 0 (reset it).
+    frontLeftDriveEnc.setPosition(0);
+
+    // Convert feet to inches.
+    double inches = feet * 12.0;
+
+    // Our current encoder count reading.
+    double currentCounts = 0;
+
+    // 1.15 is a magic number for the calibration for the encoders.
+    // This should give us how many counts.
+    double encoderCounts = inches / 1.15;
+
+    while (currentCounts < encoderCounts) {
+
+      // Strafe right.
+      frontLeftDriveMotor.set(STRAFE_SPEED);
+      backLeftDriveMotor.set(STRAFE_SPEED);
+      frontRightDriveMotor.set(-STRAFE_SPEED);
+      backRightDriveMotor.set(-STRAFE_SPEED);
+
+      // Delay for 20 ms.
+      Timer.delay(0.02);
+
+      // Read the encoder, and get our current counts.
+      currentCounts = Math.abs(frontLeftDriveEnc.getPosition());
+
+      // System.out.println("currentCounts: " + currentCounts + "\tencoderCounts: " +
+      // encoderCounts);
+
+    }
+
+    // Stop the motors.
+    // mecanumDrive.stopMotor();
+    frontLeftDriveMotor.set(0);
+    backLeftDriveMotor.set(0);
+    frontRightDriveMotor.set(0);
+    backRightDriveMotor.set(0);
+
   }
 
 }
