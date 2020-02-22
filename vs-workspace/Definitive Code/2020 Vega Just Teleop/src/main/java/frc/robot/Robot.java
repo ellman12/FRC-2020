@@ -8,7 +8,7 @@
 //
 // Environment: Microsoft VSCode Java
 //
-// Remarks: 
+// Remarks:
 //
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -52,6 +52,9 @@ public class Robot extends TimedRobot {
   // Magic number for the speed for how fast the robot strafes.
   final double STRAFE_SPEED = 0.5;
 
+  // How fast the motors spin in driveFwd().
+  final double DRIVE_FWD_SPEED = 0.2;
+
   @Override
   public void robotInit() {
 
@@ -82,6 +85,9 @@ public class Robot extends TimedRobot {
     backRightDriveMotor.setIdleMode(IdleMode.kBrake);
 
     mecanumDrive.setSafetyEnabled(false);
+
+    frontLeftDriveEnc.setPosition(0);
+
     // mecanumDrive.setDeadband(0.3);
 
   }
@@ -98,8 +104,10 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
 
     if (autoOnce == true) {
-      strafeLeftAuto(5);
-      strafeRightAuto(5);
+      // strafeLeftAuto(5);
+      // strafeRightAuto(5);
+      driveFwd(5);
+      driveBwd(5);
       autoOnce = false;
     }
   }
@@ -107,7 +115,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    // Long-ass if statement that acts as a deadband for the drive.
+    // Long if statement that acts as a deadband for the drive.
     if (((PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE) || (PS4.getY() > PS4_TRIGGER_DEADBAND_POSITIVE)
         || (getZAxis() > PS4_TRIGGER_DEADBAND_POSITIVE))
         || ((PS4.getX() < PS4_TRIGGER_DEADBAND_NEGATIVE) || (PS4.getY() < PS4_TRIGGER_DEADBAND_NEGATIVE)
@@ -165,16 +173,17 @@ public class Robot extends TimedRobot {
   }
 
   /////////////////////////////////////////////////////////////////////
-  // Function:
+  // Function: strafeLeftAuto(...)
   /////////////////////////////////////////////////////////////////////
   //
-  // Purpose:
+  // Purpose: Used for strafing left in autonomous.
   //
-  // Arguments:
+  // Arguments: double feet.
+  // This value is later converted to inches, to get inches per count.
   //
-  // Returns:
+  // Returns: void
   //
-  // Remarks:
+  // Remarks: Created on 2/22/2020.
   //
   /////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////
@@ -222,16 +231,17 @@ public class Robot extends TimedRobot {
   }
 
   /////////////////////////////////////////////////////////////////////
-  // Function:
+  // Function: strafeRightAuto(...)
   /////////////////////////////////////////////////////////////////////
   //
-  // Purpose:
+  // Purpose: Used for strafing right in autonomous.
   //
-  // Arguments:
+  // Arguments: double feet.
+  // This value is later converted to inches, to get inches per count.
   //
-  // Returns:
+  // Returns: void
   //
-  // Remarks:
+  // Remarks: Created on 2/22/2020.
   //
   /////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////
@@ -246,6 +256,7 @@ public class Robot extends TimedRobot {
     // Our current encoder count reading.
     double currentCounts = 0;
 
+    // TODO make 1.15 a magic number up at the top of the file.
     // 1.15 is a magic number for the calibration for the encoders.
     // This should give us how many counts.
     double encoderCounts = inches / 1.15;
@@ -257,6 +268,130 @@ public class Robot extends TimedRobot {
       backLeftDriveMotor.set(STRAFE_SPEED);
       frontRightDriveMotor.set(-STRAFE_SPEED);
       backRightDriveMotor.set(-STRAFE_SPEED);
+
+      // Delay for 20 ms.
+      Timer.delay(0.02);
+
+      // Read the encoder, and get our current counts.
+      currentCounts = Math.abs(frontLeftDriveEnc.getPosition());
+
+      // System.out.println("currentCounts: " + currentCounts + "\tencoderCounts: " +
+      // encoderCounts);
+
+    }
+
+    // Stop the motors.
+    // mecanumDrive.stopMotor();
+    frontLeftDriveMotor.set(0);
+    backLeftDriveMotor.set(0);
+    frontRightDriveMotor.set(0);
+    backRightDriveMotor.set(0);
+
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Function: driveFwd(...)
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose: Used for driving forward in autonomous.
+  //
+  // Arguments: double feet.
+  // This value is later converted to inches, to get inches per count.
+  //
+  // Returns: void
+  //
+  // Remarks: Created on 2/22/2020.
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public void driveFwd(double feet) {
+
+    // TODO acceleration/deceleration.
+
+    // Initialize the encoder to 0 (reset it).
+    frontLeftDriveEnc.setPosition(0);
+
+    // Convert feet to inches.
+    double inches = feet * 12.0;
+
+    // Our current encoder count reading.
+    double currentCounts = 0;
+
+    // TODO make 1.43 a magic number up at the top.
+    // TODO arcadeDrive for auto stuff?
+    // 1.43 is a magic number for the calibration for the encoders.
+    // This should give us how many counts.
+    double encoderCounts = inches / 1.43;
+
+    while (currentCounts < encoderCounts) {
+
+      // Drive forward.
+      frontLeftDriveMotor.set(DRIVE_FWD_SPEED);
+      backLeftDriveMotor.set(-DRIVE_FWD_SPEED);
+      frontRightDriveMotor.set(DRIVE_FWD_SPEED);
+      backRightDriveMotor.set(-DRIVE_FWD_SPEED);
+
+      // Delay for 20 ms.
+      Timer.delay(0.02);
+
+      // Read the encoder, and get our current counts.
+      currentCounts = Math.abs(frontLeftDriveEnc.getPosition());
+
+      // System.out.println("currentCounts: " + currentCounts + "\tencoderCounts: " +
+      // encoderCounts);
+
+    }
+
+    // Stop the motors.
+    // mecanumDrive.stopMotor();
+    frontLeftDriveMotor.set(0);
+    backLeftDriveMotor.set(0);
+    frontRightDriveMotor.set(0);
+    backRightDriveMotor.set(0);
+
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Function:
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose: Used for driving backward in autonomous.
+  //
+  // Arguments: double feet
+  // This value is later converted to inches, to get inches per count.
+  //
+  // Returns: void
+  //
+  // Remarks: Created on 2/22/2020.
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public void driveBwd(double feet) {
+
+    // TODO acceleration/deceleration.
+
+    // Initialize the encoder to 0 (reset it).
+    frontLeftDriveEnc.setPosition(0);
+
+    // Convert feet to inches.
+    double inches = feet * 12.0;
+
+    // Our current encoder count reading.
+    double currentCounts = 0;
+
+    // TODO make 1.43 a magic number up at the top.
+    // TODO arcadeDrive for auto stuff?
+    // 1.43 is a magic number for the calibration for the encoders.
+    // This should give us how many counts.
+    double encoderCounts = inches / 1.43;
+
+    while (currentCounts < encoderCounts) {
+
+      // Drive forward.
+      frontLeftDriveMotor.set(-DRIVE_FWD_SPEED);
+      backLeftDriveMotor.set(DRIVE_FWD_SPEED);
+      frontRightDriveMotor.set(-DRIVE_FWD_SPEED);
+      backRightDriveMotor.set(DRIVE_FWD_SPEED);
 
       // Delay for 20 ms.
       Timer.delay(0.02);
