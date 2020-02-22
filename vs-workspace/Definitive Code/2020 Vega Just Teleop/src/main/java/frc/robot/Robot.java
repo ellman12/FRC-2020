@@ -27,8 +27,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public class Robot extends TimedRobot {
 
-  // TODO Delete 2020 Auto Strafe Test.
-
+  // Used for running auto code once.
   boolean autoOnce = true;
 
   // Creating the drive motors.
@@ -49,15 +48,17 @@ public class Robot extends TimedRobot {
 
   CANEncoder frontLeftDriveEnc;
 
-  // Magic number for the speed for how fast the robot strafes.
-  final double STRAFE_SPEED = 0.5;
+  // Magic numbers.
+  final double DRIVE_FWD_AND_BWD_SPEED = 0.5; // How fast the drive motors spin in driveFwd() and driveBwd().
+  final double ENCODER_CALIBRATION_DRIVEFWDBWD = 1.43; // Encoder calibration for the driveFwd/Bwd auto functions.
 
-  // How fast the drive motors spin in driveFwd() and driveBwd().
-  final double DRIVE_FWD_AND_BWD_SPEED = 0.5;
+  final double STRAFE_SPEED = 0.5; // Magic number for the speed for how fast the robot strafes.
+  final double ENCODER_CALIBRATION_STRAFE = 1.15; // Encoder calibration for the strafeLeft/Right auto functions.
 
   @Override
   public void robotInit() {
 
+    // Creating the drive motors, and assigning their IDs.
     frontLeftDriveMotor = new CANSparkMax(1, MotorType.kBrushless);
     frontRightDriveMotor = new CANSparkMax(2, MotorType.kBrushless);
     backLeftDriveMotor = new CANSparkMax(3, MotorType.kBrushless);
@@ -71,6 +72,7 @@ public class Robot extends TimedRobot {
 
     driveGyro = new ADXRS450_Gyro();
 
+    // Assigning the encoder to its motor.
     frontLeftDriveEnc = new CANEncoder(frontLeftDriveMotor);
 
     // Putting the drive motors in coast mode.
@@ -79,13 +81,16 @@ public class Robot extends TimedRobot {
     // backLeftDriveMotor.setIdleMode(IdleMode.kCoast);
     // backRightDriveMotor.setIdleMode(IdleMode.kCoast);
 
+    // Putting the drive in brake mode.
     frontLeftDriveMotor.setIdleMode(IdleMode.kBrake);
     frontRightDriveMotor.setIdleMode(IdleMode.kBrake);
     backLeftDriveMotor.setIdleMode(IdleMode.kBrake);
     backRightDriveMotor.setIdleMode(IdleMode.kBrake);
 
+    // Turning off pointless warnings and the like.
     mecanumDrive.setSafetyEnabled(false);
 
+    // Resetting the encoder.
     frontLeftDriveEnc.setPosition(0);
 
   }
@@ -202,9 +207,8 @@ public class Robot extends TimedRobot {
     // Our current encoder count reading.
     double currentCounts = 0;
 
-    // 1.15 is a magic number for the calibration for the encoders.
     // This should give us how many counts.
-    double encoderCounts = inches / 1.15;
+    double encoderCounts = inches / ENCODER_CALIBRATION_STRAFE;
 
     while (currentCounts < encoderCounts) {
 
@@ -226,7 +230,6 @@ public class Robot extends TimedRobot {
     }
 
     // Stop the motors.
-    // mecanumDrive.stopMotor();
     frontLeftDriveMotor.set(0);
     backLeftDriveMotor.set(0);
     frontRightDriveMotor.set(0);
@@ -260,10 +263,8 @@ public class Robot extends TimedRobot {
     // Our current encoder count reading.
     double currentCounts = 0;
 
-    // TODO make 1.15 a magic number up at the top of the file.
-    // 1.15 is a magic number for the calibration for the encoders.
     // This should give us how many counts.
-    double encoderCounts = inches / 1.15;
+    double encoderCounts = inches / ENCODER_CALIBRATION_STRAFE;
 
     while (currentCounts < encoderCounts) {
 
@@ -285,7 +286,6 @@ public class Robot extends TimedRobot {
     }
 
     // Stop the motors.
-    // mecanumDrive.stopMotor();
     frontLeftDriveMotor.set(0);
     backLeftDriveMotor.set(0);
     frontRightDriveMotor.set(0);
@@ -321,11 +321,8 @@ public class Robot extends TimedRobot {
     // Our current encoder count reading.
     double currentCounts = 0;
 
-    // TODO make 1.43 a magic number up at the top.
-    // TODO arcadeDrive for auto stuff?
-    // 1.43 is a magic number for the calibration for the encoders.
     // This should give us how many counts.
-    double encoderCounts = inches / 1.43;
+    double encoderCounts = inches / ENCODER_CALIBRATION_DRIVEFWDBWD;
 
     while (currentCounts < encoderCounts) {
 
@@ -383,11 +380,8 @@ public class Robot extends TimedRobot {
     // Our current encoder count reading.
     double currentCounts = 0;
 
-    // TODO make 1.43 a magic number up at the top.
-    // TODO arcadeDrive for auto stuff?
-    // 1.43 is a magic number for the calibration for the encoders.
     // This should give us how many counts.
-    double encoderCounts = inches / 1.43;
+    double encoderCounts = inches / ENCODER_CALIBRATION_DRIVEFWDBWD;
 
     while (currentCounts < encoderCounts) {
 
