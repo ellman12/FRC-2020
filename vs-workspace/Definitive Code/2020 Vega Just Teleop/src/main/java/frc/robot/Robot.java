@@ -20,6 +20,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -29,16 +30,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
-  static String gameData;
-
   // Creating the drive motors.
-  CANSparkMax frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
-
-  WPI_TalonFX fLShooter, bLshooter, frshooter, brshooter;
-
-  CANSparkMax rworm, lworm;
-
-  WPI_TalonFX intake;
+  CANSparkMax frontLeftDriveMotor, backLeftDriveMotor, frontRightDriveMotor, backRightDriveMotor;
 
   // Creating the Mecanum Drive.
   MecanumDrive mecanumDrive;
@@ -46,54 +39,28 @@ public class Robot extends TimedRobot {
   // Creating the PS4 controller.
   Joystick PS4;
 
-  SpeedControllerGroup wormDrive;
+  // Creating the drive gyro.
+  ADXRS450_Gyro driveGyro;
 
-  double PS4_L_Y;
-
+  // Magic numbers for the deadbands for the PS4 joystick axes.
   final double PS4_TRIGGER_DEADBAND_POSITIVE = 0.2;
   final double PS4_TRIGGER_DEADBAND_NEGATIVE = -0.2;
 
   @Override
   public void robotInit() {
 
-    // Dummy IDs for right now!
-    // frontLeftMotor = new (1);
-    // frontRightMotor = new WPI_TalonFX(3);
-    // backLeftMotor = new WPI_TalonFX(2);
-    // backRightMotor = new WPI_TalonFX(4);
-
-    frontLeftMotor = new CANSparkMax(1, MotorType.kBrushless);
-    frontRightMotor = new CANSparkMax(2, MotorType.kBrushless);
-    backLeftMotor = new CANSparkMax(3, MotorType.kBrushless);
-    backRightMotor = new CANSparkMax(4, MotorType.kBrushless);
-
-    fLShooter = new WPI_TalonFX(5);
-    bLshooter = new WPI_TalonFX(7);
-    frshooter = new WPI_TalonFX(6);
-    brshooter = new WPI_TalonFX(8);
-
-    rworm = new CANSparkMax(9, MotorType.kBrushless);
-    lworm = new CANSparkMax(10, MotorType.kBrushless);
-
-    intake = new WPI_TalonFX(11);
+    frontLeftDriveMotor = new CANSparkMax(1, MotorType.kBrushless);
+    frontRightDriveMotor = new CANSparkMax(2, MotorType.kBrushless);
+    backLeftDriveMotor = new CANSparkMax(3, MotorType.kBrushless);
+    backRightDriveMotor = new CANSparkMax(4, MotorType.kBrushless);
 
     // Adding the drive motors to the Mecanum Drive.
-    mecanumDrive = new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
+    mecanumDrive = new MecanumDrive(frontLeftDriveMotor, backLeftDriveMotor, frontRightDriveMotor, backRightDriveMotor);
 
     // Assigning the PS4 controller the ID of 0.
     PS4 = new Joystick(0);
 
-    fLShooter.setNeutralMode(NeutralMode.Brake);
-    bLshooter.setNeutralMode(NeutralMode.Brake);
-    frshooter.setNeutralMode(NeutralMode.Brake);
-    brshooter.setNeutralMode(NeutralMode.Brake);
-
-    rworm.setIdleMode(IdleMode.kBrake);
-    lworm.setIdleMode(IdleMode.kBrake);
-
-    rworm.setInverted(true);
-
-    wormDrive = new SpeedControllerGroup(rworm, lworm);
+    driveGyro = new ADXRS450_Gyro();
 
     mecanumDrive.setSafetyEnabled(false);
     // mecanumDrive.setDeadband(0.3);
@@ -116,72 +83,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    PS4_L_Y = PS4.getY();
-
-    if (PS4.getRawButton(9) == true) {
-      fLShooter.set(1.0);
-      frshooter.set(-1.0);
-    } else {
-      fLShooter.set(0);
-      frshooter.set(0);
-    }
-
-    if (PS4.getRawButton(1) == true) {
-      // fLShooter.set(0.3);
-      // frshooter.set(-0.3);
-      // brshooter.set(-0.3);
-      // bLshooter.set(0.3);
-      // wormDrive.set(0.3);
-      wormDrive.set(0.30);
-
-    } else if (PS4.getRawButton(2) == true) {
-
-      // wormDrive.set(-0.3);
-      wormDrive.set(-0.30);
-
-    } else {
-      // fLShooter.set(0.0);
-      // frshooter.set(0.0);
-      // brshooter.set(0.0);
-      // bLshooter.set(0.0);
-      wormDrive.set(0.0);
-    }
-
-    if (PS4.getRawButton(3) == true) {
-      intake.set(-0.3);
-    } else {
-      intake.set(0);
-    }
-
-    if (PS4.getRawButton(5) == true) {
-      bLshooter.set(0.1);
-      brshooter.set(-0.1);
-    } else {
-      bLshooter.set(0.0);
-      brshooter.set(0.0);
-    }
-
-    if (PS4_L_Y < 0.2 || PS4_L_Y > -0.2) {
-      PS4_L_Y = 0;
-    }
-
     // Long-ass if statement that acts as a deadband for the drive.
     if (((PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE) || (PS4.getY() > PS4_TRIGGER_DEADBAND_POSITIVE)
-        || (PS4.getZ() > PS4_TRIGGER_DEADBAND_POSITIVE))
+        || (getZAxis() > PS4_TRIGGER_DEADBAND_POSITIVE))
         || ((PS4.getX() < PS4_TRIGGER_DEADBAND_NEGATIVE) || (PS4.getY() < PS4_TRIGGER_DEADBAND_NEGATIVE)
-            || (PS4.getZ() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
-      // mecanumDrive.driveCartesian(-PS4_L_Y, PS4.getZ(), PS4.getX());
-      mecanumDrive.driveCartesian(PS4.getY(), PS4.getZ(), PS4.getX());
-
-      // mecanumDrive.drivePolar(magnitude, angle, zRotation);
+            || (getZAxis() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
+      mecanumDrive.driveCartesian(-PS4.getY(), getZAxis(), PS4.getX());
     } else {
       mecanumDrive.driveCartesian(0, 0, 0);
     }
-
-    // TODO polar stuff.
-    // IDK which one we should use; not much documentation on each.
-    // mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation, gyroAngle);
-    // mecanumDrive.drivePolar(magnitude, angle, zRotation);
 
   }
 
@@ -189,15 +99,45 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
-  public String getGameData() {
+  /////////////////////////////////////////////////////////////////////
+  // Function: getZAxis()
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose: Gets the value for the "Z" axis using the 2 analog triggers.
+  //
+  // Arguments: none
+  //
+  // Returns: double zAxis: the value.
+  //
+  // Remarks: Created on 2/22/2020.
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public double getZAxis() {
 
-    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    // This variable is used for setting the Z axis for strafing.
+    double zAxis;
 
-    gameData = gameData.substring(0, 2);
+    // These variables are for getting the values for the left and right
+    // analog triggers, respectively.
+    double leftAnalogTrigger;
+    double rightAnalogTrigger;
 
-    SmartDashboard.putString("Colors", gameData);
+    // Axes 2 and 3 are the left and right analog triggers, respectively.
+    // You have to add 1 because the triggers start at -1 and go to 1.
+    // Adding 1 makes them start at 0 when not being pressed.
+    leftAnalogTrigger = PS4.getRawAxis(3) + 1;
+    rightAnalogTrigger = PS4.getRawAxis(4) + 1;
 
-    return (gameData);
+    // Do the math for getting the value for strafing.
+    // Example 1: if the driver presses the right one down, that value will be 1 - 0
+    // = 100% speed (1).
+    // Example 2: if the driver presses the left one down, that value will be 0 - 1
+    // ; -100% speed (-1).
+    zAxis = rightAnalogTrigger - leftAnalogTrigger;
+
+    // Return the value, to be used elsewhere.
+    return zAxis;
   }
 
 }
