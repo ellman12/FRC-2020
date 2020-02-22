@@ -52,8 +52,8 @@ public class Robot extends TimedRobot {
   // Magic number for the speed for how fast the robot strafes.
   final double STRAFE_SPEED = 0.5;
 
-  // How fast the motors spin in driveFwd().
-  final double DRIVE_FWD_SPEED = 0.2;
+  // How fast the drive motors spin in driveFwd() and driveBwd().
+  final double DRIVE_FWD_AND_BWD_SPEED = 0.5;
 
   @Override
   public void robotInit() {
@@ -88,8 +88,6 @@ public class Robot extends TimedRobot {
 
     frontLeftDriveEnc.setPosition(0);
 
-    // mecanumDrive.setDeadband(0.3);
-
   }
 
   @Override
@@ -103,11 +101,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
+    // Run auto stuff only once.
     if (autoOnce == true) {
-      // strafeLeftAuto(5);
-      // strafeRightAuto(5);
-      driveFwd(5);
       driveBwd(5);
+      Timer.delay(0.5);
+      strafeRightAuto(4);
+      Timer.delay(0.5);
+      strafeLeftAuto(8);
+      Timer.delay(0.5);
+      strafeRightAuto(4);
+      Timer.delay(0.5);
+      driveFwd(5);
       autoOnce = false;
     }
   }
@@ -326,10 +330,10 @@ public class Robot extends TimedRobot {
     while (currentCounts < encoderCounts) {
 
       // Drive forward.
-      frontLeftDriveMotor.set(DRIVE_FWD_SPEED);
-      backLeftDriveMotor.set(-DRIVE_FWD_SPEED);
-      frontRightDriveMotor.set(DRIVE_FWD_SPEED);
-      backRightDriveMotor.set(-DRIVE_FWD_SPEED);
+      frontLeftDriveMotor.set(DRIVE_FWD_AND_BWD_SPEED);
+      backLeftDriveMotor.set(-DRIVE_FWD_AND_BWD_SPEED);
+      frontRightDriveMotor.set(DRIVE_FWD_AND_BWD_SPEED);
+      backRightDriveMotor.set(-DRIVE_FWD_AND_BWD_SPEED);
 
       // Delay for 20 ms.
       Timer.delay(0.02);
@@ -388,10 +392,10 @@ public class Robot extends TimedRobot {
     while (currentCounts < encoderCounts) {
 
       // Drive forward.
-      frontLeftDriveMotor.set(-DRIVE_FWD_SPEED);
-      backLeftDriveMotor.set(DRIVE_FWD_SPEED);
-      frontRightDriveMotor.set(-DRIVE_FWD_SPEED);
-      backRightDriveMotor.set(DRIVE_FWD_SPEED);
+      frontLeftDriveMotor.set(-DRIVE_FWD_AND_BWD_SPEED);
+      backLeftDriveMotor.set(DRIVE_FWD_AND_BWD_SPEED);
+      frontRightDriveMotor.set(-DRIVE_FWD_AND_BWD_SPEED);
+      backRightDriveMotor.set(DRIVE_FWD_AND_BWD_SPEED);
 
       // Delay for 20 ms.
       Timer.delay(0.02);
