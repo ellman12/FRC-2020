@@ -126,10 +126,10 @@ public class Robot extends TimedRobot {
 
     // Long if statement that acts as a deadband for the drive.
     if (((PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE) || (PS4.getY() > PS4_TRIGGER_DEADBAND_POSITIVE)
-        || (getZAxis() > PS4_TRIGGER_DEADBAND_POSITIVE))
+        || (getZAxisTriggers() > PS4_TRIGGER_DEADBAND_POSITIVE))
         || ((PS4.getX() < PS4_TRIGGER_DEADBAND_NEGATIVE) || (PS4.getY() < PS4_TRIGGER_DEADBAND_NEGATIVE)
-            || (getZAxis() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
-      mecanumDrive.driveCartesian(-PS4.getY(), getZAxis(), PS4.getX());
+            || (getZAxisTriggers() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
+      mecanumDrive.driveCartesian(-PS4.getY(), getZAxisTriggers(), PS4.getX());
     } else {
       mecanumDrive.driveCartesian(0, 0, 0);
     }
@@ -141,20 +141,21 @@ public class Robot extends TimedRobot {
   }
 
   /////////////////////////////////////////////////////////////////////
-  // Function: getZAxis()
+  // Function: getZAxisTriggers()
   /////////////////////////////////////////////////////////////////////
   //
   // Purpose: Gets the value for the "Z" axis using the 2 analog triggers.
   //
   // Arguments: none
   //
-  // Returns: double zAxis: the value.
+  // Returns: double zAxis: the value from -1 to 1, which is used for
+  // controlling the speed and direction for strafing in teleop.
   //
   // Remarks: Created on 2/22/2020.
   //
   /////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////
-  public double getZAxis() {
+  public double getZAxisTriggers() {
 
     // This variable is used for setting the Z axis for strafing.
     double zAxis;
@@ -208,9 +209,9 @@ public class Robot extends TimedRobot {
     double currentCounts = 0;
 
     // This should give us how many counts.
-    double encoderCounts = inches / ENCODER_CALIBRATION_STRAFE;
+    double maxEncoderCounts = inches / ENCODER_CALIBRATION_STRAFE;
 
-    while (currentCounts < encoderCounts) {
+    while (currentCounts < maxEncoderCounts) {
 
       // Strafe left.
       frontLeftDriveMotor.set(-STRAFE_SPEED);
@@ -264,9 +265,9 @@ public class Robot extends TimedRobot {
     double currentCounts = 0;
 
     // This should give us how many counts.
-    double encoderCounts = inches / ENCODER_CALIBRATION_STRAFE;
+    double maxEncoderCounts = inches / ENCODER_CALIBRATION_STRAFE;
 
-    while (currentCounts < encoderCounts) {
+    while (currentCounts < maxEncoderCounts) {
 
       // Strafe right.
       frontLeftDriveMotor.set(STRAFE_SPEED);
@@ -319,12 +320,12 @@ public class Robot extends TimedRobot {
     double inches = feet * 12.0;
 
     // Our current encoder count reading.
-    double currentCounts = 0;
+    double maxEncoderCounts = 0;
 
     // This should give us how many counts.
     double encoderCounts = inches / ENCODER_CALIBRATION_DRIVEFWDBWD;
 
-    while (currentCounts < encoderCounts) {
+    while (maxEncoderCounts < encoderCounts) {
 
       // Drive forward.
       frontLeftDriveMotor.set(DRIVE_FWD_AND_BWD_SPEED);
@@ -336,7 +337,7 @@ public class Robot extends TimedRobot {
       Timer.delay(0.02);
 
       // Read the encoder, and get our current counts.
-      currentCounts = Math.abs(frontLeftDriveEnc.getPosition());
+      maxEncoderCounts = Math.abs(frontLeftDriveEnc.getPosition());
 
       // System.out.println("currentCounts: " + currentCounts + "\tencoderCounts: " +
       // encoderCounts);
@@ -381,9 +382,9 @@ public class Robot extends TimedRobot {
     double currentCounts = 0;
 
     // This should give us how many counts.
-    double encoderCounts = inches / ENCODER_CALIBRATION_DRIVEFWDBWD;
+    double maxEncoderCounts = inches / ENCODER_CALIBRATION_DRIVEFWDBWD;
 
-    while (currentCounts < encoderCounts) {
+    while (currentCounts < maxEncoderCounts) {
 
       // Drive forward.
       frontLeftDriveMotor.set(-DRIVE_FWD_AND_BWD_SPEED);
