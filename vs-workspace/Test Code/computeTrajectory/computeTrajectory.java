@@ -1,16 +1,17 @@
+
 /////////////////////////////////////////////////////
 // File: computeTrajectory.java
 /////////////////////////////////////////////////////
-// 
+//
 // Date created: 1/18/2020
-// 
-// Purpose: Class file for Trajectory.java that 
+//
+// Purpose: Class file for Trajectory.java that
 // houses all calculations.
-// 
+//
 // Authors: Noah S, Elliott D, Larry B
-// 
+//
 // Environment: Microsoft VSCode Java
-// 
+//
 // Remarks:
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
@@ -238,5 +239,43 @@ class computeTrajectory {
         }
         return theta_soln;
 
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: computeLeadScrewPosition(...)
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Computes the position of the screw for the ball shooter.
+    //
+    // Arguments: double lowerPivot, double height, double upperPivot,
+    // double angleDeg
+    //
+    // Returns: screwPosition: the position of the ball shooter screw.
+    //
+    // Remarks: Created on 2/24/2020.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public double computeLeadScrewPosition(double lowerPivot, double height, double upperPivot, double angleDeg) {
+
+        // Position of the ball shooter screw.
+        double screwPosition;
+
+        // The computed sides of a right angle triangle,
+        // where the hypotenuse is the lead screw position.
+        double side1, side2;
+
+        // Used for storing the angleDeg argument, converted to Radians.
+        double angleRad = Math.toRadians(angleDeg);
+
+        // Doing the math for calculating the screw position.
+        side1 = lowerPivot - upperPivot * Math.cos(angleRad);
+        side2 = upperPivot * Math.sin(angleRad);
+
+        // Using the Pythagorean Theorem for getting the screw position.
+        screwPosition = Math.sqrt((side1 * side1) + (side2 * side2));
+
+        // Return the final screw position value.
+        return screwPosition;
     }
 }
