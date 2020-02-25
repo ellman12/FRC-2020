@@ -49,11 +49,16 @@ public class Robot extends TimedRobot {
   CANEncoder frontLeftDriveEnc;
 
   // Magic numbers.
+  // Magic numbers for driveFwd() and driveBwd().
   final double DRIVE_FWD_AND_BWD_SPEED = 0.5; // How fast the drive motors spin in driveFwd() and driveBwd().
   final double ENCODER_CALIBRATION_DRIVEFWDBWD = 1.43; // Encoder calibration for the driveFwd/Bwd auto functions.
 
+  // Magic numbers for strafeLeft() and strafeRight().
   final double STRAFE_SPEED = 0.5; // Magic number for the speed for how fast the robot strafes.
   final double ENCODER_CALIBRATION_STRAFE = 1.15; // Encoder calibration for the strafeLeft/Right auto functions.
+
+  // Magic numbers for turnLeft() and turnRight().
+  final double ROTATION_SPEED = 0.5; // Speed value for turnLeft() and turnRight().
 
   @Override
   public void robotInit() {
@@ -108,15 +113,17 @@ public class Robot extends TimedRobot {
 
     // Run auto stuff only once.
     if (autoOnce == true) {
-      driveBwd(5);
-      Timer.delay(0.5);
-      strafeRightAuto(4);
-      Timer.delay(0.5);
-      strafeLeftAuto(8);
-      Timer.delay(0.5);
-      strafeRightAuto(4);
-      Timer.delay(0.5);
-      driveFwd(5);
+      // driveBwd(5);
+      // Timer.delay(0.5);
+      // strafeRight(4);
+      // Timer.delay(0.5);
+      // strafeLeft(8);
+      // Timer.delay(0.5);
+      // strafeRight(4);
+      // Timer.delay(0.5);
+      // driveFwd(5);
+      turnRight(90);
+      System.out.println("gyro: " + driveGyro.getAngle());
       autoOnce = false;
     }
   }
@@ -183,7 +190,7 @@ public class Robot extends TimedRobot {
   }
 
   /////////////////////////////////////////////////////////////////////
-  // Function: strafeLeftAuto(...)
+  // Function: strafeLeft(...)
   /////////////////////////////////////////////////////////////////////
   //
   // Purpose: Used for strafing left in autonomous.
@@ -197,7 +204,7 @@ public class Robot extends TimedRobot {
   //
   /////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////
-  public void strafeLeftAuto(double feet) {
+  public void strafeLeft(double feet) {
 
     // Initialize the encoder to 0 (reset it).
     frontLeftDriveEnc.setPosition(0);
@@ -239,7 +246,7 @@ public class Robot extends TimedRobot {
   }
 
   /////////////////////////////////////////////////////////////////////
-  // Function: strafeRightAuto(...)
+  // Function: strafeRight(...)
   /////////////////////////////////////////////////////////////////////
   //
   // Purpose: Used for strafing right in autonomous.
@@ -253,7 +260,7 @@ public class Robot extends TimedRobot {
   //
   /////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////
-  public void strafeRightAuto(double feet) {
+  public void strafeRight(double feet) {
 
     // Initialize the encoder to 0 (reset it).
     frontLeftDriveEnc.setPosition(0);
@@ -310,8 +317,6 @@ public class Robot extends TimedRobot {
   /////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////
   public void driveFwd(double feet) {
-
-    // TODO acceleration/deceleration.
 
     // Initialize the encoder to 0 (reset it).
     frontLeftDriveEnc.setPosition(0);
@@ -370,8 +375,6 @@ public class Robot extends TimedRobot {
   /////////////////////////////////////////////////////////////////////
   public void driveBwd(double feet) {
 
-    // TODO acceleration/deceleration.
-
     // Initialize the encoder to 0 (reset it).
     frontLeftDriveEnc.setPosition(0);
 
@@ -410,6 +413,143 @@ public class Robot extends TimedRobot {
     frontRightDriveMotor.set(0);
     backRightDriveMotor.set(0);
 
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Function: turnLeft(...)
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose: Used for turning left in autonomous.
+  //
+  // Arguments: double targetAngle: the angle we are trying to achieve.
+  //
+  // Returns: void
+  //
+  // Remarks: Created on 2/24/2020.
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public void turnLeft(double targetAngle) {
+
+    driveGyro.reset(); // Reset the gyro.
+
+    targetAngle *= -1.0; // Invert the target angle.
+
+    double currentAngle = driveGyro.getAngle(); // Initial gyro angle.
+    double rotationSpeed = ROTATION_SPEED; // Start our rotation speed at this magic number.
+
+    // While our current angle is less than our target angle, rotate.
+    while (currentAngle > targetAngle) {
+
+      // Call this simple function for rotating.
+      rotateCounterclockwise(rotationSpeed);
+
+      // Get our current angle, and stop when we get there.
+      currentAngle = driveGyro.getAngle();
+
+      // If our current angle minus our target angle is less than 10 degrees,
+      // reduce our speed.
+      if (Math.abs(currentAngle - targetAngle) < 10.0) {
+        rotationSpeed = 0.1;
+      }
+    }
+
+    // Stop the motors, because we're at our target.
+    frontLeftDriveMotor.set(0);
+    backLeftDriveMotor.set(0);
+    frontRightDriveMotor.set(0);
+    backRightDriveMotor.set(0);
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Function: public void rotateCounterclockwise(...)
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose: Used to turn the robot counterclockwise. Stupid simple,
+  // and is only used in turnRight().
+  //
+  // Arguments: rotationSpeed: a double representing the rotation speed.
+  //
+  // Returns: void
+  //
+  // Remarks: Created on 2/24/2020.
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public void rotateCounterclockwise(double rotationSpeed) {
+
+    frontLeftDriveMotor.set(-rotationSpeed);
+    backLeftDriveMotor.set(-rotationSpeed);
+    frontRightDriveMotor.set(-rotationSpeed);
+    backRightDriveMotor.set(-rotationSpeed);
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Function: turnRight(...)
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose: Used for turning right in autonomous.
+  //
+  // Arguments: double targetAngle: the angle we are trying to achieve.
+  //
+  // Returns: void
+  //
+  // Remarks: Created on 2/24/2020.
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public void turnRight(double targetAngle) {
+
+    driveGyro.reset(); // Reset the gyro.
+
+    double currentAngle = driveGyro.getAngle(); // Initial gyro angle.
+    double rotationSpeed = ROTATION_SPEED; // Start our rotation speed at this magic number.
+
+    // While our current angle is greater than our target angle, rotate.
+    while (currentAngle < targetAngle) {
+
+      // Call this simple function for rotating,
+      // and pass in a speed of that magic number.
+      rotateClockwise(rotationSpeed);
+
+      // Get our current angle, and stop when we get there.
+      currentAngle = driveGyro.getAngle();
+
+      // If our current angle minus our target angle is less than 10 degrees,
+      // reduce our speed.
+      if (Math.abs(currentAngle - targetAngle) < 10.0) {
+        rotationSpeed = 0.1;
+      }
+    }
+
+    // Stop the motors, because we're at our target.
+    frontLeftDriveMotor.set(0);
+    backLeftDriveMotor.set(0);
+    frontRightDriveMotor.set(0);
+    backRightDriveMotor.set(0);
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Function: public void rotateClockwise(...)
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose: Used to turn the robot clockwise. Stupid simple, and is
+  // only used in turnLeft().
+  //
+  // Arguments: rotationSpeed: a double representing the rotation speed.
+  //
+  // Returns: void
+  //
+  // Remarks: Created on 2/24/2020.
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public void rotateClockwise(double rotationSpeed) {
+
+    frontLeftDriveMotor.set(rotationSpeed);
+    backLeftDriveMotor.set(rotationSpeed);
+    frontRightDriveMotor.set(rotationSpeed);
+    backRightDriveMotor.set(rotationSpeed);
   }
 
 }
