@@ -2,7 +2,8 @@
 // File: Robot.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: This program was going to be for teleop stuff for Vega.
+// Purpose: This program is the improved official code for the 2020
+// competition robot, Vega.
 //
 // Authors: Elliott DuCharme of FRC Team #5914
 //
