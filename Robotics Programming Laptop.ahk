@@ -76,6 +76,12 @@ FormatTime, CurrentDateTime,, h:mm tt
 SendInput, %CurrentDateTime%
 return
 
+;Sends "Created on currdate."
+#c::
+FormatTime, CurrentDateTime,, M/dd/yyyy
+SendInput, Created on %CurrentDateTime%.
+return
+
 ;Open FRC-2020 GitHub folder.
 ^+f::
 Run, %A_MyDocuments%\GitHub\FRC-2020

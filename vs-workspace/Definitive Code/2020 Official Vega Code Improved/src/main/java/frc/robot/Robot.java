@@ -28,20 +28,10 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public class Robot extends TimedRobot {
 
+  DriveThread driveThread = new DriveThread("driveThread");
+
   // Used for running auto code once.
   boolean autoOnce = true;
-
-  // Creating the drive motors.
-  CANSparkMax frontLeftDriveMotor, backLeftDriveMotor, frontRightDriveMotor, backRightDriveMotor;
-
-  // Creating the Mecanum Drive.
-  MecanumDrive mecanumDrive;
-
-  // Creating the PS4 controller.
-  Joystick PS4;
-
-  // Creating the drive gyro.
-  ADXRS450_Gyro driveGyro;
 
   // Magic numbers for the deadbands for the PS4 joystick axes.
   final double PS4_TRIGGER_DEADBAND_POSITIVE = 0.2;
@@ -64,23 +54,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    // Creating the drive motors, and assigning their IDs.
-    frontLeftDriveMotor = new CANSparkMax(1, MotorType.kBrushless);
-    frontRightDriveMotor = new CANSparkMax(2, MotorType.kBrushless);
-    backLeftDriveMotor = new CANSparkMax(3, MotorType.kBrushless);
-    backRightDriveMotor = new CANSparkMax(4, MotorType.kBrushless);
-
-    // Adding the drive motors to the Mecanum Drive.
-    mecanumDrive = new MecanumDrive(frontLeftDriveMotor, backLeftDriveMotor, frontRightDriveMotor, backRightDriveMotor);
-
-    // Assigning the PS4 controller the ID of 0.
-    PS4 = new Joystick(0);
-
-    driveGyro = new ADXRS450_Gyro();
-
-    // Assigning the encoder to its motor.
-    frontLeftDriveEnc = new CANEncoder(frontLeftDriveMotor);
-
     // Putting the drive motors in coast mode.
     // frontLeftDriveMotor.setIdleMode(IdleMode.kCoast);
     // frontRightDriveMotor.setIdleMode(IdleMode.kCoast);
@@ -88,13 +61,10 @@ public class Robot extends TimedRobot {
     // backRightDriveMotor.setIdleMode(IdleMode.kCoast);
 
     // Putting the drive in brake mode.
-    frontLeftDriveMotor.setIdleMode(IdleMode.kBrake);
-    frontRightDriveMotor.setIdleMode(IdleMode.kBrake);
-    backLeftDriveMotor.setIdleMode(IdleMode.kBrake);
-    backRightDriveMotor.setIdleMode(IdleMode.kBrake);
-
-    // Turning off pointless warnings and the like.
-    mecanumDrive.setSafetyEnabled(false);
+    // frontLeftDriveMotor.setIdleMode(IdleMode.kBrake);
+    // frontRightDriveMotor.setIdleMode(IdleMode.kBrake);
+    // backLeftDriveMotor.setIdleMode(IdleMode.kBrake);
+    // backRightDriveMotor.setIdleMode(IdleMode.kBrake);
 
     // Resetting the encoder.
     frontLeftDriveEnc.setPosition(0);
