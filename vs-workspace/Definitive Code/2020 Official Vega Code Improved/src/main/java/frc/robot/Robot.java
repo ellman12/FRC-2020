@@ -432,8 +432,11 @@ public class Robot extends TimedRobot {
     // While our current angle is less than our target angle, rotate.
     while (currentAngle > targetAngle) {
 
-      // Call this simple function for rotating.
-      rotateCounterclockwise(rotationSpeed);
+      // Rotate counterclockwise.
+      frontLeftDriveMotor.set(-rotationSpeed);
+      backLeftDriveMotor.set(-rotationSpeed);
+      frontRightDriveMotor.set(-rotationSpeed);
+      backRightDriveMotor.set(-rotationSpeed);
 
       // Get our current angle, and stop when we get there.
       currentAngle = driveGyro.getAngle();
@@ -450,29 +453,6 @@ public class Robot extends TimedRobot {
     backLeftDriveMotor.set(0);
     frontRightDriveMotor.set(0);
     backRightDriveMotor.set(0);
-  }
-
-  /////////////////////////////////////////////////////////////////////
-  // Function: public void rotateCounterclockwise(...)
-  /////////////////////////////////////////////////////////////////////
-  //
-  // Purpose: Used to turn the robot counterclockwise. Stupid simple,
-  // and is only used in turnRight().
-  //
-  // Arguments: rotationSpeed: a double representing the rotation speed.
-  //
-  // Returns: void
-  //
-  // Remarks: Created on 2/24/2020.
-  //
-  /////////////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////
-  public void rotateCounterclockwise(double rotationSpeed) {
-
-    frontLeftDriveMotor.set(-rotationSpeed);
-    backLeftDriveMotor.set(-rotationSpeed);
-    frontRightDriveMotor.set(-rotationSpeed);
-    backRightDriveMotor.set(-rotationSpeed);
   }
 
   /////////////////////////////////////////////////////////////////////
@@ -499,9 +479,11 @@ public class Robot extends TimedRobot {
     // While our current angle is greater than our target angle, rotate.
     while (currentAngle < targetAngle) {
 
-      // Call this simple function for rotating,
-      // and pass in a speed of that magic number.
-      rotateClockwise(rotationSpeed);
+      // Rotate clockwise.
+      frontLeftDriveMotor.set(rotationSpeed);
+      backLeftDriveMotor.set(rotationSpeed);
+      frontRightDriveMotor.set(rotationSpeed);
+      backRightDriveMotor.set(rotationSpeed);
 
       // Get our current angle, and stop when we get there.
       currentAngle = driveGyro.getAngle();
@@ -518,29 +500,6 @@ public class Robot extends TimedRobot {
     backLeftDriveMotor.set(0);
     frontRightDriveMotor.set(0);
     backRightDriveMotor.set(0);
-  }
-
-  /////////////////////////////////////////////////////////////////////
-  // Function: public void rotateClockwise(...)
-  /////////////////////////////////////////////////////////////////////
-  //
-  // Purpose: Used to turn the robot clockwise. Stupid simple, and is
-  // only used in turnLeft().
-  //
-  // Arguments: rotationSpeed: a double representing the rotation speed.
-  //
-  // Returns: void
-  //
-  // Remarks: Created on 2/24/2020.
-  //
-  /////////////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////
-  public void rotateClockwise(double rotationSpeed) {
-
-    frontLeftDriveMotor.set(rotationSpeed);
-    backLeftDriveMotor.set(rotationSpeed);
-    frontRightDriveMotor.set(rotationSpeed);
-    backRightDriveMotor.set(rotationSpeed);
   }
 
 }
