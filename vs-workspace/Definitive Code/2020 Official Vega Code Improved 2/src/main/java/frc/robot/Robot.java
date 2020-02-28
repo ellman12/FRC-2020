@@ -2,7 +2,8 @@
 // File: Robot.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: 
+// Purpose: The main file that links every other class and thread
+// together, plus some other stuff.
 //
 // Authors: Elliott DuCharme.
 //
