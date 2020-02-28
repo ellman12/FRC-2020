@@ -23,6 +23,7 @@ public class Robot extends TimedRobot {
   boolean autoOnce = true;
 
   // Creating instances of these classes, so everything is all linked together.
+  DriveThread driveThread = new DriveThread("driveThread");
   RobotDrive robotDrive = new RobotDrive();
   VarsAndConsts varsAndConsts = new VarsAndConsts();
 
@@ -41,10 +42,18 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
+    // Put SmartDashboard stuff here...
+
   }
 
   @Override
   public void autonomousPeriodic() {
+
+    // Run auto stuff only once.
+    if (autoOnce == true) {
+      // Auto code here...
+      autoOnce = false;
+    }
 
   }
 
@@ -56,4 +65,5 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
 }
