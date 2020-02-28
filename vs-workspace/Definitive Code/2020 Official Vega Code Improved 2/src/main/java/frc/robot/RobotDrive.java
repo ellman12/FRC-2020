@@ -17,20 +17,33 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
+
 class RobotDrive {
+
+        // Used for being able to access Robot.java stuff in here.
+        Robot robot = new Robot();
+
+        // Creating the drive motors.
+        CANSparkMax frontLeftDriveMotor = new CANSparkMax(robot.varsAndConsts.FRONT_LEFT_DRIVE_MOTOR_ID,
+                        MotorType.kBrushless);
+        CANSparkMax frontRightDriveMotor = new CANSparkMax(robot.varsAndConsts.FRONT_RIGHT_DRIVE_MOTOR_ID,
+                        MotorType.kBrushless);
+        CANSparkMax backLeftDriveMotor = new CANSparkMax(robot.varsAndConsts.BACK_LEFT_DRIVE_MOTOR_ID,
+                        MotorType.kBrushless);
+        CANSparkMax backRightDriveMotor = new CANSparkMax(robot.varsAndConsts.BACK_RIGHT_DRIVE_MOTOR_ID,
+                        MotorType.kBrushless);
+
+        // Creating an object of the MecanumDrive class.
+        // This links the 4 drive motors together.
+        MecanumDrive mecanumDrive = new MecanumDrive(frontLeftDriveMotor, backLeftDriveMotor, frontRightDriveMotor,
+                        backRightDriveMotor);
 
         // Constructor.
         RobotDrive() {
 
-                // Creating the drive motors.
-                CANSparkMax frontLeftDriveMotor = new CANSparkMax(VarsAndConsts.FRONT_LEFT_DRIVE_MOTOR_ID,
-                                MotorType.kBrushless);
-                CANSparkMax frontRightDriveMotor = new CANSparkMax(VarsAndConsts.FRONT_RIGHT_DRIVE_MOTOR_ID,
-                                MotorType.kBrushless);
-                CANSparkMax backLeftDriveMotor = new CANSparkMax(VarsAndConsts.BACK_LEFT_DRIVE_MOTOR_ID,
-                                MotorType.kBrushless);
-                CANSparkMax backRightDriveMotor = new CANSparkMax(VarsAndConsts.BACK_RIGHT_DRIVE_MOTOR_ID,
-                                MotorType.kBrushless);
-
+                // Removes pointless, annoying warnings/errors from the RioLog.
+                mecanumDrive.setSafetyEnabled(false);
         }
+
 }
