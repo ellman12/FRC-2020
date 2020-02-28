@@ -5,7 +5,7 @@
 // Purpose: Used for drive-related things for the robot.
 // Also houses the autonomous drive functions.
 //
-// Authors: Elliott DuCharme
+// Authors: Elliott DuCharme and Larry Basegio.
 //
 // Environment: Microsoft VSCode Java
 //

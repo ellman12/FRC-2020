@@ -5,7 +5,7 @@
 // Purpose: The main file that links every other class and thread
 // together, plus some other stuff.
 //
-// Authors: Elliott DuCharme.
+// Authors: Elliott DuCharme and Larry Basegio.
 //
 // Environment: Microsoft VSCode Java
 //

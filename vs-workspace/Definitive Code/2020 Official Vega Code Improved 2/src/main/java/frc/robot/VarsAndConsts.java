@@ -5,7 +5,7 @@
 // Purpose: Houses miscellaneous variables and constants that don't
 // belong elsewhere.
 //
-// Authors: Elliott DuCharme
+// Authors: Elliott DuCharme and Larry Basegio.
 //
 // Environment: Microsoft VSCode Java
 //
