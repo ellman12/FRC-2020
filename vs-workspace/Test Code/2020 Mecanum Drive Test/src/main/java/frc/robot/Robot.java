@@ -149,7 +149,7 @@ public class Robot extends TimedRobot {
     // axis.
     // In this case, ySpeed is the strafeing stuff, xSpeed is for driving
     // forward/backward, and zRotation is for turning left/right.
-    mecanumDrive.driveCartesian(PS4.getZ(), -PS4.getY(), PS4.getX());
+    // mecanumDrive.driveCartesian(PS4.getZ(), -PS4.getY(), PS4.getX());
 
   }
 

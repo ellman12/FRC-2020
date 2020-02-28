@@ -2,7 +2,8 @@
 // File: DriveThread.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose:
+// Purpose: This Thread is responsible for the joystick controls for
+// the robot in teleop.
 //
 // Authors: Elliott DuCharme and Larry Basegio.
 //

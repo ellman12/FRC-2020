@@ -32,7 +32,12 @@ class VarsAndConsts {
     final int BACK_LEFT_SHOOTER_MOTOR_ID = 7;
     final int BACK_RIGHT_SHOOTER_MOTOR_ID = 8;
 
-    // TODO Worm drive motors, intake, etc.
+    // Magic numbers for the ID for the worm drive Falcon 500.
+    final int RIGHT_WORM_DRIVE_MOTOR_ID = 9;
+    final int LEFT_WORM_DRIVE_MOTOR_ID = 10;
+
+    // Magic number for the ID for the ball intake Falcon 500.
+    final int BALL_INTAKE_MOTOR_ID = 11;
 
     // Magic numbers for PS4 Controller Axes IDs.
     final int PS4_L_X_AXIS_ID = 0;
