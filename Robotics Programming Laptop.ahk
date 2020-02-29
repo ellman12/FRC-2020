@@ -92,6 +92,38 @@ return
 Run, "https://github.com/ellman12/FRC-2020"
 return
 
+;Send the color sensor library link.
+^+c::
+Send, http://revrobotics.com/content/sw/color-sensor-v3/sdk/REVColorSensorV3.json
+return
+
+;Send the link to the Spark Max library.
+^+s::
+Send, https://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json
+return
+
+;Send the entire Robot.java template.txt file. VSCode doesn't format it at all, so in VSCod you have to do Alt + Shift + f. Works great, though.
+^+r::
+
+SendRaw,package frc.robot`;`n`nimport edu.wpi.first.wpilibj.TimedRobot`;`n`npublic class Robot extends TimedRobot {`n`n  @Override`n  public void robotInit() {`n`n  }`n`n  @Override`n  public void robotPeriodic() {`n  }`n`n  @Override`n  public void autonomousInit() {`n`n  }`n`n  @Override`n  public void autonomousPeriodic() {`n`n  }`n`n  @Override`n  public void teleopPeriodic() {`n`n  }`n`n  @Override`n  public void testPeriodic() {`n  }`n}
+
+return
+
+;Send my name.
+^+e::
+Send, Elliott DuCharme.
+return
+
+;Send my name and Larry's.
+^!+e::
+Send, Elliott DuCharme and Larry Basegio.
+return
+
+;Send my name, Larry's name, and Noah's name.
+^!+#e::
+Send, Elliott DuCharme, Larry Basegio and Noah Stigeler.
+return
+
 ^Space::
 WinSet, AlwaysOnTop, Toggle, A
 return
