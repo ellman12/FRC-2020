@@ -30,7 +30,7 @@ class DriveThread extends RobotDrive implements Runnable {
     boolean invertDriveToggle = false;
 
     // Doubles used for the joystick and analog trigger
-    // values in the Mec drive deadband.
+    // values in the Mecanum drive deadband.
     double leftXAxisPS4, leftYAxisPS4, zAxisTriggers;
 
     // Used for the Mecanum drive deadband.
@@ -55,6 +55,13 @@ class DriveThread extends RobotDrive implements Runnable {
 
             if (DriverStation.getInstance().isAutonomous()) {
                 // TODO Auto stuff here...
+
+                // Run auto stuff only once.
+                if (autoOnce == true) {
+                    // Auto code here...
+                    autoOnce = false;
+                }
+
             } else {
 
                 // Getting the values of these to be used for Mecanum drive stuff.
@@ -63,7 +70,8 @@ class DriveThread extends RobotDrive implements Runnable {
                 zAxisTriggers = getZAxisTriggers();
 
                 // If the driver presses the Triangle button on the PS4,
-                // change the variable to its opposite state.
+                // change the variable to its opposite state, thus either
+                // inverting the drive or un-inverting it.
                 if (PS4.getRawButton(constants.PS4_TRIANGLE_BUTTON)) {
                     invertDriveToggle = !invertDriveToggle;
                 }
@@ -83,6 +91,7 @@ class DriveThread extends RobotDrive implements Runnable {
                 if (((Math.abs(leftXAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
                         || (Math.abs(leftYAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
                         || (Math.abs(zAxisTriggers) > PS4_MEC_DRIVE_DEADBAND))) {
+
                     // If the invert drive toggle is false, drive normally.
                     if (invertDriveToggle == false) {
                         mecanumDrive.driveCartesian(-leftYAxisPS4, getZAxisTriggers(), leftXAxisPS4);
@@ -94,7 +103,7 @@ class DriveThread extends RobotDrive implements Runnable {
                     }
 
                 } else {
-                    // Don't run the drive motors.
+                    // Else, don't run the drive motors.
                     mecanumDrive.driveCartesian(0, 0, 0);
                 }
 

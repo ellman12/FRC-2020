@@ -16,19 +16,19 @@ package frc.robot;
 
 class Constants {
 
-    // Magic numbers for DriveThread Motor IDs.
+    // Magic numbers for RobotDrive Motor IDs.
     final int FRONT_LEFT_DRIVE_MOTOR_ID = 1;
     final int FRONT_RIGHT_DRIVE_MOTOR_ID = 2;
     final int BACK_LEFT_DRIVE_MOTOR_ID = 3;
     final int BACK_RIGHT_DRIVE_MOTOR_ID = 4;
 
-    // Magic numbers for BallShootThread Motor IDs.
+    // Magic numbers for BallShooter Motor IDs.
     final int FRONT_LEFT_SHOOTER_MOTOR_ID = 5;
     final int FRONT_RIGHT_SHOOTER_MOTOR_ID = 6;
     final int BACK_LEFT_SHOOTER_MOTOR_ID = 7;
     final int BACK_RIGHT_SHOOTER_MOTOR_ID = 8;
 
-    // Magic numbers for the ID for the worm drive Falcon 500.
+    // Magic numbers for the ID for the WormDrive motors.
     final int RIGHT_WORM_DRIVE_MOTOR_ID = 9;
     final int LEFT_WORM_DRIVE_MOTOR_ID = 10;
 

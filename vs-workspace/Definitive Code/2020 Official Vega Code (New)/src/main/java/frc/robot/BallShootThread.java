@@ -48,6 +48,7 @@ class BallShootThread extends BallShooter implements Runnable {
             // and the triangle button is NOT pressed...
             if ((PS4.getRawButton(constants.PS4_CIRCLE_BUTTON) == true)
                     && (PS4.getRawButton(constants.PS4_TRIANGLE_BUTTON) == false)) {
+
                 // Shoot balls with front motors at 100% and back motors at 40%.
                 ballShoot(1, 0.4);
 
@@ -55,9 +56,12 @@ class BallShootThread extends BallShooter implements Runnable {
                 // and the triangle button IS pressed...
             } else if ((PS4.getRawButton(constants.PS4_CIRCLE_BUTTON) == true)
                     && (PS4.getRawButton(constants.PS4_TRIANGLE_BUTTON) == true)) {
+
                 // Run the ball shooter motors backwards at 100% and back motors at 40%.
                 ballShoot(-1, -0.4);
+
             } else {
+
                 // Else, don't run the motors.
                 ballShoot(0, 0);
             }

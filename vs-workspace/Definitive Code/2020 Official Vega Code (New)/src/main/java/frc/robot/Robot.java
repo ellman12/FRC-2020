@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////////////////
 //
 // Purpose: The main file that links every other class and thread
-// together, plus some other stuff.
+// together, plus some other stuff like.
 //
 // Authors: Elliott DuCharme and Larry Basegio.
 //
@@ -57,12 +57,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-
-    // Run auto stuff only once.
-    if (autoOnce == true) {
-      // Auto code here...
-      autoOnce = false;
-    }
 
   }
 

@@ -3,13 +3,13 @@
 /////////////////////////////////////////////////////////////////////
 //
 // Purpose: Thread used for controlling the worm drive for raising and
-// lowering the ball shooter, and also the climb.
+// lowering the ball shooter.
 //
 // Authors: Elliot DuCharme and Larry Basegio.
 //
 // Environment: Microsoft VSCode Java
 //
-// Remarks: Created on 2/08/2020 at 5:47 PM.
+// Remarks: Created on 2/29/2020.
 //
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////

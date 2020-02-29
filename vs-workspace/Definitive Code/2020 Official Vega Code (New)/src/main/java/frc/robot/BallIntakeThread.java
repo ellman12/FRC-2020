@@ -4,13 +4,11 @@
 //
 // Purpose: Thread used for running Ball Intake stuff.
 //
-// Authors: Elliot DuCharme.
+// Authors: Elliot DuCharme and Larry Basegio.
 //
 // Environment: Microsoft VSCode Java
 //
-// Remarks: Created on 2/08/2020.
-// This for the first argument wasn't working, even though in
-// DriveThread that is how we do it...?
+// Remarks: Created on 2/29/2020.
 //
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -51,8 +49,11 @@ class BallIntakeThread extends BallIntake implements Runnable {
                 // Else if the driver pushes the left bumper button on the PS4 Controller,
                 // run the intake motors backwards (outward).
             } else if (driveThread.PS4.getRawButton(constants.PS4_LEFT_BUMPER)) {
+
                 intakeBalls(-0.65, -0.5);
+
             } else {
+
                 // Else, set the motors to 0 (don't run them).
                 intakeBalls(0, 0);
             }
