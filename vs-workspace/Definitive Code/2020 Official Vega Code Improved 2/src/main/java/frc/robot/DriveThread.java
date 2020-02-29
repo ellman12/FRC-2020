@@ -15,34 +15,29 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-// Creating the class that implements the Runnable interface.
-class DriveThread implements Runnable {
+import edu.wpi.first.wpilibj.DriverStation;
 
-    // Used for being able to access Robot.java stuff in here.
-    Robot robot = new Robot();
+// Creating the class that extends RobotDrive and implements the Runnable interface.
+class DriveThread extends RobotDrive implements Runnable {
 
     // Creating an instance of the Thread class, named driveThread.
     Thread driveThread;
 
+    // Getting a reference to the Runtime class.
+    // We use this stuff for garbage collection.
+    Runtime runtime = Runtime.getRuntime();
+
+    // Doubles used for the joystick and analog trigger values.
+    double leftXAxisPS4, leftYAxisPS4, zAxisTriggers;
+
     // Used for the Mecanum drive deadband.
-    final double PS4_TRIGGER_DEADBAND_POSITIVE = 0.2;
-    final double PS4_TRIGGER_DEADBAND_NEGATIVE = -0.2;
+    final double PS4_MEC_DRIVE_DEADBAND = 0.2;
 
     // Constructor.
     DriveThread(String name) {
 
         // Name of the Thread.
         String threadName = name;
-
-        // Getting a reference to the Runtime class.
-        // We use this stuff for garbage collection.
-        // According to page 461 chapter 11 of Java: The Complete Reference 9th edition
-        // by Herbert Schildt, you can't instantiate a Runtime object.
-        // But, you can get a reference to it. Using this, you can control
-        // the state and behavior of the Java Virtual Machine.
-        // Lots of cool functions in this section: totalMemory(), freeMemory(), etc.
-        // Worth a look.
-        Runtime runtime = Runtime.getRuntime();
 
         // Actually creating the Thread.
         driveThread = new Thread(this, threadName);
@@ -55,27 +50,36 @@ class DriveThread implements Runnable {
         // While the Thread is alive, do stuff.
         while (driveThread.isAlive() == true) {
 
-            // Long if statement that acts as a deadband for the drive.
-            // Basically, if the X, Y, OR Z axis values are greater than 0.2, OR -0.2, run
-            // the Mecanum drive. Else, don't run the Mecanum drive stuff.
-
-            // The arguments for this function won't match up with the actual joystick axes
-            // for some reason.
-            // Depending on the robot, you might have to experiment with these.
-            // Z = Right joystick X axis (changed to the analog triggers using
-            // getZAxisTriggers()); Y = Left joystick Y axis; X = left joystick X
-            // axis. In this case, ySpeed is the strafing stuff, xSpeed is for driving
-            // forward/backward, and zRotation is for turning left/right.
-            if (((robot.PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE)
-                    || (robot.PS4.getY() > PS4_TRIGGER_DEADBAND_POSITIVE)
-                    || (getZAxisTriggers() > PS4_TRIGGER_DEADBAND_POSITIVE))
-                    || ((robot.PS4.getX() < PS4_TRIGGER_DEADBAND_NEGATIVE)
-                            || (robot.PS4.getY() < PS4_TRIGGER_DEADBAND_NEGATIVE)
-                            || (getZAxisTriggers() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
-                robot.robotDrive.mecanumDrive.driveCartesian(-robot.PS4.getY(), getZAxisTriggers(), robot.PS4.getX());
+            if (DriverStation.getInstance().isAutonomous()) {
+                // TODO Auto stuff here...
             } else {
-                // Don't run the drive motors.
-                robot.robotDrive.mecanumDrive.driveCartesian(0, 0, 0);
+
+                // Getting the values of these to be used for Mecanum drive stuff.
+                leftXAxisPS4 = PS4.getX();
+                leftYAxisPS4 = PS4.getY();
+                zAxisTriggers = getZAxisTriggers();
+
+                /*
+                 * Long if statement that acts as a deadband for the drive. Basically, if the
+                 * absolute value of X, Y, OR Z axis values are greater than 0.2, run the
+                 * Mecanum drive. Else, don't run the Mecanum drive stuff. The arguments for
+                 * this function don't match up with the actual joystick axes for some reason.
+                 * Depending on the robot, you might have to experiment with these. Z = Right
+                 * joystick X axis (changed to the analog triggers using getZAxisTriggers()); Y
+                 * = Left joystick Y axis; X = left joystick X axis. In this case, ySpeed is the
+                 * strafing stuff, xSpeed is for driving forward/backward, and zRotation is for
+                 * turning left/right.
+                 */
+
+                if ((Math.abs(leftXAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
+                        || (Math.abs(leftYAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
+                        || (Math.abs(zAxisTriggers) > PS4_MEC_DRIVE_DEADBAND)) {
+                    mecanumDrive.driveCartesian(-PS4.getY(), getZAxisTriggers(), PS4.getX());
+                } else {
+                    // Don't run the drive motors.
+                    mecanumDrive.driveCartesian(0, 0, 0);
+                }
+
             }
 
         }
@@ -110,8 +114,8 @@ class DriveThread implements Runnable {
         // Axes 2 and 3 are the left and right analog triggers, respectively.
         // You have to add 1 because the triggers start at -1 and go to 1.
         // Adding 1 makes them start at 0 when not being pressed.
-        leftAnalogTrigger = robot.PS4.getRawAxis(3) + 1;
-        rightAnalogTrigger = robot.PS4.getRawAxis(4) + 1;
+        leftAnalogTrigger = PS4.getRawAxis(3) + 1;
+        rightAnalogTrigger = PS4.getRawAxis(4) + 1;
 
         // Do the math for getting the value for strafing.
         // Example 1: if the driver presses the right one down, that value will be 1 - 0

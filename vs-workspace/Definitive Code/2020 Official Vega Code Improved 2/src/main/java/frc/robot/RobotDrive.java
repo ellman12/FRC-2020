@@ -24,20 +24,14 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
-class RobotDrive {
-
-    // Used for being able to access Robot.java stuff in here.
-    Robot robot = new Robot();
+// This class extends the Robot class so it can access stuff in there.
+class RobotDrive extends Robot {
 
     // Creating the drive motors.
-    CANSparkMax frontLeftDriveMotor = new CANSparkMax(robot.varsAndConsts.FRONT_LEFT_DRIVE_MOTOR_ID,
-            MotorType.kBrushless);
-    CANSparkMax frontRightDriveMotor = new CANSparkMax(robot.varsAndConsts.FRONT_RIGHT_DRIVE_MOTOR_ID,
-            MotorType.kBrushless);
-    CANSparkMax backLeftDriveMotor = new CANSparkMax(robot.varsAndConsts.BACK_LEFT_DRIVE_MOTOR_ID,
-            MotorType.kBrushless);
-    CANSparkMax backRightDriveMotor = new CANSparkMax(robot.varsAndConsts.BACK_RIGHT_DRIVE_MOTOR_ID,
-            MotorType.kBrushless);
+    CANSparkMax frontLeftDriveMotor = new CANSparkMax(varsAndConsts.FRONT_LEFT_DRIVE_MOTOR_ID, MotorType.kBrushless);
+    CANSparkMax frontRightDriveMotor = new CANSparkMax(varsAndConsts.FRONT_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless);
+    CANSparkMax backLeftDriveMotor = new CANSparkMax(varsAndConsts.BACK_LEFT_DRIVE_MOTOR_ID, MotorType.kBrushless);
+    CANSparkMax backRightDriveMotor = new CANSparkMax(varsAndConsts.BACK_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless);
 
     // Creating an object of the MecanumDrive class.
     // This links the 4 drive motors together.
@@ -239,7 +233,7 @@ class RobotDrive {
     }
 
     /////////////////////////////////////////////////////////////////////
-    // Function:
+    // Function: driveBwd(...)
     /////////////////////////////////////////////////////////////////////
     //
     // Purpose: Used for driving backward in autonomous.

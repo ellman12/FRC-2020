@@ -36,7 +36,6 @@ class BallShootThread extends BallShooter implements Runnable {
         // Actually creating the Thread.
         ballShootThread = new Thread(ballShootThread, threadName);
         ballShootThread.start(); // Start the Thread.
-
     }
 
     // Function that actually runs stuff.
