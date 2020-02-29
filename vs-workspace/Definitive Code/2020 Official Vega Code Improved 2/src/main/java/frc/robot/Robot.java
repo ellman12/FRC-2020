@@ -27,6 +27,12 @@ public class Robot extends TimedRobot {
   Joystick PS4 = new Joystick(0);
 
   // Creating instances of these classes, so everything is all linked together.
+  // When Robot is extended in other classes, all of this stuff can be accessed
+  // in those files, too.
+  BallIntake ballIntake = new BallIntake();
+  // TODO BallIntakeThread
+  BallShooter ballShooter = new BallShooter();
+  BallShootThread ballShootThread = new BallShootThread("ballShootThread");
   DriveThread driveThread = new DriveThread("driveThread");
   RobotDrive robotDrive = new RobotDrive();
   VarsAndConsts varsAndConsts = new VarsAndConsts();
