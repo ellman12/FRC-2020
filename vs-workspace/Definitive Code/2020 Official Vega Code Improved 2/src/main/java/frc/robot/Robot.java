@@ -28,18 +28,20 @@ public class Robot extends TimedRobot {
 
   // Creating instances of these classes, so everything is all linked together.
   // When Robot is extended in other classes, all of this stuff can be accessed
-  // in those files, too.
+  // in those files, too. Inheritance is amazing and works infinitely better than
+  // doing something like Robot robot = new Robot(); That is terrible and nasty.
   BallIntake ballIntake = new BallIntake();
-  // TODO BallIntakeThread
+  BallIntakeThread ballIntakeThread = new BallIntakeThread("ballIntakeThread");
   BallShooter ballShooter = new BallShooter();
   BallShootThread ballShootThread = new BallShootThread("ballShootThread");
+  Constants constants = new Constants();
   DriveThread driveThread = new DriveThread("driveThread");
   RobotDrive robotDrive = new RobotDrive();
-  Constants constants = new Constants();
+  WormDrive wormDrive = new WormDrive();
+  WormDriveThread wormDriveThread = new WormDriveThread("wormDriveThread");
 
   @Override
   public void robotInit() {
-
   }
 
   @Override
@@ -49,8 +51,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    // Put SmartDashboard stuff here...
-
+    // Put SmartDashboard stuff here, so the SD can get that stuff and the program
+    // can use that in autoPeriodic()...
   }
 
   @Override
@@ -66,7 +68,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-
   }
 
   @Override

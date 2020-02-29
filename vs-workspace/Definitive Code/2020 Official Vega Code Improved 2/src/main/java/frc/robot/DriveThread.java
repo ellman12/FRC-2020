@@ -24,7 +24,6 @@ class DriveThread extends RobotDrive implements Runnable {
     Thread driveThread;
 
     // Getting a reference to the Runtime class.
-    // We use this stuff for garbage collection.
     Runtime runtime = Runtime.getRuntime();
 
     // Doubles used for the joystick and analog trigger values.

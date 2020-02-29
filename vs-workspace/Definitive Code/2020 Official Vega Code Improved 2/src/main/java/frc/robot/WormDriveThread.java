@@ -22,7 +22,6 @@ class WormDriveThread extends WormDrive implements Runnable {
     Thread wormDriveThread;
 
     // Getting a reference to the Runtime class.
-    // We use this stuff for garbage collection.
     Runtime runtime = Runtime.getRuntime();
 
     // WormDriveThread constructor.
