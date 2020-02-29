@@ -26,7 +26,8 @@ class DriveThread extends RobotDrive implements Runnable {
     // Getting a reference to the Runtime class.
     Runtime runtime = Runtime.getRuntime();
 
-    // Doubles used for the joystick and analog trigger values.
+    // Doubles used for the joystick and analog trigger
+    // values in the Mec drive deadband.
     double leftXAxisPS4, leftYAxisPS4, zAxisTriggers;
 
     // Used for the Mecanum drive deadband.

@@ -29,7 +29,6 @@ class BallIntake extends Robot {
 
         // Setting the intake Falcon 500 motor in brake mode.
         ballIntakeMotor.setNeutralMode(NeutralMode.Brake);
-
     }
 
     /////////////////////////////////////////////////////////////////////

@@ -59,13 +59,13 @@ class WormDrive extends Robot {
 
         // If the driver pushes the Square Button on the PS4 Controller,
         // set the worm drive motors to go backwards (lower it).
-        if (driveThread.PS4.getRawButton(constants.PS4_X_BUTTON) == true) {
+        if (PS4.getRawButton(constants.PS4_X_BUTTON) == true) {
 
             wormDriveMotors.set(-wormDriveSpeed);
 
             // If the driver pushes the Triangle Button on the PS4 Controller,
             // set the worm drive motors to go forwards (raise it up).
-        } else if (driveThread.PS4.getRawButton(constants.PS4_SQUARE_BUTTON) == true) {
+        } else if (PS4.getRawButton(constants.PS4_SQUARE_BUTTON) == true) {
 
             wormDriveMotors.set(wormDriveSpeed);
         }
@@ -73,10 +73,10 @@ class WormDrive extends Robot {
         // If the driver is an idiot and is pressing BOTH the Square Button AND the
         // Triangle Button at the same time, OR (||) if the driver is pushing neither
         // button, set the motor speed to 0.
-        else if (((driveThread.PS4.getRawButton(constants.PS4_X_BUTTON) == true)
-                && (driveThread.PS4.getRawButton(constants.PS4_SQUARE_BUTTON) == true))
-                || ((driveThread.PS4.getRawButton(constants.PS4_X_BUTTON) == false)
-                        && (driveThread.PS4.getRawButton(constants.PS4_SQUARE_BUTTON) == false))) {
+        else if (((PS4.getRawButton(constants.PS4_X_BUTTON) == true)
+                && (PS4.getRawButton(constants.PS4_SQUARE_BUTTON) == true))
+                || ((PS4.getRawButton(constants.PS4_X_BUTTON) == false)
+                        && (PS4.getRawButton(constants.PS4_SQUARE_BUTTON) == false))) {
 
             wormDriveMotors.set(0);
         }
