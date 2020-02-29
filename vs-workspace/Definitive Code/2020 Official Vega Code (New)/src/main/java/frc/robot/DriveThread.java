@@ -88,6 +88,7 @@ class DriveThread extends RobotDrive implements Runnable {
                  * turning left/right.
                  */
 
+                // TODO Try using drive Cartesian with the driveGyro angle parameter.
                 if (((Math.abs(leftXAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
                         || (Math.abs(leftYAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
                         || (Math.abs(zAxisTriggers) > PS4_MEC_DRIVE_DEADBAND))) {
