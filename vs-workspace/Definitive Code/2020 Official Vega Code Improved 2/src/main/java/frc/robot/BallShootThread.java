@@ -15,25 +15,15 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-class BallShootThread implements Runnable {
+// This Thread extends BallShooter (which also extends Robot).
+class BallShootThread extends BallShooter implements Runnable {
 
     // Creating instance of the Thread class by
     // creating a thread (reserving memory for this object).
     Thread ballShootThread;
 
-    // Creating an instance of the Robot class in here.
-    // Used for accessing the other Thread classes,
-    // which are created in that file.
-    Robot robot = new Robot();
-
     // Getting a reference to the Runtime class.
     // We use this stuff for garbage collection.
-    // According to page 461 chapter 11 of Java: The Complete Reference 9th edition
-    // by Herbert Schildt, you can't instantiate a Runtime object.
-    // But, you can get a reference to it. Using this, you can control
-    // the state and behavior of the Java Virtual Machine.
-    // Lots of cool functions in this section: totalMemory(), freeMemory(), etc.
-    // Worth a look.
     Runtime runtime = Runtime.getRuntime();
 
     // BallShootThread constructor.
@@ -54,6 +44,15 @@ class BallShootThread implements Runnable {
 
         // While the Thread is alive, do stuff.
         while (ballShootThread.isAlive() == true) {
+
+            // If the circle button on the PS4 is pressed...
+            if (PS4.getRawButton(varsAndConsts.PS4_CIRCLE_BUTTON)) {
+                // Shoot balls with front motors at 100% and back motors at 40%.
+                ballShoot(1, 0.4);
+            } else {
+                // Else, don't run the motors.
+                ballShoot(0, 0);
+            }
 
         }
 
