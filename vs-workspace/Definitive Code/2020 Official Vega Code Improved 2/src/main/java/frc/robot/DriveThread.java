@@ -26,6 +26,9 @@ class DriveThread extends RobotDrive implements Runnable {
     // Getting a reference to the Runtime class.
     Runtime runtime = Runtime.getRuntime();
 
+    // Toggle for if the drive joystick axes are inverted or not.
+    boolean invertDriveToggle = false;
+
     // Doubles used for the joystick and analog trigger
     // values in the Mec drive deadband.
     double leftXAxisPS4, leftYAxisPS4, zAxisTriggers;
@@ -59,6 +62,12 @@ class DriveThread extends RobotDrive implements Runnable {
                 leftYAxisPS4 = PS4.getY();
                 zAxisTriggers = getZAxisTriggers();
 
+                // If the driver presses the Triangle button on the PS4,
+                // change the variable to its opposite state.
+                if (PS4.getRawButton(constants.PS4_TRIANGLE_BUTTON)) {
+                    invertDriveToggle = !invertDriveToggle;
+                }
+
                 /*
                  * Long if statement that acts as a deadband for the drive. Basically, if the
                  * absolute value of X, Y, OR Z axis values are greater than 0.2, run the
@@ -71,10 +80,19 @@ class DriveThread extends RobotDrive implements Runnable {
                  * turning left/right.
                  */
 
-                if ((Math.abs(leftXAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
+                if (((Math.abs(leftXAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
                         || (Math.abs(leftYAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
-                        || (Math.abs(zAxisTriggers) > PS4_MEC_DRIVE_DEADBAND)) {
-                    mecanumDrive.driveCartesian(-PS4.getY(), getZAxisTriggers(), PS4.getX());
+                        || (Math.abs(zAxisTriggers) > PS4_MEC_DRIVE_DEADBAND))) {
+                    // If the invert drive toggle is false, drive normally.
+                    if (invertDriveToggle == false) {
+                        mecanumDrive.driveCartesian(-leftYAxisPS4, getZAxisTriggers(), leftXAxisPS4);
+                    }
+
+                    // If the toggle is true, the same function but the signs are different.
+                    else if (invertDriveToggle == true) {
+                        mecanumDrive.driveCartesian(leftYAxisPS4, -getZAxisTriggers(), -leftXAxisPS4);
+                    }
+
                 } else {
                     // Don't run the drive motors.
                     mecanumDrive.driveCartesian(0, 0, 0);

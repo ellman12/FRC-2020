@@ -68,7 +68,7 @@ class RobotDrive extends Robot {
         // backLeftDriveMotor.setIdleMode(IdleMode.kCoast);
         // backRightDriveMotor.setIdleMode(IdleMode.kCoast);
 
-        // Putting the drive in brake mode.
+        // Putting the drive motors in brake mode.
         frontLeftDriveMotor.setIdleMode(IdleMode.kBrake);
         frontRightDriveMotor.setIdleMode(IdleMode.kBrake);
         backLeftDriveMotor.setIdleMode(IdleMode.kBrake);
