@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
   BallShootThread ballShootThread = new BallShootThread("ballShootThread");
   DriveThread driveThread = new DriveThread("driveThread");
   RobotDrive robotDrive = new RobotDrive();
-  VarsAndConsts varsAndConsts = new VarsAndConsts();
+  Constants constants = new Constants();
 
   @Override
   public void robotInit() {

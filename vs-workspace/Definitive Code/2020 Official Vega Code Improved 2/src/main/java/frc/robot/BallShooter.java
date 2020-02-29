@@ -5,7 +5,7 @@
 // Purpose: Houses motors, functions and other stuff for shooting
 // lemons (power cells).
 //
-// Authors: Elliott DuCharme.
+// Authors: Elliott DuCharme and Larry Basegio.
 //
 // Environment: Microsoft VSCode Java
 //
@@ -26,10 +26,10 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 class BallShooter extends Robot {
 
     // Creating the 4 shooter Falcon 500s, and assigning them their ID's.
-    WPI_TalonFX frontLeftShooterMotor = new WPI_TalonFX(varsAndConsts.FRONT_LEFT_SHOOTER_MOTOR_ID);
-    WPI_TalonFX frontRightShooterMotor = new WPI_TalonFX(varsAndConsts.FRONT_RIGHT_SHOOTER_MOTOR_ID);
-    WPI_TalonFX backLeftShooterMotor = new WPI_TalonFX(varsAndConsts.BACK_LEFT_SHOOTER_MOTOR_ID);
-    WPI_TalonFX backRightShooterMotor = new WPI_TalonFX(varsAndConsts.BACK_RIGHT_SHOOTER_MOTOR_ID);
+    WPI_TalonFX frontLeftShooterMotor = new WPI_TalonFX(constants.FRONT_LEFT_SHOOTER_MOTOR_ID);
+    WPI_TalonFX frontRightShooterMotor = new WPI_TalonFX(constants.FRONT_RIGHT_SHOOTER_MOTOR_ID);
+    WPI_TalonFX backLeftShooterMotor = new WPI_TalonFX(constants.BACK_LEFT_SHOOTER_MOTOR_ID);
+    WPI_TalonFX backRightShooterMotor = new WPI_TalonFX(constants.BACK_RIGHT_SHOOTER_MOTOR_ID);
 
     // Creating the SpeedControllerGroups linking the front and back
     // shooter motors together.

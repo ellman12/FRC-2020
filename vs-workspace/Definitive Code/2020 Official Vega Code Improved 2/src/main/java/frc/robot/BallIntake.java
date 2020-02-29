@@ -5,12 +5,11 @@
 // Purpose: Houses motors, functions and other stuff for shooting
 // lemons (power cells).
 //
-// Authors: Elliott DuCharme.
+// Authors: Elliott DuCharme and Larry Basegio.
 //
 // Environment: Microsoft VSCode Java
 //
 // Remarks: Created on 2/29/2020.
-// First tried using inheritance in this file on 2/29/2020.
 //
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -24,7 +23,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 class BallIntake extends Robot {
 
     // Creating the Falcon 500 for the ball intake, and assigning it an ID.
-    WPI_TalonFX ballIntakeMotor = new WPI_TalonFX(varsAndConsts.BALL_INTAKE_MOTOR_ID);
+    WPI_TalonFX ballIntakeMotor = new WPI_TalonFX(constants.BALL_INTAKE_MOTOR_ID);
 
     BallIntake() {
 

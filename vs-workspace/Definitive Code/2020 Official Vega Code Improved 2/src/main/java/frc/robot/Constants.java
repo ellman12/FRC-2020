@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////
-// File: VarsAndConsts.java
+// File: Constants.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: Houses miscellaneous variables and constants that don't
-// belong elsewhere.
+// Purpose: Houses constants that don't belong elsewhere.
 //
 // Authors: Elliott DuCharme and Larry Basegio.
 //
@@ -15,11 +14,8 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
-class VarsAndConsts {
+class Constants {
 
-    ///////////////////// VARIABLES ////////////////////
-
-    ///////////////////// CONSTANTS ////////////////////
     // Magic numbers for DriveThread Motor IDs.
     final int FRONT_LEFT_DRIVE_MOTOR_ID = 1;
     final int FRONT_RIGHT_DRIVE_MOTOR_ID = 2;

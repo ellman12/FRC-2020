@@ -28,10 +28,10 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 class RobotDrive extends Robot {
 
     // Creating the drive motors.
-    CANSparkMax frontLeftDriveMotor = new CANSparkMax(varsAndConsts.FRONT_LEFT_DRIVE_MOTOR_ID, MotorType.kBrushless);
-    CANSparkMax frontRightDriveMotor = new CANSparkMax(varsAndConsts.FRONT_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless);
-    CANSparkMax backLeftDriveMotor = new CANSparkMax(varsAndConsts.BACK_LEFT_DRIVE_MOTOR_ID, MotorType.kBrushless);
-    CANSparkMax backRightDriveMotor = new CANSparkMax(varsAndConsts.BACK_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless);
+    CANSparkMax frontLeftDriveMotor = new CANSparkMax(constants.FRONT_LEFT_DRIVE_MOTOR_ID, MotorType.kBrushless);
+    CANSparkMax frontRightDriveMotor = new CANSparkMax(constants.FRONT_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless);
+    CANSparkMax backLeftDriveMotor = new CANSparkMax(constants.BACK_LEFT_DRIVE_MOTOR_ID, MotorType.kBrushless);
+    CANSparkMax backRightDriveMotor = new CANSparkMax(constants.BACK_RIGHT_DRIVE_MOTOR_ID, MotorType.kBrushless);
 
     // Creating an object of the MecanumDrive class.
     // This links the 4 drive motors together.
