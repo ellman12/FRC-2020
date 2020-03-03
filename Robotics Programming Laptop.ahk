@@ -58,6 +58,11 @@ Send, {Space}meaning
 return
 #If
 
+;Close Shuffleboard with Shift + F4.
++F4::
+WinClose, Shuffleboard
+return
+
 ;Sends the current date and time in this format: 10/31/2019 07:43 PM.
 :*:datetime::
 FormatTime, CurrentDateTime,, M/dd/yyyy h:mm tt
