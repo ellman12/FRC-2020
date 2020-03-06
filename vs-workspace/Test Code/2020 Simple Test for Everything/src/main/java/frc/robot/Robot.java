@@ -128,9 +128,9 @@ public class Robot extends TimedRobot {
     // bLshooter.set(0);
     // }
 
-    if (PS4.getRawButton(5)) { // l bumper
+    if (PS4.getRawButton(5)) { // left bumper
       wormDrive.set(0.4); // down
-    } else if (PS4.getRawButton(6)) { // r bumper
+    } else if (PS4.getRawButton(6)) { // right bumper
       wormDrive.set(-0.4); // up
     } else {
       wormDrive.set(0);

@@ -185,6 +185,21 @@ return
 WinMaximize, A
 return
 
+;Open battery menu thing.
+#b::
+MouseGetPos, winBMouseX, winBMouseY
+MouseMove, 1670, 1055, 0
+Sleep 300
+Send, {Click}
+return
+
+;Open Wi-Fi menu thing.
+#w::
+MouseGetPos, winWMouseX, winWMouseY
+MouseMove, 1732, 1055, 0
+Sleep 300
+Send, {Click}
+return
 
 ;**************************APPLICATION SWITCHER STUFF***************************************
 F1::
