@@ -2,12 +2,12 @@
 // File: BallIntake.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: Houses motors, functions and other stuff for shooting
+// Purpose: Houses motors, functions, and other stuff for intaking
 // lemons (power cells).
 //
 // Authors: Elliott DuCharme and Larry Basegio.
 //
-// Environment: Microsoft VSCode Java
+// Environment: Microsoft VSCode Java.
 //
 // Remarks: Created on 2/29/2020.
 //

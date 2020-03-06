@@ -6,7 +6,7 @@
 //
 // Authors: Elliot DuCharme and Larry Basegio.
 //
-// Environment: Microsoft VSCode Java
+// Environment: Microsoft VSCode Java.
 //
 // Remarks: Created on 2/29/2020.
 //
@@ -14,6 +14,8 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+// Extends the Thread's base class (BallIntake in this case), and uses
+// the functions and stuff created in there.
 class BallIntakeThread extends BallIntake implements Runnable {
 
     // Creating instance of the Thread class by

@@ -7,7 +7,7 @@
 //
 // Authors: Elliott DuCharme and Larry Basegio.
 //
-// Environment: Microsoft VSCode Java
+// Environment: Microsoft VSCode Java.
 //
 // Remarks: Created on 2/29/2020.
 //

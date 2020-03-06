@@ -107,7 +107,7 @@ return
 Send, https://www.revrobotics.com/content/sw/max/sdk/REVRobotics.json
 return
 
-;Send the entire Robot.java template.txt file. VSCode doesn't format it at all, so in VSCod you have to do Alt + Shift + f. Works great, though.
+;Send the entire Robot.java template.txt file. VSCode doesn't format it at all, so in VSCode you have to do Alt + Shift + f. Works great, though.
 ^+r::
 
 SendRaw,package frc.robot`;`n`nimport edu.wpi.first.wpilibj.TimedRobot`;`n`npublic class Robot extends TimedRobot {`n`n  @Override`n  public void robotInit() {`n`n  }`n`n  @Override`n  public void robotPeriodic() {`n  }`n`n  @Override`n  public void autonomousInit() {`n`n  }`n`n  @Override`n  public void autonomousPeriodic() {`n`n  }`n`n  @Override`n  public void teleopPeriodic() {`n`n  }`n`n  @Override`n  public void testPeriodic() {`n  }`n}
@@ -436,7 +436,7 @@ PrevWindowF7(){
 
 ;Send the file copy-and-paste.
 ^#f::
-Send, /////////////////////////////////////////////////////////////////////{Enter}// File: {Enter}/////////////////////////////////////////////////////////////////////{Enter}//{Enter}// Purpose: {Enter}//{Enter}// Authors: {Enter}//{Enter}// Environment: Microsoft VSCode Java{Enter}//{Enter}// Remarks: {Enter}//{Enter}/////////////////////////////////////////////////////////////////////{Enter}/////////////////////////////////////////////////////////////////////{Enter}
+Send, /////////////////////////////////////////////////////////////////////{Enter}// File: {Enter}/////////////////////////////////////////////////////////////////////{Enter}//{Enter}// Purpose: {Enter}//{Enter}// Authors: {Enter}//{Enter}// Environment: Microsoft VSCode Java.{Enter}//{Enter}// Remarks: {Enter}//{Enter}/////////////////////////////////////////////////////////////////////{Enter}/////////////////////////////////////////////////////////////////////{Enter}
 return
 
 ;Send the method (function) copy-and-paste.

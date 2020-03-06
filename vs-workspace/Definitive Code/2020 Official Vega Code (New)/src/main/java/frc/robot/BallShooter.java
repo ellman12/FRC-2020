@@ -2,12 +2,12 @@
 // File: BallShooter.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: Houses motors, functions and other stuff for shooting
+// Purpose: Houses motors, functions, and other stuff for shooting
 // lemons (power cells).
 //
 // Authors: Elliott DuCharme and Larry Basegio.
 //
-// Environment: Microsoft VSCode Java
+// Environment: Microsoft VSCode Java.
 //
 // Remarks: Created on 2/29/2020.
 // First tried using inheritance in this file on 2/29/2020.
@@ -45,7 +45,7 @@ class BallShooter extends Robot {
         backLeftShooterMotor.setNeutralMode(NeutralMode.Brake);
         backRightShooterMotor.setNeutralMode(NeutralMode.Brake);
 
-        // Invert shooter motors, so they spin the right way.
+        // Invert some of the motors, so they spin the right way.
         frontRightShooterMotor.setInverted(true);
         backRightShooterMotor.setInverted(true);
     }

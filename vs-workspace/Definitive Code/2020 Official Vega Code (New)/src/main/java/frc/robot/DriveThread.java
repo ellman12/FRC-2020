@@ -7,7 +7,7 @@
 //
 // Authors: Elliott DuCharme and Larry Basegio.
 //
-// Environment: Microsoft VSCode Java
+// Environment: Microsoft VSCode Java.
 //
 // Remarks: Created on 2/27/2020.
 //
@@ -53,12 +53,12 @@ class DriveThread extends RobotDrive implements Runnable {
         // While the Thread is alive, do stuff.
         while (driveThread.isAlive() == true) {
 
+            // If we're in autonomous, run auto code. Else, normal joystick drive stuff.
             if (DriverStation.getInstance().isAutonomous()) {
-                // TODO Auto stuff here...
 
                 // Run auto stuff only once.
                 if (autoOnce == true) {
-                    // Auto code here...
+                    // TODO Auto stuff here...
                     autoOnce = false;
                 }
 
@@ -89,6 +89,8 @@ class DriveThread extends RobotDrive implements Runnable {
                  */
 
                 // TODO Try using drive Cartesian with the driveGyro angle parameter.
+                // If either axis is being pressed, run the drive in 1 of 2 ways,
+                // depending on the toggle.
                 if (((Math.abs(leftXAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
                         || (Math.abs(leftYAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
                         || (Math.abs(zAxisTriggers) > PS4_MEC_DRIVE_DEADBAND))) {
