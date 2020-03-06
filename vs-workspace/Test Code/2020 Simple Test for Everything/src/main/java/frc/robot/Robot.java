@@ -2,12 +2,13 @@
 // File: Robot.java
 /////////////////////////////////////////////////////////////////////
 //
-// Purpose: This program is for testing Mecanum Drive for the 2020
-// FRC game, and also other random stuff.
+// Purpose: This program is for testing miscellaneous stuff on the
+// 2020 Robot. This code is terrible and definitely a perfect
+// example of spaghetti code.
 //
-// Authors: Elliott DuCharme of FRC Team #5914
+// Authors: Elliott DuCharme.
 //
-// Environment: Microsoft VSCode Java
+// Environment: Microsoft VSCode Java.
 //
 // Remarks: 
 //
@@ -21,6 +22,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -134,6 +136,22 @@ public class Robot extends TimedRobot {
       wormDrive.set(-0.4); // up
     } else {
       wormDrive.set(0);
+    }
+
+    // Switch between camera modes for the cameras.
+    if (PS4.getRawButton(1)) {
+
+      // Sets the camera mode display thing to 0: side-by-side.
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
+
+      // Sets the camera mode display thing to 1: PiP Main - The secondary camera
+      // stream is placed in the lower-right corner of the
+      // primary camera stream
+      // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
+
+      // Sets the camera mode display thing to 2: PiP Secondary - The primary camera
+      // stream is placed in the lower-right corner of the secondary camera stream
+      // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
     }
 
     // Long if statement that acts as a deadband for the drive.
