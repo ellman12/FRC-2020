@@ -189,7 +189,7 @@ return
 #b::
 MouseGetPos, winBMouseX, winBMouseY
 MouseMove, 1670, 1055, 0
-Sleep 300
+Sleep 200
 Send, {Click}
 return
 
@@ -197,7 +197,7 @@ return
 #w::
 MouseGetPos, winWMouseX, winWMouseY
 MouseMove, 1732, 1055, 0
-Sleep 300
+Sleep 200
 Send, {Click}
 return
 
