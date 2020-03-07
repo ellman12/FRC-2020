@@ -16,6 +16,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 
 // Creating the class that extends RobotDrive and implements the Runnable interface.
 class DriveThread extends RobotDrive implements Runnable {
@@ -74,6 +75,7 @@ class DriveThread extends RobotDrive implements Runnable {
                 // inverting the drive or un-inverting it.
                 if (PS4.getRawButton(constants.PS4_TRIANGLE_BUTTON)) {
                     invertDriveToggle = !invertDriveToggle;
+                    Timer.delay(0.1);
                 }
 
                 /*
@@ -97,12 +99,12 @@ class DriveThread extends RobotDrive implements Runnable {
 
                     // If the invert drive toggle is false, drive normally.
                     if (invertDriveToggle == false) {
-                        mecanumDrive.driveCartesian(-leftYAxisPS4, getZAxisTriggers(), leftXAxisPS4);
+                        mecanumDrive.driveCartesian(getZAxisTriggers(), -leftYAxisPS4, leftXAxisPS4);
                     }
 
                     // If the toggle is true, the same function but the signs are different.
                     else if (invertDriveToggle == true) {
-                        mecanumDrive.driveCartesian(leftYAxisPS4, -getZAxisTriggers(), -leftXAxisPS4);
+                        mecanumDrive.driveCartesian(-getZAxisTriggers(), leftYAxisPS4, -leftXAxisPS4);
                     }
 
                 } else {

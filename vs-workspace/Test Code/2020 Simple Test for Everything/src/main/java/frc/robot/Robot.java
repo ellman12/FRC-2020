@@ -25,15 +25,17 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public class Robot extends TimedRobot {
 
   // Creating the drive motors.
-  // CANSparkMax frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
+  CANSparkMax frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
 
   WPI_TalonFX climbFalcon;
 
@@ -44,25 +46,35 @@ public class Robot extends TimedRobot {
   WPI_TalonFX intake;
 
   // Creating the Mecanum Drive.
-  // MecanumDrive mecanumDrive;
+  MecanumDrive mecanumDrive;
 
   // Creating the PS4 controller.
   Joystick PS4;
 
   SpeedControllerGroup wormDrive;
 
-  // double PS4_L_Y;
+  // Doubles used for the joystick and analog trigger
+  // values in the Mecanum drive deadband.
+  double leftXAxisPS4, leftYAxisPS4, zAxisTriggers;
+
+  // Used for the Mecanum drive deadband.
+  final double PS4_MEC_DRIVE_DEADBAND = 0.2;
+
+  // Toggle for if the drive joystick axes are inverted or not.
+  boolean invertDriveToggle = false;
 
   // final double PS4_TRIGGER_DEADBAND_POSITIVE = 0.2;
   // final double PS4_TRIGGER_DEADBAND_NEGATIVE = -0.2;
 
+  ADXRS450_Gyro driveGyro = new ADXRS450_Gyro();
+
   @Override
   public void robotInit() {
 
-    // frontLeftMotor = new CANSparkMax(1, MotorType.kBrushless);
-    // frontRightMotor = new CANSparkMax(3, MotorType.kBrushless);
-    // backLeftMotor = new CANSparkMax(2, MotorType.kBrushless);
-    // backRightMotor = new CANSparkMax(4, MotorType.kBrushless);
+    frontLeftMotor = new CANSparkMax(1, MotorType.kBrushless);
+    frontRightMotor = new CANSparkMax(3, MotorType.kBrushless);
+    backLeftMotor = new CANSparkMax(2, MotorType.kBrushless);
+    backRightMotor = new CANSparkMax(4, MotorType.kBrushless);
 
     climbFalcon = new WPI_TalonFX(12);
 
@@ -83,11 +95,16 @@ public class Robot extends TimedRobot {
     // frontRightMotor.setInverted(true);
 
     // Adding the drive motors to the Mecanum Drive.
-    // mecanumDrive = new MecanumDrive(frontLeftMotor, backLeftMotor,
-    // frontRightMotor, backRightMotor);
+    mecanumDrive = new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
 
     // Assigning the PS4 controller the ID of 0.
     PS4 = new Joystick(0);
+
+    // Putting the drive motors in brake mode.
+    frontLeftMotor.setIdleMode(IdleMode.kBrake);
+    frontRightMotor.setIdleMode(IdleMode.kBrake);
+    backLeftMotor.setIdleMode(IdleMode.kBrake);
+    backRightMotor.setIdleMode(IdleMode.kBrake);
 
     fLShooter.setNeutralMode(NeutralMode.Brake);
     bLshooter.setNeutralMode(NeutralMode.Brake);
@@ -108,7 +125,7 @@ public class Robot extends TimedRobot {
     // backRightMotor.setInverted(true);
     // frontRightMotor.setInverted(true);
 
-    // mecanumDrive.setSafetyEnabled(false);
+    mecanumDrive.setSafetyEnabled(false);
 
   }
 
@@ -134,19 +151,19 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    // if (PS4.getRawButton(1) == true) {
-    // fLShooter.set(0.1);
-    // frshooter.set(-0.1);
-    // brshooter.set(-0.1);
-    // bLshooter.set(0.1);
-    // } else {
-    // fLShooter.set(0);
-    // frshooter.set(0);
-    // brshooter.set(0);
-    // bLshooter.set(0);
-    // }
+    if (PS4.getRawButton(3) == true) {
+      fLShooter.set(0.6);
+      frshooter.set(-0.6);
+      brshooter.set(-0.1);
+      bLshooter.set(0.1);
+    } else {
+      fLShooter.set(0);
+      frshooter.set(0);
+      brshooter.set(0);
+      bLshooter.set(0);
+    }
 
-    climbFalcon.set(-PS4.getRawAxis(5));
+    // climbFalcon.set(-PS4.getRawAxis(5));
 
     if (PS4.getRawButton(1)) {
       intake.set(-0.2);
@@ -158,56 +175,107 @@ public class Robot extends TimedRobot {
 
     if (PS4.getRawButton(5)) { // left bumper
       // wormDrive.set(0.4); // down
-      lworm.set(-0.1);
-      rworm.set(0.15);
+      lworm.set(-0.3);
+      // rworm.set(0.15);
     } else if (PS4.getRawButton(6)) { // right bumper
       // wormDrive.set(-0.4); // up
-      lworm.set(0.1);
-      rworm.set(-0.15);
+      lworm.set(0.3);
+      // rworm.set(-0.15);
     } else {
       wormDrive.set(0);
     }
 
-    // // Switch between camera modes for the cameras.
-    // if (PS4.getRawButton(1)) {
+    // Getting the values of these to be used for Mecanum drive stuff.
+    double leftXAxisPS4 = PS4.getX();
+    double leftYAxisPS4 = PS4.getY();
+    double zAxisTriggers = getZAxisTriggers();
 
-    // // Sets the camera mode display thing to 0: side-by-side.
-    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
+    // If the driver presses the Triangle button on the PS4,
+    // change the variable to its opposite state, thus either
+    // inverting the drive or un-inverting it.
+    if (PS4.getRawButton(4)) {
+      invertDriveToggle = !invertDriveToggle;
+      Timer.delay(0.2);
+    }
 
-    // // Sets the camera mode display thing to 1: PiP Main - The secondary camera
-    // // stream is placed in the lower-right corner of the
-    // // primary camera stream
-    // //
-    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
+    /*
+     * Long if statement that acts as a deadband for the drive. Basically, if the
+     * absolute value of X, Y, OR Z axis values are greater than 0.2, run the
+     * Mecanum drive. Else, don't run the Mecanum drive stuff. The arguments for
+     * this function don't match up with the actual joystick axes for some reason.
+     * Depending on the robot, you might have to experiment with these. Z = Right
+     * joystick X axis (changed to the analog triggers using getZAxisTriggers()); Y
+     * = Left joystick Y axis; X = left joystick X axis. In this case, ySpeed is the
+     * strafing stuff, xSpeed is for driving forward/backward, and zRotation is for
+     * turning left/right.
+     */
 
-    // // Sets the camera mode display thing to 2: PiP Secondary - The primary
-    // camera
-    // // stream is placed in the lower-right corner of the secondary camera stream
-    // //
-    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
-    // }
+    // If either axis is being pressed, run the drive in 1 of 2 ways,
+    // depending on the toggle.
+    if (((Math.abs(leftXAxisPS4) > PS4_MEC_DRIVE_DEADBAND) || (Math.abs(leftYAxisPS4) > PS4_MEC_DRIVE_DEADBAND)
+        || (Math.abs(zAxisTriggers) > PS4_MEC_DRIVE_DEADBAND))) {
 
-    // Long if statement that acts as a deadband for the drive.
-    // if (((PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE) || (PS4.getY() >
-    // PS4_TRIGGER_DEADBAND_POSITIVE)
-    // || (PS4.getZ() > PS4_TRIGGER_DEADBAND_POSITIVE))
-    // || ((PS4.getX() < PS4_TRIGGER_DEADBAND_NEGATIVE) || (PS4.getY() <
-    // PS4_TRIGGER_DEADBAND_NEGATIVE)
-    // || (PS4.getZ() < PS4_TRIGGER_DEADBAND_NEGATIVE))) {
+      // If the invert drive toggle is false, drive normally.
+      if (invertDriveToggle == false) {
+        mecanumDrive.driveCartesian(getZAxisTriggers(), -leftYAxisPS4, leftXAxisPS4);
+      }
 
-    // The arguments for this function won't match up with the actual joystick axes
-    // for some reason.
-    // Depending on the robot, you might have to experiment with these.
-    // Z = Right joystick X axis; Y = Left joystick Y axis; X = left joystick X
-    // axis.
-    // In this case, ySpeed is the strafeing stuff, xSpeed is for driving
-    // forward/backward, and zRotation is for turning left/right.
-    // mecanumDrive.driveCartesian(PS4.getZ(), -PS4.getY(), PS4.getX());
+      // If the toggle is true, the same function but the signs are different.
+      else if (invertDriveToggle == true) {
+        mecanumDrive.driveCartesian(-getZAxisTriggers(), leftYAxisPS4, -leftXAxisPS4);
+      }
+
+    } else {
+      // Else, don't run the drive motors.
+      mecanumDrive.driveCartesian(0, 0, 0);
+    }
 
   }
 
   @Override
   public void testPeriodic() {
+  }
+
+  /////////////////////////////////////////////////////////////////////
+  // Function: getZAxisTriggers()
+  /////////////////////////////////////////////////////////////////////
+  //
+  // Purpose: Gets the value for the "Z" axis using the 2 analog triggers.
+  //
+  // Arguments: none
+  //
+  // Returns: double zAxis: the value from -1 to 1, which is used for
+  // controlling the speed and direction for strafing in teleop.
+  //
+  // Remarks: Created on 2/22/2020.
+  //
+  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////
+  public double getZAxisTriggers() {
+
+    // This variable is used for setting the Z axis for strafing.
+    double zAxis;
+
+    // These variables are for getting the values for the left and right
+    // analog triggers, respectively.
+    double leftAnalogTrigger;
+    double rightAnalogTrigger;
+
+    // Axes 2 and 3 are the left and right analog triggers, respectively.
+    // You have to add 1 because the triggers start at -1 and go to 1.
+    // Adding 1 makes them start at 0 when not being pressed.
+    leftAnalogTrigger = PS4.getRawAxis(3) + 1;
+    rightAnalogTrigger = PS4.getRawAxis(4) + 1;
+
+    // Do the math for getting the value for strafing.
+    // Example 1: if the driver presses the right one down, that value will be 1 - 0
+    // = 100% speed (1).
+    // Example 2: if the driver presses the left one down, that value will be 0 - 1
+    // ; -100% speed (-1).
+    zAxis = rightAnalogTrigger - leftAnalogTrigger;
+
+    // Return the value, to be used elsewhere.
+    return zAxis;
   }
 
 }
