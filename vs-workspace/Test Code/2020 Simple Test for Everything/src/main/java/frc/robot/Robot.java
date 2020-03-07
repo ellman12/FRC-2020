@@ -93,6 +93,7 @@ public class Robot extends TimedRobot {
 
     // Might be necessary, might not be...? *Shrug*
     lworm.setInverted(true);
+    rworm.setInverted(false);
 
     wormDrive = new SpeedControllerGroup(rworm, lworm);
 
@@ -131,9 +132,13 @@ public class Robot extends TimedRobot {
     // }
 
     if (PS4.getRawButton(5)) { // left bumper
-      wormDrive.set(0.4); // down
+      // wormDrive.set(0.4); // down
+      lworm.set(-0.1);
+      rworm.set(0.15);
     } else if (PS4.getRawButton(6)) { // right bumper
-      wormDrive.set(-0.4); // up
+      // wormDrive.set(-0.4); // up
+      lworm.set(0.1);
+      rworm.set(-0.15);
     } else {
       wormDrive.set(0);
     }
