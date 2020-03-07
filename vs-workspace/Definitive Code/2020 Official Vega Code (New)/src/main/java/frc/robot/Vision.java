@@ -392,7 +392,7 @@ class Vision extends Autonomous {
                 robotDrive.strafeRight(0.6);
             }
 
-            // Read this value every time the loop loops.
+            // Read this value every time the while loop loops.
             tx = getTxHorizontalOffset();
         }
 
