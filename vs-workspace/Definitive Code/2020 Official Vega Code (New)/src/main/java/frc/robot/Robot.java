@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
   BallShootThread ballShootThread = new BallShootThread("ballShootThread");
   Constants constants = new Constants();
   DriveThread driveThread = new DriveThread("driveThread");
+  ProximitySensor proximitySensorClass = new ProximitySensor();
   RobotDrive robotDrive = new RobotDrive();
   WormDrive wormDrive = new WormDrive();
   WormDriveThread wormDriveThread = new WormDriveThread("wormDriveThread");

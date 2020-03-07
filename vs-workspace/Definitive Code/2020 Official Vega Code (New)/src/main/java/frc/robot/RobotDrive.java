@@ -49,9 +49,9 @@ class RobotDrive extends Robot {
     final double DRIVE_FWD_AND_BWD_SPEED = 0.5; // How fast the drive motors spin in driveFwd() and driveBwd().
     final double ENCODER_CALIBRATION_DRIVEFWDBWD = 1.43; // Encoder calibration for the driveFwd/Bwd auto functions.
 
-    // Magic numbers for strafeLeft() and strafeRight().
+    // Magic numbers for strafeLeftAuto() and strafeRightAuto().
     final double STRAFE_SPEED = 0.5; // Magic number for the speed for how fast the robot strafes.
-    final double ENCODER_CALIBRATION_STRAFE = 1.15; // Encoder calibration for the strafeLeft/Right auto functions.
+    final double ENCODER_CALIBRATION_STRAFE = 1.15; // Encoder calibration for the strafeLeftAuto/Right auto functions.
 
     // Magic numbers for turnLeft() and turnRight().
     final double ROTATION_SPEED = 0.5; // Speed value for turnLeft() and turnRight().
@@ -82,6 +82,52 @@ class RobotDrive extends Robot {
     // Function: strafeLeft(...)
     /////////////////////////////////////////////////////////////////////
     //
+    // Purpose: Used for strafing left, without encoder magic.
+    //
+    // Arguments: double strafeSpeed
+    //
+    // Returns: void
+    //
+    // Remarks: Created on 3/07/2020.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void strafeLeft(double strafeSpeed) {
+
+        // Strafe left at the inputted speed.
+        frontLeftDriveMotor.set(-strafeSpeed);
+        backLeftDriveMotor.set(-strafeSpeed);
+        frontRightDriveMotor.set(strafeSpeed);
+        backRightDriveMotor.set(strafeSpeed);
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: strafeRight(...)
+    /////////////////////////////////////////////////////////////////////
+    //
+    // Purpose: Used for strafing right, without encoder magic.
+    //
+    // Arguments: double strafeSpeed
+    //
+    // Returns: void
+    //
+    // Remarks: Created on 3/07/2020.
+    //
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    public void strafeRight(double strafeSpeed) {
+
+        // Strafe right at the inputted speed.
+        frontLeftDriveMotor.set(strafeSpeed);
+        backLeftDriveMotor.set(strafeSpeed);
+        frontRightDriveMotor.set(-strafeSpeed);
+        backRightDriveMotor.set(-strafeSpeed);
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Function: strafeLeftAuto(...)
+    /////////////////////////////////////////////////////////////////////
+    //
     // Purpose: Used for strafing left in autonomous.
     //
     // Arguments: double feet.
@@ -93,7 +139,7 @@ class RobotDrive extends Robot {
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
-    public void strafeLeft(double feet) {
+    public void strafeLeftAuto(double feet) {
 
         // Initialize the encoder to 0 (reset it).
         frontLeftDriveEnc.setPosition(0);
@@ -130,7 +176,7 @@ class RobotDrive extends Robot {
     }
 
     /////////////////////////////////////////////////////////////////////
-    // Function: strafeRight(...)
+    // Function: strafeRightAuto(...)
     /////////////////////////////////////////////////////////////////////
     //
     // Purpose: Used for strafing right in autonomous.
@@ -144,7 +190,7 @@ class RobotDrive extends Robot {
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
-    public void strafeRight(double feet) {
+    public void strafeRightAuto(double feet) {
 
         // Initialize the encoder to 0 (reset it).
         frontLeftDriveEnc.setPosition(0);

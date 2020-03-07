@@ -22,6 +22,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -101,10 +103,18 @@ public class Robot extends TimedRobot {
     // frontRightMotor.setInverted(true);
 
     // mecanumDrive.setSafetyEnabled(false);
+
   }
 
   @Override
   public void robotPeriodic() {
+
+    // Has to be called constantly, for some reason...?
+    NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("limelight");
+    networkTable.getEntry("camMode").setValue(0);
+    networkTable.getEntry("ledMode").setValue(3);
+    networkTable.getEntry("stream").setValue(0);
+
   }
 
   @Override
