@@ -4,7 +4,7 @@
 //
 // Purpose: Used for vision stuff for the Limelight.
 //
-// Authors: Elliott DuCharme.
+// Authors: Elliott DuCharme and Larry Basegio.
 //
 // Environment: Microsoft VSCode Java.
 //
@@ -347,7 +347,7 @@ class Vision extends Autonomous {
     public double calcMaxAngleTx() {
 
         // Do this math and get an angle in Radians.
-        double maxAngleRad = Math.atan(((HIGH_GOAL_DIAMETER / 2) / proximitySensorClass.getDistance());
+        double maxAngleRad = Math.atan(((HIGH_GOAL_DIAMETER / 2) / proximitySensorClass.getDistance()));
 
         // Return the value in degrees.
         return Math.toDegrees(maxAngleRad);
@@ -368,6 +368,9 @@ class Vision extends Autonomous {
     //
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
+
+    // TODO try this function!
+
     public void alignCenterInnerPort() {
 
         // The max angle from the previous function.
