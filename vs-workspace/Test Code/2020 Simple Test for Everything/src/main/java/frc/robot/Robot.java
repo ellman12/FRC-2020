@@ -35,11 +35,13 @@ public class Robot extends TimedRobot {
   // Creating the drive motors.
   // CANSparkMax frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor;
 
+  WPI_TalonFX climbFalcon;
+
   WPI_TalonFX fLShooter, bLshooter, frshooter, brshooter;
 
   CANSparkMax rworm, lworm;
 
-  // WPI_TalonFX intake;
+  WPI_TalonFX intake;
 
   // Creating the Mecanum Drive.
   // MecanumDrive mecanumDrive;
@@ -62,6 +64,8 @@ public class Robot extends TimedRobot {
     // backLeftMotor = new CANSparkMax(2, MotorType.kBrushless);
     // backRightMotor = new CANSparkMax(4, MotorType.kBrushless);
 
+    climbFalcon = new WPI_TalonFX(12);
+
     fLShooter = new WPI_TalonFX(5);
     bLshooter = new WPI_TalonFX(7);
     frshooter = new WPI_TalonFX(6);
@@ -70,7 +74,7 @@ public class Robot extends TimedRobot {
     rworm = new CANSparkMax(9, MotorType.kBrushless);
     lworm = new CANSparkMax(10, MotorType.kBrushless);
 
-    // intake = new WPI_TalonFX(11);
+    intake = new WPI_TalonFX(11);
 
     // backLeftMotor.setInverted(false);
     // frontLeftMotor.setInverted(false);
@@ -99,6 +103,8 @@ public class Robot extends TimedRobot {
 
     wormDrive = new SpeedControllerGroup(rworm, lworm);
 
+    climbFalcon.setNeutralMode(NeutralMode.Brake);
+
     // backRightMotor.setInverted(true);
     // frontRightMotor.setInverted(true);
 
@@ -114,7 +120,6 @@ public class Robot extends TimedRobot {
     networkTable.getEntry("camMode").setValue(0);
     networkTable.getEntry("ledMode").setValue(3);
     networkTable.getEntry("stream").setValue(0);
-
   }
 
   @Override
@@ -141,6 +146,16 @@ public class Robot extends TimedRobot {
     // bLshooter.set(0);
     // }
 
+    climbFalcon.set(-PS4.getRawAxis(5));
+
+    if (PS4.getRawButton(1)) {
+      intake.set(-0.2);
+    } else if (PS4.getRawButton(2)) {
+      intake.set(0.2);
+    } else {
+      intake.set(0.0);
+    }
+
     if (PS4.getRawButton(5)) { // left bumper
       // wormDrive.set(0.4); // down
       lworm.set(-0.1);
@@ -153,21 +168,24 @@ public class Robot extends TimedRobot {
       wormDrive.set(0);
     }
 
-    // Switch between camera modes for the cameras.
-    if (PS4.getRawButton(1)) {
+    // // Switch between camera modes for the cameras.
+    // if (PS4.getRawButton(1)) {
 
-      // Sets the camera mode display thing to 0: side-by-side.
-      NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
+    // // Sets the camera mode display thing to 0: side-by-side.
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
 
-      // Sets the camera mode display thing to 1: PiP Main - The secondary camera
-      // stream is placed in the lower-right corner of the
-      // primary camera stream
-      // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
+    // // Sets the camera mode display thing to 1: PiP Main - The secondary camera
+    // // stream is placed in the lower-right corner of the
+    // // primary camera stream
+    // //
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
 
-      // Sets the camera mode display thing to 2: PiP Secondary - The primary camera
-      // stream is placed in the lower-right corner of the secondary camera stream
-      // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
-    }
+    // // Sets the camera mode display thing to 2: PiP Secondary - The primary
+    // camera
+    // // stream is placed in the lower-right corner of the secondary camera stream
+    // //
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
+    // }
 
     // Long if statement that acts as a deadband for the drive.
     // if (((PS4.getX() > PS4_TRIGGER_DEADBAND_POSITIVE) || (PS4.getY() >

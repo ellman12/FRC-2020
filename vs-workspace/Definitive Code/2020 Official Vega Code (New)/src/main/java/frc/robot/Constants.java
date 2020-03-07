@@ -35,6 +35,9 @@ class Constants {
     // Magic number for the ID for the ball intake Falcon 500.
     final int BALL_INTAKE_MOTOR_ID = 11;
 
+    // Magic number for the ID for the climb Falcon 500.
+    final int CLIMB_MOTOR_ID = 12;
+
     // Magic numbers for PS4 Controller Axes IDs.
     final int PS4_L_X_AXIS_ID = 0;
     final int PS4_L_Y_AXIS_ID = 1;
