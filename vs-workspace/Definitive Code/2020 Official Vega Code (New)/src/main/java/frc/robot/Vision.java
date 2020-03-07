@@ -50,8 +50,10 @@ class Vision extends Autonomous {
     // Constructor.
     Vision() {
 
-        // TODO Set these to our desired initial values.
-
+        // Set these to our desired initial values.
+        setLEDMode(LED_MODE_FORCE_ON);
+        setCamMode(CAM_MODE_VISION_PROCESSOR);
+        setStreamMode(STREAM_MODE_STANDARD);
     }
 
     /////////////////////////////////////////////////////////////////////
