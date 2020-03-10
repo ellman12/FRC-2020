@@ -45,12 +45,12 @@ class BallIntakeThread extends BallIntake implements Runnable {
 
             // If the driver pushes the right bumper button on the PS4 Controller,
             // run the intake motors forward (inwards).
-            if (driveThread.PS4.getRawButton(constants.PS4_RIGHT_BUMPER)) {
+            if (PS4.getRawButton(constants.PS4_RIGHT_BUMPER)) {
                 intakeBalls(0.65, 0.5);
 
                 // Else if the driver pushes the left bumper button on the PS4 Controller,
                 // run the intake motors backwards (outward).
-            } else if (driveThread.PS4.getRawButton(constants.PS4_LEFT_BUMPER)) {
+            } else if (PS4.getRawButton(constants.PS4_LEFT_BUMPER)) {
 
                 intakeBalls(-0.65, -0.5);
 

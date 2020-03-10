@@ -48,18 +48,18 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
 
-    // try {
+    try {
 
-    // ballIntakeThread.ballIntakeThread.join();
-    // ballShootThread.ballShootThread.join();
-    // driveThread.driveThread.join();
-    // wormDriveThread.wormDriveThread.join();
+      ballIntakeThread.ballIntakeThread.join();
+      ballShootThread.ballShootThread.join();
+      driveThread.driveThread.join();
+      wormDriveThread.wormDriveThread.join();
 
-    // } catch (InterruptedException e) {
+    } catch (InterruptedException e) {
 
-    // System.out.println("hi");
+      System.out.println("hi");
 
-    // }
+    }
   }
 
   @Override
