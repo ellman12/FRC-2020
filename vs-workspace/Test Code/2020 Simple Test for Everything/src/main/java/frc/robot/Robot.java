@@ -68,13 +68,15 @@ public class Robot extends TimedRobot {
 
   ADXRS450_Gyro driveGyro = new ADXRS450_Gyro();
 
+  ProximitySensor proximitySensorClass = new ProximitySensor();
+
   @Override
   public void robotInit() {
 
-    frontLeftMotor = new CANSparkMax(1, MotorType.kBrushless);
-    frontRightMotor = new CANSparkMax(3, MotorType.kBrushless);
-    backLeftMotor = new CANSparkMax(2, MotorType.kBrushless);
-    backRightMotor = new CANSparkMax(4, MotorType.kBrushless);
+    frontLeftMotor = new CANSparkMax(4, MotorType.kBrushless);
+    frontRightMotor = new CANSparkMax(2, MotorType.kBrushless);
+    backLeftMotor = new CANSparkMax(3, MotorType.kBrushless);
+    backRightMotor = new CANSparkMax(1, MotorType.kBrushless);
 
     climbFalcon = new WPI_TalonFX(12);
 
@@ -83,7 +85,7 @@ public class Robot extends TimedRobot {
     frshooter = new WPI_TalonFX(6);
     brshooter = new WPI_TalonFX(8);
 
-    rworm = new CANSparkMax(9, MotorType.kBrushless);
+    // rworm = new CANSparkMax(9, MotorType.kBrushless);
     lworm = new CANSparkMax(10, MotorType.kBrushless);
 
     intake = new WPI_TalonFX(11);
@@ -111,14 +113,14 @@ public class Robot extends TimedRobot {
     frshooter.setNeutralMode(NeutralMode.Brake);
     brshooter.setNeutralMode(NeutralMode.Brake);
 
-    rworm.setIdleMode(IdleMode.kBrake);
+    // rworm.setIdleMode(IdleMode.kBrake);
     lworm.setIdleMode(IdleMode.kBrake);
 
     // Might be necessary, might not be...? *Shrug*
     lworm.setInverted(true);
-    rworm.setInverted(false);
+    // rworm.setInverted(false);
 
-    wormDrive = new SpeedControllerGroup(rworm, lworm);
+    // wormDrive = new SpeedControllerGroup(rworm, lworm);
 
     climbFalcon.setNeutralMode(NeutralMode.Brake);
 
@@ -137,6 +139,10 @@ public class Robot extends TimedRobot {
     networkTable.getEntry("camMode").setValue(0);
     networkTable.getEntry("ledMode").setValue(3);
     networkTable.getEntry("stream").setValue(0);
+
+    // System.out.println("prox: " + proximitySensorClass.getDistance());
+
+    System.out.println("fl shooter velocity: " + fLShooter.getSelectedSensorVelocity());
   }
 
   @Override
@@ -163,12 +169,12 @@ public class Robot extends TimedRobot {
       bLshooter.set(0);
     }
 
-    // climbFalcon.set(-PS4.getRawAxis(5));
+    climbFalcon.set(-PS4.getRawAxis(5));
 
     if (PS4.getRawButton(1)) {
-      intake.set(-0.2);
+      intake.set(-0.25);
     } else if (PS4.getRawButton(2)) {
-      intake.set(0.2);
+      intake.set(0.25);
     } else {
       intake.set(0.0);
     }
@@ -182,7 +188,8 @@ public class Robot extends TimedRobot {
       lworm.set(0.3);
       // rworm.set(-0.15);
     } else {
-      wormDrive.set(0);
+      // wormDrive.set(0);
+      lworm.set(0);
     }
 
     // Getting the values of these to be used for Mecanum drive stuff.
