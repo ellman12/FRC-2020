@@ -41,7 +41,8 @@ public class Robot extends TimedRobot {
 
   WPI_TalonFX fLShooter, bLshooter, frshooter, brshooter;
 
-  CANSparkMax rworm, lworm;
+  WPI_TalonFX lworm;
+  // CANSparkMax rworm, lworm;
 
   WPI_TalonFX intake;
 
@@ -86,7 +87,8 @@ public class Robot extends TimedRobot {
     brshooter = new WPI_TalonFX(8);
 
     // rworm = new CANSparkMax(9, MotorType.kBrushless);
-    lworm = new CANSparkMax(10, MotorType.kBrushless);
+    // lworm = new CANSparkMax(10, MotorType.kBrushless);
+    lworm = new WPI_TalonFX(10);
 
     intake = new WPI_TalonFX(11);
 
@@ -114,7 +116,8 @@ public class Robot extends TimedRobot {
     brshooter.setNeutralMode(NeutralMode.Brake);
 
     // rworm.setIdleMode(IdleMode.kBrake);
-    lworm.setIdleMode(IdleMode.kBrake);
+    // lworm.setIdleMode(IdleMode.kBrake);
+    lworm.setNeutralMode(NeutralMode.Brake);
 
     // Might be necessary, might not be...? *Shrug*
     lworm.setInverted(true);
@@ -142,7 +145,8 @@ public class Robot extends TimedRobot {
 
     // System.out.println("prox: " + proximitySensorClass.getDistance());
 
-    System.out.println("fl shooter velocity: " + fLShooter.getSelectedSensorVelocity());
+    // System.out.println("fl shooter velocity: " +
+    // fLShooter.getSelectedSensorVelocity());
   }
 
   @Override
@@ -158,8 +162,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     if (PS4.getRawButton(3) == true) {
-      fLShooter.set(0.6);
-      frshooter.set(-0.6);
+      fLShooter.set(1);
+      frshooter.set(-1);
+      Timer.delay(1);
       brshooter.set(-0.1);
       bLshooter.set(0.1);
     } else {
@@ -181,11 +186,11 @@ public class Robot extends TimedRobot {
 
     if (PS4.getRawButton(5)) { // left bumper
       // wormDrive.set(0.4); // down
-      lworm.set(-0.3);
+      lworm.set(-0.5);
       // rworm.set(0.15);
     } else if (PS4.getRawButton(6)) { // right bumper
       // wormDrive.set(-0.4); // up
-      lworm.set(0.3);
+      lworm.set(0.5);
       // rworm.set(-0.15);
     } else {
       // wormDrive.set(0);

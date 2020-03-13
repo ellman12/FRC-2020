@@ -39,12 +39,14 @@ public class Robot extends TimedRobot {
 
   Constants constants;
   BallShooter ballShooter;
+  ProximitySensor proximitySensor;
   BallShootThread ballShootThread;
 
   @Override
   public void robotInit() {
 
     constants = new Constants();
+    proximitySensor = new ProximitySensor();
     ballShooter = new BallShooter();
   }
 
@@ -67,22 +69,33 @@ public class Robot extends TimedRobot {
 
     // If the circle button on the PS4 is pressed,
     // and the triangle button is NOT pressed...
-    if ((PS4.getRawButton(constants.PS4_CIRCLE_BUTTON) == true)
-        && (PS4.getRawButton(constants.PS4_TRIANGLE_BUTTON) == false)) {
+    // if ((PS4.getRawButton(constants.PS4_CIRCLE_BUTTON) == true)
+    // && (PS4.getRawButton(constants.PS4_TRIANGLE_BUTTON) == false)) {
 
-      // Shoot balls with front motors at 100% and back motors at 40%.
-      ballShootThread = new BallShootThread("threadName");
+    // // Shoot balls with front motors at 100% and back motors at 40%.
+    // ballShootThread = new BallShootThread("threadName");
 
-      // Else if the circle button on the PS4 is pressed,
-      // and the triangle button IS pressed...
-    } else if ((PS4.getRawButton(constants.PS4_CIRCLE_BUTTON) == true)
-        && (PS4.getRawButton(constants.PS4_TRIANGLE_BUTTON) == true)) {
+    // // Else if the circle button on the PS4 is pressed,
+    // // and the triangle button IS pressed...
+    // } else if ((PS4.getRawButton(constants.PS4_CIRCLE_BUTTON) == true)
+    // && (PS4.getRawButton(constants.PS4_TRIANGLE_BUTTON) == true)) {
 
-      // Run the ball shooter motors backwards at 100% and back motors at 40%.
+    // // Run the ball shooter motors backwards at 100% and back motors at 40%.
 
-    } else {
+    // } else {
 
-      // Else, don't run the motors.
+    // // Else, don't run the motors.
+
+    // }
+
+    if (PS4.getRawButton(constants.PS4_CIRCLE_BUTTON)) {
+      ballShootThread = new BallShootThread("ballShootThread");
+
+      try {
+        ballShootThread.ballShootThread.join();
+      } catch (InterruptedException e) {
+        System.out.println("Main thread interrupted.");
+      }
 
     }
 

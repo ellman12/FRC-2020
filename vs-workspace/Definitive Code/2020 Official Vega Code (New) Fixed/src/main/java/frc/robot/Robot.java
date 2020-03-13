@@ -81,6 +81,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+    // TODO .join() stuff!
+
     wormDrive.adjustShooterAngleManual();
 
     // Getting the values of these to be used for Mecanum drive stuff.

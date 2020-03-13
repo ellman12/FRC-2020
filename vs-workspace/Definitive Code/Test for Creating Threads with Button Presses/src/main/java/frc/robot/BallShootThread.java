@@ -15,7 +15,15 @@
 /////////////////////////////////////////////////////////////////////
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Timer;
+
 class BallShootThread extends Constants implements Runnable {
+
+    final double TARGET_VELOCITY = 0; // TODO get an actual value for this...
+
+    int count = 3;
+
+    String threadName;
 
     // Creating instance of the Thread class by
     // creating a thread (reserving memory for this object).
@@ -30,7 +38,7 @@ class BallShootThread extends Constants implements Runnable {
     BallShootThread(String name) {
 
         // Name of the Thread.
-        String threadName = name;
+        threadName = name;
 
         // Actually creating the Thread.
         ballShootThread = new Thread(ballShootThread, threadName);
@@ -40,10 +48,47 @@ class BallShootThread extends Constants implements Runnable {
     // Function that actually runs stuff.
     public void run() {
 
-        // While the Thread is alive, do stuff.
-        while (ballShootThread.isAlive() == true) {
+        double proximitySensorDistance, frontLeftShooterVelocity, frontRightShooterVelocity;
 
+        int backLeftShooterCounts, backRightShooterCounts, backLeftShooterTarget, backRightShooterTarget;
+
+        // While the Thread is alive, do stuff.
+        while (count > 0) {
+
+            proximitySensorDistance = proximitySensor.getDistance();
+
+            // TODO get lookup theta thing.
+
+            ballShooter.frontShooterMotors.set(1);
+
+            frontLeftShooterVelocity = ballShooter.frontLeftShooterMotor.getSelectedSensorVelocity();
+            frontRightShooterVelocity = ballShooter.frontRightShooterMotor.getSelectedSensorVelocity();
+
+            System.out.println("leftMotorVelocity: " + frontLeftShooterVelocity);
+            System.out.println("rightMotorVelocity: " + frontRightShooterVelocity);
+
+            backLeftShooterCounts = ballShooter.backLeftShooterMotor.getSelectedSensorPosition();
+            backRightShooterCounts = ballShooter.backRightShooterMotor.getSelectedSensorPosition();
+
+            backLeftShooterTarget = backLeftShooterCounts + 2608; // TODO make this number a magic number.
+            backRightShooterTarget = backRightShooterCounts + 2608;
+
+            while ((backLeftShooterTarget < backLeftShooterTarget)
+                    && (backRightShooterCounts < backRightShooterTarget)) {
+
+                ballShooter.backShooterMotors.set(0.2);
+            }
+
+            ballShooter.backShooterMotors.set(0);
+            ballShooter.frontShooterMotors.set(0);
+
+            count--;
+
+            Timer.delay(2);
         }
 
+        System.out.println(threadName + " exiting.");
+
+        runtime.gc();
     }
 }
